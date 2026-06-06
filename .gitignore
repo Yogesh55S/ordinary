@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# whatsapp credentials
+.baileys_auth/
+
+# env files
+.env
+.env.local
+.env.*
+.env*.local
+
+# markdown files
+*.md
+!README.md
+
