@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -52,9 +53,13 @@ export default function Sidebar() {
       {/* Mobile Top Bar */}
       <div className="flex items-center justify-between bg-white dark:bg-[#0e1320] px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 md:hidden transition-colors duration-200">
         <div className="flex items-center space-x-2">
-          <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-indigo-600 text-white">
-            <MessageSquare className="h-5 w-5" />
-          </div>
+          <Image
+            src="/icon.png"
+            alt="ordinary Logo"
+            width={32}
+            height={32}
+            className="rounded-lg object-contain shadow-sm"
+          />
           <span className="font-bold text-lg text-slate-800 dark:text-slate-200 tracking-tight">ordinary</span>
         </div>
         <div className="flex items-center space-x-2">
@@ -88,9 +93,13 @@ export default function Sidebar() {
           <div className="relative flex flex-col w-72 max-w-xs bg-white dark:bg-[#0e1320] h-full shadow-2xl transition-transform duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center space-x-2">
-                <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-indigo-600 text-white">
-                  <MessageSquare className="h-5 w-5" />
-                </div>
+                <Image
+                  src="/icon.png"
+                  alt="ordinary Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-lg object-contain shadow-sm"
+                />
                 <span className="font-bold text-lg text-slate-800 dark:text-slate-200 tracking-tight">ordinary</span>
               </div>
               <button 
@@ -151,9 +160,13 @@ export default function Sidebar() {
       {/* Desktop Persistent Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0e1320] border-r border-slate-200 dark:border-slate-800 h-screen sticky top-0 transition-colors duration-200">
         <div className="flex items-center space-x-2.5 px-6 py-5 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center justify-center h-9 w-9 rounded-xl bg-indigo-600 text-white shadow-sm">
-            <MessageSquare className="h-5 w-5" />
-          </div>
+          <Image
+            src="/icon.png"
+            alt="ordinary Logo"
+            width={36}
+            height={36}
+            className="rounded-xl object-contain shadow-sm"
+          />
           <span className="font-bold text-xl text-slate-800 dark:text-slate-200 tracking-tight">ordinary</span>
         </div>
 
