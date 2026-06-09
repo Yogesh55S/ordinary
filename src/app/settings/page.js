@@ -28,15 +28,14 @@ export default function SettingsPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
   
-  // SMTP Email Gateway State
   const [smtp, setSmtp] = useState({
-    smtp_host: '',
-    smtp_port: '587',
-    smtp_user: '',
+    smtp_host: process.env.NEXT_PUBLIC_SMTP_HOST || 'smtp.gmail.com',
+    smtp_port: process.env.NEXT_PUBLIC_SMTP_PORT || '587',
+    smtp_user: process.env.NEXT_PUBLIC_SMTP_USER || 'ordinarylancer@gmail.com',
     smtp_pass: '',
-    smtp_secure: false,
-    sender_name: '',
-    sender_email: '',
+    smtp_secure: process.env.NEXT_PUBLIC_SMTP_SECURE === 'true',
+    sender_name: process.env.NEXT_PUBLIC_SENDER_NAME || 'ordinary CRM',
+    sender_email: process.env.NEXT_PUBLIC_SENDER_EMAIL || 'ordinarylancer@gmail.com',
   });
   const [smtpSaving, setSmtpSaving] = useState(false);
   const [smtpStatusMsg, setSmtpStatusMsg] = useState('');
@@ -135,13 +134,13 @@ export default function SettingsPage() {
             category: 'SYSTEM',
             status: 'disconnected',
             notes: JSON.stringify({ 
-              smtp_host: '',
-              smtp_port: '587',
-              smtp_user: '',
+              smtp_host: process.env.NEXT_PUBLIC_SMTP_HOST || 'smtp.gmail.com',
+              smtp_port: process.env.NEXT_PUBLIC_SMTP_PORT || '587',
+              smtp_user: process.env.NEXT_PUBLIC_SMTP_USER || 'ordinarylancer@gmail.com',
               smtp_pass: '',
-              smtp_secure: false,
-              sender_name: '',
-              sender_email: '',
+              smtp_secure: process.env.NEXT_PUBLIC_SMTP_SECURE === 'true',
+              sender_name: process.env.NEXT_PUBLIC_SENDER_NAME || 'ordinary CRM',
+              sender_email: process.env.NEXT_PUBLIC_SENDER_EMAIL || 'ordinarylancer@gmail.com',
               updated_at: new Date().toISOString() 
             })
           })
@@ -158,13 +157,13 @@ export default function SettingsPage() {
         try {
           const parsed = JSON.parse(data.notes);
           setSmtp({
-            smtp_host: parsed.smtp_host || '',
-            smtp_port: parsed.smtp_port || '587',
-            smtp_user: parsed.smtp_user || '',
+            smtp_host: parsed.smtp_host || process.env.NEXT_PUBLIC_SMTP_HOST || 'smtp.gmail.com',
+            smtp_port: parsed.smtp_port || process.env.NEXT_PUBLIC_SMTP_PORT || '587',
+            smtp_user: parsed.smtp_user || process.env.NEXT_PUBLIC_SMTP_USER || 'ordinarylancer@gmail.com',
             smtp_pass: parsed.smtp_pass || '',
-            smtp_secure: parsed.smtp_secure || false,
-            sender_name: parsed.sender_name || '',
-            sender_email: parsed.sender_email || '',
+            smtp_secure: parsed.smtp_secure !== undefined ? parsed.smtp_secure : (process.env.NEXT_PUBLIC_SMTP_SECURE === 'true'),
+            sender_name: parsed.sender_name || process.env.NEXT_PUBLIC_SENDER_NAME || 'ordinary CRM',
+            sender_email: parsed.sender_email || process.env.NEXT_PUBLIC_SENDER_EMAIL || 'ordinarylancer@gmail.com',
           });
         } catch (e) {
           // not JSON

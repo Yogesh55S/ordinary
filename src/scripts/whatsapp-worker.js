@@ -339,8 +339,16 @@ async function processSchedules() {
           console.error("SMTP notes JSON parse failed:", e.message);
         }
 
-        if (!smtpConfig.smtp_host || !smtpConfig.smtp_user || !smtpConfig.smtp_pass) {
-          console.warn("Cannot dispatch email: Incomplete SMTP config settings.");
+        const host = process.env.SMTP_HOST || smtpConfig.smtp_host;
+        const port = process.env.SMTP_PORT || smtpConfig.smtp_port;
+        const user = process.env.SMTP_USER || smtpConfig.smtp_user;
+        const pass = process.env.SMTP_PASS || smtpConfig.smtp_pass;
+        const secure = process.env.SMTP_SECURE !== undefined ? (process.env.SMTP_SECURE === 'true') : (smtpConfig.smtp_secure || false);
+        const sName = process.env.SENDER_NAME || smtpConfig.sender_name || 'ordinary CRM';
+        const sEmail = process.env.SENDER_EMAIL || smtpConfig.sender_email || user;
+
+        if (!host || !user || !pass) {
+          console.warn("Cannot dispatch email: Incomplete SMTP config settings (missing host, user, or pass).");
           await supabase.from('outreach_schedules')
             .update({ status: 'Failed' })
             .eq('id', schedule.id);
@@ -404,17 +412,17 @@ async function processSchedules() {
         try {
           // Initialize transporter
           const transporter = nodemailer.createTransport({
-            host: smtpConfig.smtp_host,
-            port: parseInt(smtpConfig.smtp_port) || 587,
-            secure: smtpConfig.smtp_secure || false,
+            host: host,
+            port: parseInt(port) || 587,
+            secure: secure,
             auth: {
-              user: smtpConfig.smtp_user,
-              pass: smtpConfig.smtp_pass
+              user: user,
+              pass: pass
             }
           });
 
           await transporter.sendMail({
-            from: `"${smtpConfig.sender_name || 'ordinary CRM'}" <${smtpConfig.sender_email}>`,
+            from: `"${sName}" <${sEmail}>`,
             to: emailAddress,
             subject: subjectText,
             text: messageText,
@@ -684,15 +692,23 @@ async function checkGatewaySignals() {
       if (parsed.test_connection_requested) {
         console.log(`SMTP Connection Test requested for recipient: ${parsed.test_recipient}...`);
 
+        const host = process.env.SMTP_HOST || parsed.smtp_host;
+        const port = process.env.SMTP_PORT || parsed.smtp_port;
+        const user = process.env.SMTP_USER || parsed.smtp_user;
+        const pass = process.env.SMTP_PASS || parsed.smtp_pass;
+        const secure = process.env.SMTP_SECURE !== undefined ? (process.env.SMTP_SECURE === 'true') : (parsed.smtp_secure || false);
+        const sName = process.env.SENDER_NAME || parsed.sender_name || 'ordinary CRM';
+        const sEmail = process.env.SENDER_EMAIL || parsed.sender_email || user;
+
         try {
           // Initialize nodemailer transporter
           const transporter = nodemailer.createTransport({
-            host: parsed.smtp_host,
-            port: parseInt(parsed.smtp_port) || 587,
-            secure: parsed.smtp_secure || false,
+            host: host,
+            port: parseInt(port) || 587,
+            secure: secure,
             auth: {
-              user: parsed.smtp_user,
-              pass: parsed.smtp_pass
+              user: user,
+              pass: pass
             }
           });
 
@@ -702,7 +718,7 @@ async function checkGatewaySignals() {
 
           // Send test email
           await transporter.sendMail({
-            from: `"${parsed.sender_name || 'ordinary CRM'}" <${parsed.sender_email}>`,
+            from: `"${sName}" <${sEmail}>`,
             to: parsed.test_recipient,
             subject: 'SMTP Connection Test - ordinary',
             text: 'Hello! This is a test email sent from the ordinary Outreach Automation background worker. Your SMTP settings are correctly configured!'
