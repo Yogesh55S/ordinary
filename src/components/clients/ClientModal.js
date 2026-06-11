@@ -21,15 +21,15 @@ export default function ClientModal({
       ></div>
       
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-150 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
-          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-105 dark:text-slate-200">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 dark:text-slate-200">
             {editingClient ? `Edit Client Profile` : `Add New Client`}
           </h3>
           <button 
             onClick={onClose}
-            className="text-slate-400 dark:text-slate-500 hover:text-slate-655 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X className="h-5 w-5" />
           </button>
@@ -47,7 +47,7 @@ export default function ClientModal({
                 onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
                 className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] ${
                   formErrors.business_name 
-                    ? 'border-rose-350 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
+                    ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
                 }`}
                 placeholder="Acme Corporation"
@@ -78,7 +78,7 @@ export default function ClientModal({
                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
                 className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] ${
                   formErrors.phone_number 
-                    ? 'border-rose-350 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
+                    ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
                 }`}
                 placeholder="+919876543210"
@@ -191,7 +191,7 @@ export default function ClientModal({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
             >
               {editingClient ? 'Save Changes' : 'Create Client'}
             </button>

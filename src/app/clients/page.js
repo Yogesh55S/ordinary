@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Plus, AlertCircle, Upload, Download, FileSpreadsheet, Users } from 'lucide-react';
 
@@ -30,6 +30,14 @@ export default function ClientsPage() {
   const [editingClient, setEditingClient] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
   
+  // Pagination & Infinite Scroll State
+  const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const loaderRef = useRef(null);
+  const PAGE_SIZE = 20;
+  
   // Form State
   const [formData, setFormData] = useState({
     business_name: '',
@@ -51,28 +59,130 @@ export default function ClientsPage() {
     setSelectedIds([]);
   }, [searchTerm, statusFilter, categoryFilter]);
 
-  const fetchClients = async () => {
+  const fetchCategories = async () => {
     try {
-      setLoading(true);
       const { data, error } = await supabase
         .from('clients')
-        .select('*')
+        .select('category')
+        .not('category', 'is', null)
         .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
-        .order('created_at', { ascending: false });
-        
+        .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+        .neq('business_name', 'SYSTEM_EXCEL_SYNC');
       if (error) throw error;
-      setClients(data || []);
+      
+      const uniqueCats = Array.from(
+        new Set(data.map((c) => c.category).filter((cat) => cat && cat.trim() !== ''))
+      );
+      setCategories(uniqueCats);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
+
+  const fetchClients = async (pageNum = 0) => {
+    try {
+      if (pageNum === 0) {
+        setLoading(true);
+        setError(null);
+      } else {
+        setIsFetchingMore(true);
+      }
+      
+      let query = supabase
+        .from('clients')
+        .select('*', { count: 'exact' })
+        .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
+        .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+        .neq('business_name', 'SYSTEM_EXCEL_SYNC');
+
+      // Apply Search Term
+      if (searchTerm.trim() !== '') {
+        const term = `%${searchTerm.trim()}%`;
+        query = query.or(`business_name.ilike.${term},owner_name.ilike.${term},phone_number.ilike.${term},city.ilike.${term}`);
+      }
+
+      // Apply Status Filter
+      if (statusFilter !== 'All') {
+        query = query.eq('status', statusFilter);
+      }
+
+      // Apply Category Filter
+      if (categoryFilter !== 'All') {
+        query = query.eq('category', categoryFilter);
+      }
+
+      const from = pageNum * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+      
+      query = query
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      const { data, error, count } = await query;
+      
+      if (error) throw error;
+
+      if (pageNum === 0) {
+        setClients(data || []);
+      } else {
+        setClients((prev) => [...prev, ...(data || [])]);
+      }
+
+      setHasMore(data && data.length === PAGE_SIZE && (count ? (from + data.length < count) : true));
     } catch (err) {
       console.error('Error fetching clients:', err);
       setError('Failed to load clients. Please check connection.');
     } finally {
       setLoading(false);
+      setIsFetchingMore(false);
     }
   };
 
+  const handleRefresh = () => {
+    setPage(0);
+    fetchClients(0);
+    fetchCategories();
+  };
+
+  // Fetch categories on mount
   useEffect(() => {
-    fetchClients();
+    fetchCategories();
   }, []);
+
+  // Fetch page 0 when filters change
+  useEffect(() => {
+    setPage(0);
+    fetchClients(0);
+  }, [searchTerm, statusFilter, categoryFilter]);
+
+  // Fetch next page when page increments
+  useEffect(() => {
+    if (page > 0) {
+      fetchClients(page);
+    }
+  }, [page]);
+
+  // IntersectionObserver for infinite scrolling
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !isFetchingMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMore, loading, isFetchingMore]);
 
   // Selection & Export Handlers
   const handleSelectRow = (id) => {
@@ -82,10 +192,10 @@ export default function ClientsPage() {
   };
 
   const handleSelectAll = () => {
-    if (selectedIds.length === filteredClients.length) {
+    if (selectedIds.length === clients.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(filteredClients.map((c) => c.id));
+      setSelectedIds(clients.map((c) => c.id));
     }
   };
 
@@ -240,28 +350,7 @@ export default function ClientsPage() {
     }
   };
 
-  // Unique categories gathered dynamically
-  const categories = Array.from(
-    new Set(
-      clients
-        .map((c) => c.category)
-        .filter((cat) => cat && cat.trim() !== '')
-    )
-  );
 
-  // Filter and Search Logic
-  const filteredClients = clients.filter((client) => {
-    const matchesSearch = 
-      (client.business_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (client.owner_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (client.phone_number || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (client.city || '').toLowerCase().includes(searchTerm.toLowerCase());
-      
-    const matchesStatus = statusFilter === 'All' || client.status === statusFilter;
-    const matchesCategory = categoryFilter === 'All' || client.category === categoryFilter;
-    
-    return matchesSearch && matchesStatus && matchesCategory;
-  });
 
   // Open modal for adding
   const handleAddClick = () => {
@@ -329,7 +418,7 @@ export default function ClientsPage() {
         setSelectedClient(null);
       }
       
-      fetchClients();
+      handleRefresh();
     } catch (err) {
       console.error('Error deleting client:', err);
       alert('Failed to delete client.');
@@ -412,7 +501,7 @@ export default function ClientsPage() {
       }
       
       setIsModalOpen(false);
-      fetchClients();
+      handleRefresh();
     } catch (err) {
       console.error('Error saving client:', err);
       alert('Failed to save client: ' + err.message);
@@ -423,15 +512,15 @@ export default function ClientsPage() {
   const getStatusBadgeStyles = (status) => {
     switch (status) {
       case 'Active':
-        return 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border-emerald-150 dark:border-emerald-900/30';
+        return 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/30';
       case 'Lead':
-        return 'bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border-amber-150 dark:border-amber-900/30';
+        return 'bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/30';
       case 'New':
-        return 'bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-400 border-indigo-150 dark:border-indigo-900/30';
+        return 'bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900/30';
       case 'Inactive':
-        return 'bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border-rose-150 dark:border-rose-900/30';
+        return 'bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/30';
       default:
-        return 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-350 border-slate-150 dark:border-slate-800';
+        return 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-350 border-slate-200 dark:border-slate-805';
     }
   };
 
@@ -453,7 +542,7 @@ export default function ClientsPage() {
           </button>
           <button
             onClick={handleAddClick}
-            className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
+            className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
           >
             <Plus className="h-4.5 w-4.5" />
             <span>Add Client</span>
@@ -462,7 +551,7 @@ export default function ClientsPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-955/20 border border-amber-205 dark:border-amber-900/30 rounded-xl text-amber-850 dark:text-amber-400">
+        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
           <AlertCircle className="h-5 w-5 shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
@@ -480,9 +569,9 @@ export default function ClientsPage() {
       />
 
       {/* Main Clients Table Component */}
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-150 dark:border-slate-800/60 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
         <ClientTable
-          clients={filteredClients}
+          clients={clients}
           loading={loading}
           onRowClick={setSelectedClient}
           onEdit={handleEditClick}
@@ -494,6 +583,16 @@ export default function ClientsPage() {
         />
       </div>
 
+      {/* Sentinel element for infinite scroll */}
+      <div ref={loaderRef} className="h-12 flex items-center justify-center mt-4 mb-8">
+        {isFetchingMore && (
+          <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+            <span className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full"></span>
+            <span>Loading more clients...</span>
+          </div>
+        )}
+      </div>
+
       {/* Floating Bulk Actions Bar */}
       {selectedIds.length > 0 && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex items-center justify-between space-x-6 animate-in slide-in-from-bottom duration-300 max-w-lg w-[calc(100%-2rem)]">
@@ -502,20 +601,20 @@ export default function ClientsPage() {
               <Users className="h-5 w-5" />
             </div>
             <div>
-              <div className="font-bold text-sm text-slate-850 dark:text-slate-200">{selectedIds.length} Client{selectedIds.length > 1 ? 's' : ''} Selected</div>
+              <div className="font-bold text-sm text-slate-800 dark:text-slate-200">{selectedIds.length} Client{selectedIds.length > 1 ? 's' : ''} Selected</div>
               <p className="text-[10px] text-slate-500">Perform bulk client actions</p>
             </div>
           </div>
           <div className="flex items-center space-x-2 shrink-0">
             <button
               onClick={() => setSelectedIds([])}
-              className="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-semibold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-805 transition-all"
+              className="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-semibold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
             >
               Clear
             </button>
             <button
               onClick={handleExportSelected}
-              className="inline-flex items-center justify-center px-3.5 py-1.5 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow-md transition-all space-x-1.5"
+              className="inline-flex items-center justify-center px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow-md transition-all space-x-1.5"
             >
               <FileSpreadsheet className="h-4 w-4" />
               <span>Export Excel</span>
@@ -542,7 +641,7 @@ export default function ClientsPage() {
         onClose={() => setIsImportOpen(false)}
         onImportSuccess={() => {
           setIsImportOpen(false);
-          fetchClients();
+          handleRefresh();
         }}
         clients={clients}
       />

@@ -37,7 +37,9 @@ export default function Dashboard() {
         supabase
           .from('clients')
           .select('*', { count: 'exact', head: true })
-          .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY'),
+          .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
+          .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+          .neq('business_name', 'SYSTEM_EXCEL_SYNC'),
         supabase
           .from('outreach_schedules')
           .select('*', { count: 'exact', head: true })

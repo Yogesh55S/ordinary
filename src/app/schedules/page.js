@@ -61,6 +61,7 @@ export default function SchedulesPage() {
           .select('id, business_name, owner_name, phone_number, email')
           .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
           .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+          .neq('business_name', 'SYSTEM_EXCEL_SYNC')
           .order('business_name'),
         supabase
           .from('templates')

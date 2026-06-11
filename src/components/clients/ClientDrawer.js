@@ -22,12 +22,12 @@ export default function ClientDrawer({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <div className="flex items-center space-x-2">
-            <Info className="h-5 w-5 text-indigo-650 dark:text-indigo-400" />
+            <Info className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
             <h3 className="font-bold text-slate-800 dark:text-slate-200 text-lg">Client Details</h3>
           </div>
           <button 
             onClick={onClose}
-            className="text-slate-400 dark:text-slate-500 hover:text-slate-650 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X className="h-5 w-5" />
           </button>
@@ -78,7 +78,7 @@ export default function ClientDrawer({
                   <Mail className="h-4.5 w-4.5 text-slate-400 dark:text-slate-500 mt-0.5 shrink-0" />
                   <div>
                     <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Email Address</span>
-                    <a href={`mailto:${client.email}`} className="text-indigo-650 dark:text-indigo-400 hover:underline font-medium">
+                    <a href={`mailto:${client.email}`} className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
                       {client.email}
                     </a>
                   </div>
@@ -95,7 +95,7 @@ export default function ClientDrawer({
                       href={client.website.startsWith('http') ? client.website : `https://${client.website}`} 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="text-indigo-650 dark:text-indigo-400 hover:underline font-medium inline-flex items-center space-x-1"
+                      className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium inline-flex items-center space-x-1"
                     >
                       <span>{client.website}</span>
                       <ExternalLink className="h-3 w-3" />
@@ -144,7 +144,7 @@ export default function ClientDrawer({
           {/* Notes Section */}
           <div className="space-y-2">
             <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">CRM Notes</span>
-            <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-150 dark:border-slate-800/80 rounded-xl">
+            <div className="p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 rounded-xl">
               {client.notes ? (
                 <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
                   {client.notes}
@@ -175,7 +175,7 @@ export default function ClientDrawer({
           </button>
           <button
             onClick={(e) => onDelete(e, client)}
-            className="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-700 dark:text-rose-450 font-semibold rounded-xl text-sm border border-rose-100 dark:border-rose-900/30 transition-all space-x-1.5"
+            className="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-700 dark:text-rose-400 font-semibold rounded-xl text-sm border border-rose-100 dark:border-rose-900/30 transition-all space-x-1.5"
           >
             <Trash2 className="h-4 w-4" />
             <span>Delete Client</span>

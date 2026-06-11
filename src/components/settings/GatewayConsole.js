@@ -134,7 +134,7 @@ export default function GatewayConsole({
             <button
               onClick={() => onRefresh(true)}
               disabled={loading}
-              className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-55 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Force refresh"
             >
               <RefreshCw className={`h-4.5 w-4.5 ${loading ? 'animate-spin' : ''}`} />
@@ -200,7 +200,7 @@ export default function GatewayConsole({
 
             {/* Active Connection Info */}
             {gateway.status === 'connected' && gateway.connected_phone && (
-              <div className="p-4 bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-105 dark:border-emerald-900/30 rounded-xl space-y-1 text-sm text-slate-700 dark:text-slate-300">
+              <div className="p-4 bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-xl space-y-1 text-sm text-slate-700 dark:text-slate-300">
                 <div className="flex justify-between">
                   <span className="text-slate-400 dark:text-slate-500 font-semibold">Connected Device:</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">{gateway.connected_phone}</span>
@@ -229,7 +229,7 @@ export default function GatewayConsole({
       {activeTab === 'email' && (
         <div>
           <div className="p-5 border-b border-slate-100 dark:border-slate-800">
-            <h3 className="font-bold text-slate-805 dark:text-slate-100 text-lg">Email SMTP Gateway</h3>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Email SMTP Gateway</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Configure outbound email relay properties using your standard SMTP server</p>
           </div>
 
@@ -237,7 +237,7 @@ export default function GatewayConsole({
             {smtpStatusMsg && (
               <div className={`p-4 rounded-xl border text-sm flex items-start space-x-3 ${
                 smtpStatusMsg.toLowerCase().includes('success')
-                  ? 'bg-emerald-50 dark:bg-emerald-955/20 border-emerald-200 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-400'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-400'
                   : 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900/30 text-indigo-800 dark:text-indigo-400'
               }`}>
                 <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
@@ -255,7 +255,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_host}
                   onChange={(e) => setSmtp({ ...smtp, smtp_host: e.target.value })}
                   placeholder="smtp.gmail.com / smtp.mailgun.org"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
 
@@ -268,7 +268,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_port}
                   onChange={(e) => setSmtp({ ...smtp, smtp_port: e.target.value })}
                   placeholder="587 / 465"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
             </div>
@@ -283,7 +283,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_user}
                   onChange={(e) => setSmtp({ ...smtp, smtp_user: e.target.value })}
                   placeholder="user@gmail.com"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
 
@@ -296,7 +296,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_pass}
                   onChange={(e) => setSmtp({ ...smtp, smtp_pass: e.target.value })}
                   placeholder="••••••••••••••••"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function GatewayConsole({
                   value={smtp.sender_name}
                   onChange={(e) => setSmtp({ ...smtp, sender_name: e.target.value })}
                   placeholder="ordinary CRM"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-105 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
 
@@ -323,7 +323,7 @@ export default function GatewayConsole({
                   value={smtp.sender_email}
                   onChange={(e) => setSmtp({ ...smtp, sender_email: e.target.value })}
                   placeholder="outreach@yourdomain.com"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
             </div>
@@ -335,7 +335,7 @@ export default function GatewayConsole({
                 type="checkbox"
                 checked={smtp.smtp_secure}
                 onChange={(e) => setSmtp({ ...smtp, smtp_secure: e.target.checked })}
-                className="h-4 w-4 rounded-sm border-slate-350 text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
+                className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
               />
               <label htmlFor="smtp_secure" className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase cursor-pointer select-none">
                 Use Secure SSL/TLS (Required for Port 465, disable for Port 587 STARTTLS)
@@ -347,7 +347,7 @@ export default function GatewayConsole({
               <button
                 type="submit"
                 disabled={smtpSaving || smtpTesting}
-                className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm hover:shadow-md disabled:opacity-50"
+                className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm hover:shadow-md disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
                 <span>{smtpSaving ? 'Saving...' : 'Save Settings'}</span>
@@ -361,13 +361,13 @@ export default function GatewayConsole({
                   value={testRecipient}
                   onChange={(e) => setTestRecipient(e.target.value)}
                   disabled={smtpTesting}
-                  className="px-3 py-2 max-w-[200px] border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="px-3 py-2 max-w-[200px] border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
                 <button
                   type="button"
                   onClick={() => onTestSmtp(testRecipient)}
                   disabled={smtpSaving || smtpTesting}
-                  className="inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-755 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{smtpTesting ? 'Testing...' : 'Test Connection'}</span>
@@ -381,7 +381,7 @@ export default function GatewayConsole({
       {activeTab === 'sheets' && (
         <div>
           <div className="p-5 border-b border-slate-100 dark:border-slate-800">
-            <h3 className="font-bold text-slate-805 dark:text-slate-100 text-lg">Excel & Google Sheets Live Sync</h3>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Excel & Google Sheets Live Sync</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Sync outreach success and failure logs in real-time to a connected web spreadsheet.</p>
           </div>
 
@@ -389,8 +389,8 @@ export default function GatewayConsole({
             {sheetsStatusMsg && (
               <div className={`p-4 rounded-xl border text-sm flex items-start space-x-3 ${
                 sheetsStatusMsg.toLowerCase().includes('success')
-                  ? 'bg-emerald-50 dark:bg-emerald-955/20 border-emerald-200 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-400'
-                  : 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900/30 text-indigo-805 dark:text-indigo-400'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-400'
+                  : 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900/30 text-indigo-800 dark:text-indigo-400'
               }`}>
                 <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
                 <span>{sheetsStatusMsg}</span>
@@ -407,7 +407,7 @@ export default function GatewayConsole({
                   value={sheetsSync.webhook_url}
                   onChange={(e) => setSheetsSync({ ...sheetsSync, webhook_url: e.target.value })}
                   placeholder="https://script.google.com/macros/s/.../exec"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
                 />
               </div>
 
@@ -418,7 +418,7 @@ export default function GatewayConsole({
                   type="checkbox"
                   checked={sheetsSync.enabled}
                   onChange={(e) => setSheetsSync({ ...sheetsSync, enabled: e.target.checked })}
-                  className="h-4 w-4 rounded-sm border-slate-350 text-indigo-650 dark:text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
+                  className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 dark:text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
                 />
                 <label htmlFor="sheets_sync_enabled" className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase cursor-pointer select-none">
                   Enable Real-Time Excel/Sheets Sync Webhook
@@ -430,7 +430,7 @@ export default function GatewayConsole({
                 <button
                   type="submit"
                   disabled={sheetsSaving || sheetsTesting}
-                  className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm hover:shadow-md disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm hover:shadow-md disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   <span>{sheetsSaving ? 'Saving...' : 'Save Settings'}</span>
@@ -440,7 +440,7 @@ export default function GatewayConsole({
                   type="button"
                   onClick={onTestSheetsSync}
                   disabled={sheetsSaving || sheetsTesting}
-                  className="inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-202 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-755 dark:text-slate-305 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50 animate-pulse-none"
+                  className="inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{sheetsTesting ? 'Testing Webhook...' : 'Test Webhook'}</span>
@@ -460,7 +460,7 @@ export default function GatewayConsole({
                 </div>
               </div>
 
-              <ol className="list-decimal pl-4 text-xs text-slate-650 dark:text-slate-400 space-y-2 leading-relaxed">
+              <ol className="list-decimal pl-4 text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
                 <li>Create a new **Google Sheet** on your Google Drive.</li>
                 <li>Go to the top menu and select **Extensions &gt; Apps Script**.</li>
                 <li>Clear any existing text inside the code editor page, and paste the code block below.</li>
@@ -473,7 +473,7 @@ export default function GatewayConsole({
 
               <div className="space-y-2 pt-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-550 dark:text-slate-450 uppercase">Apps Script Code Block</span>
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">Apps Script Code Block</span>
                   <button
                     onClick={handleCopyScript}
                     className="inline-flex items-center space-x-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:underline transition-all font-semibold"
@@ -482,7 +482,7 @@ export default function GatewayConsole({
                     <span>{copiedScript ? 'Copied!' : 'Copy Code'}</span>
                   </button>
                 </div>
-                <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-150 dark:border-slate-800 rounded-xl font-mono text-[10px] max-h-48 overflow-y-auto text-slate-700 dark:text-slate-400 leading-normal">
+                <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-[10px] max-h-48 overflow-y-auto text-slate-700 dark:text-slate-400 leading-normal">
                   {appsScriptCode}
                 </pre>
               </div>

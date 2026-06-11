@@ -60,6 +60,7 @@ export default function SettingsPage() {
         .from('clients')
         .select('*')
         .eq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
+        .limit(1)
         .maybeSingle();
         
       if (error) throw error;
@@ -118,6 +119,7 @@ export default function SettingsPage() {
         .from('clients')
         .select('*')
         .eq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+        .limit(1)
         .maybeSingle();
         
       if (error) throw error;
@@ -180,6 +182,7 @@ export default function SettingsPage() {
         .from('clients')
         .select('*')
         .eq('business_name', 'SYSTEM_EXCEL_SYNC')
+        .limit(1)
         .maybeSingle();
         
       if (error) throw error;
@@ -400,6 +403,7 @@ export default function SettingsPage() {
           .from('clients')
           .select('notes')
           .eq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+          .limit(1)
           .maybeSingle();
           
         if (!error && data && data.notes) {
@@ -506,6 +510,7 @@ export default function SettingsPage() {
           .from('clients')
           .select('notes')
           .eq('business_name', 'SYSTEM_EXCEL_SYNC')
+          .limit(1)
           .maybeSingle();
           
         if (!error && data && data.notes) {

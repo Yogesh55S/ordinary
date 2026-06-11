@@ -354,15 +354,15 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
       ></div>
 
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-150 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
-          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-205 dark:text-slate-200">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 dark:text-slate-205">
             Bulk Import Clients
           </h3>
           <button 
             onClick={onClose}
-            className="text-slate-400 dark:text-slate-500 hover:text-slate-655 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X className="h-5 w-5" />
           </button>
@@ -375,7 +375,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
             className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
               activeTab === 'upload'
                 ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 hover:text-slate-755 dark:hover:text-slate-300'
+                : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Upload File
@@ -385,7 +385,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
             className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
               activeTab === 'paste'
                 ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 hover:text-slate-755 dark:hover:text-slate-300'
+                : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Paste Raw Text
@@ -395,7 +395,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
             className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
               activeTab === 'demo'
                 ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 hover:text-slate-755 dark:hover:text-slate-300'
+                : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Samples & Demo
@@ -431,7 +431,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                 />
               </div>
               {fileName && (
-                <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-900/40 px-4 py-2.5 rounded-xl border border-slate-150 dark:border-slate-800/80">
+                <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-900/40 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800/80">
                   <span className="text-xs font-semibold text-slate-500 truncate max-w-sm">Selected: {fileName}</span>
                   <button 
                     onClick={() => {
@@ -450,7 +450,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
           {/* Tab 2: Paste Raw Text */}
           {activeTab === 'paste' && (
             <div className="space-y-3">
-              <label className="text-xs font-bold text-slate-550 dark:text-slate-400 uppercase">Paste CSV or JSON Content</label>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Paste CSV or JSON Content</label>
               <textarea
                 value={inputText}
                 onChange={handlePasteChange}
@@ -477,12 +477,12 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                       <span>Copy Template</span>
                     </button>
                   </div>
-                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-150 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
+                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
                     {demoCSV}
                   </pre>
                   <p className="text-[11px] text-slate-400 mt-1">Headers are case-insensitive and match close aliases (e.g. Mobile number, Phone, Business).</p>
                 </div>
-
+ 
                 {/* JSON block */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -495,18 +495,18 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                       <span>Copy Template</span>
                     </button>
                   </div>
-                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-150 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
+                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
                     {demoJSON}
                   </pre>
                   <p className="text-[11px] text-slate-400 mt-1">Structure can be a single client object or a JSON array of client objects.</p>
                 </div>
               </div>
-
+ 
               {/* Demo Loader Buttons */}
               <div className="bg-indigo-50/50 dark:bg-indigo-950/20 p-4 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h4 className="font-bold text-indigo-900 dark:text-indigo-305 text-sm">Interactive Sandbox Demo</h4>
-                  <p className="text-xs text-indigo-750 dark:text-indigo-400 mt-0.5">Load mock client datasets instantly to review parsing previews and verification badges.</p>
+                  <p className="text-xs text-indigo-700 dark:text-indigo-400 mt-0.5">Load mock client datasets instantly to review parsing previews and verification badges.</p>
                 </div>
                 <div className="flex space-x-2 shrink-0">
                   <button
@@ -538,7 +538,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
           {parsedData.length > 0 && (
             <div className="space-y-3 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-550 dark:text-slate-400 uppercase">Parsed Preview Logs ({parsedData.length} records detected)</span>
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Parsed Preview Logs ({parsedData.length} records detected)</span>
                 <div className="flex items-center space-x-3 text-xs">
                   <span className="flex items-center text-emerald-600 dark:text-emerald-400 font-medium">
                     <span className="h-2 w-2 rounded-full bg-emerald-500 mr-1.5"></span>
@@ -559,8 +559,8 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                 </div>
               </div>
 
-              <div className="border border-slate-150 dark:border-slate-800/80 rounded-2xl overflow-hidden max-h-72 overflow-y-auto">
-                <table className="min-w-full divide-y divide-slate-150 dark:divide-slate-800 text-left text-xs">
+              <div className="border border-slate-200 dark:border-slate-800/80 rounded-2xl overflow-hidden max-h-72 overflow-y-auto">
+                <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs text-slate-600 dark:text-slate-300">
                   <thead className="bg-slate-50 dark:bg-slate-900/40 text-slate-400 font-bold sticky top-0 uppercase">
                     <tr>
                       <th className="px-4 py-3 w-8">#</th>
@@ -572,7 +572,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                       <th className="px-4 py-3 text-right">Validation</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-650 dark:text-slate-300">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
                     {parsedData.map((row) => (
                       <tr 
                         key={row.index} 
@@ -580,12 +580,12 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                           row.validationStatus === 'error' 
                             ? 'bg-rose-50/10 dark:bg-rose-950/5' 
                             : row.validationStatus === 'warning'
-                            ? 'bg-amber-50/10 dark:bg-amber-950/5'
+                            ? 'bg-amber-50/10 dark:bg-amber-955/5'
                             : ''
                         }`}
                       >
                         <td className="px-4 py-3 text-slate-400 font-medium">{row.index}</td>
-                        <td className="px-4 py-3 font-bold text-slate-800 dark:text-slate-205">
+                        <td className="px-4 py-3 font-bold text-slate-800 dark:text-slate-200">
                           {row.business_name || <span className="text-rose-500 italic">None</span>}
                         </td>
                         <td className="px-4 py-3">{row.owner_name || '—'}</td>
@@ -601,7 +601,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                           )}
                           {row.validationStatus === 'warning' && (
                             <span 
-                              className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-450 border border-amber-100 dark:border-amber-900/30"
+                              className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] bg-amber-50 dark:bg-amber-955/30 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30"
                               title={row.validationMessage}
                             >
                               <AlertTriangle className="h-3 w-3 mr-1" />
@@ -640,7 +640,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
           <button
             onClick={handleImportSubmit}
             disabled={importing || parsedData.filter(d => d.validationStatus === 'valid').length === 0}
-            className="inline-flex items-center px-4 py-2 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
           >
             {importing ? (
               <>

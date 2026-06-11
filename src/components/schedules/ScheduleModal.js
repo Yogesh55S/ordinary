@@ -25,7 +25,7 @@ export default function ScheduleModal({
       {/* Backdrop */}
       <div 
         onClick={onClose}
-        className="fixed inset-0 bg-slate-900/40 dark:bg-slate-955/60 backdrop-blur-xs transition-opacity duration-300"
+        className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/60 backdrop-blur-xs transition-opacity duration-300"
       ></div>
       
       {/* Modal Container */}
@@ -218,7 +218,7 @@ export default function ScheduleModal({
                     <button
                       type="button"
                       onClick={() => onRemoveAttachment(file.id)}
-                      className="ml-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-455 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full p-1 leading-none"
+                      className="ml-2 text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full p-1 leading-none"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -240,7 +240,7 @@ export default function ScheduleModal({
             <button
               type="submit"
               disabled={uploadingFile}
-              className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50"
             >
               {editingSchedule ? 'Save Changes' : 'Schedule Outreach'}
             </button>

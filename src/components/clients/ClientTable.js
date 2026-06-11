@@ -40,7 +40,7 @@ export default function ClientTable({
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-slate-150 dark:divide-slate-800">
+      <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
         <thead className="bg-slate-50/70 dark:bg-slate-900/40 text-left text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
           <tr>
             <th className="px-4 py-4 w-12 text-center">
@@ -48,7 +48,7 @@ export default function ClientTable({
                 type="checkbox"
                 checked={isAllSelected}
                 onChange={onSelectAll}
-                className="rounded border-slate-300 dark:border-slate-800 text-indigo-650 dark:text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
+                className="rounded border-slate-300 dark:border-slate-800 text-indigo-600 dark:text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
               />
             </th>
             <th className="px-6 py-4">Business & Owner</th>
@@ -74,7 +74,7 @@ export default function ClientTable({
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => onSelectRow(client.id)}
-                    className="rounded border-slate-300 dark:border-slate-800 text-indigo-650 dark:text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
+                    className="rounded border-slate-300 dark:border-slate-800 text-indigo-600 dark:text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
                   />
                 </td>
                 <td className="px-6 py-4">
@@ -111,7 +111,7 @@ export default function ClientTable({
                   <div className="flex items-center justify-end space-x-2">
                     <button
                       onClick={(e) => onEdit(e, client)}
-                      className="p-1.5 text-slate-500 hover:text-indigo-650 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 rounded-lg transition-colors"
                       title="Edit Client"
                     >
                       <Edit2 className="h-4.5 w-4.5" />

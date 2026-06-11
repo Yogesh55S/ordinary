@@ -2,16 +2,16 @@ import { Terminal, Copy, Check } from 'lucide-react';
 
 export default function SetupGuide({ copiedCmd, onCopyCmd }) {
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-150 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden flex flex-col">
-      <div className="p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-905 dark:bg-slate-900/40 flex items-center space-x-2 text-slate-850 dark:text-slate-200">
-        <Terminal className="h-5 w-5 text-indigo-650 dark:text-indigo-400" />
+    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden flex flex-col">
+      <div className="p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 flex items-center space-x-2 text-slate-800 dark:text-slate-200">
+        <Terminal className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         <h3 className="font-bold text-sm uppercase tracking-wider">Local Setup Guide</h3>
       </div>
 
-      <div className="p-5 space-y-4 text-xs text-slate-650 dark:text-slate-350 leading-relaxed">
+      <div className="p-5 space-y-4 text-xs text-slate-600 dark:text-slate-350 leading-relaxed">
         <p>Because WhatsApp Web session socket nodes run locally, you must run the background automation worker daemon on your machine:</p>
         
-        <ol className="list-decimal list-inside space-y-3 font-semibold text-slate-705 dark:text-slate-200 pl-1">
+        <ol className="list-decimal list-inside space-y-3 font-semibold text-slate-700 dark:text-slate-200 pl-1">
           <li>
             <span className="font-normal text-slate-600 dark:text-slate-350">Ensure Supabase environment variables are written inside <code className="bg-slate-100 dark:bg-slate-900 px-1 py-0.5 rounded text-indigo-700 dark:text-indigo-400">.env.local</code>.</span>
           </li>

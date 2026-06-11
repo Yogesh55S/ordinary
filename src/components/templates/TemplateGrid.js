@@ -30,8 +30,8 @@ export default function TemplateGrid({
 
   if (templates.length === 0) {
     return (
-      <div className="bg-white dark:bg-[#111625] p-16 text-center text-slate-400 dark:text-slate-550 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
-        <FileText className="h-12 w-12 text-slate-305 dark:text-slate-700 mb-3" />
+      <div className="bg-white dark:bg-[#111625] p-16 text-center text-slate-400 dark:text-slate-500 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
+        <FileText className="h-12 w-12 text-slate-300 dark:text-slate-700 mb-3" />
         <span className="font-semibold text-base text-slate-700 dark:text-slate-300">No templates found</span>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">Create outreach message templates to avoid repeating common responses or marketing scripts.</p>
       </div>
@@ -61,7 +61,7 @@ export default function TemplateGrid({
           >
             <div>
               <div className="flex items-start justify-between space-x-3 mb-3">
-                <h3 className="font-bold text-slate-850 dark:text-slate-200 text-base leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   {template.template_name}
                 </h3>
                 <div className="flex flex-wrap gap-1 items-center shrink-0">
@@ -71,7 +71,7 @@ export default function TemplateGrid({
                       Email
                     </span>
                   ) : (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/20 text-emerald-705 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
                       <MessageSquare className="h-3 w-3 mr-1" />
                       WhatsApp
                     </span>
@@ -134,7 +134,7 @@ export default function TemplateGrid({
                   className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${
                     copiedId === template.id
                       ? 'bg-emerald-50 dark:bg-emerald-950/25 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/30'
-                      : 'bg-slate-50 dark:bg-[#0e1320] text-slate-600 dark:text-slate-305 border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      : 'bg-slate-50 dark:bg-[#0e1320] text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   {copiedId === template.id ? (
@@ -162,7 +162,7 @@ export default function TemplateGrid({
                 {/* Delete Button */}
                 <button
                   onClick={() => onDelete(template)}
-                  className="p-1.5 text-slate-505 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-450 hover:bg-rose-50 dark:hover:bg-rose-955/20 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30 rounded-lg transition-all"
+                  className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30 rounded-lg transition-all"
                   title="Delete Template"
                 >
                   <Trash2 className="h-4.5 w-4.5" />

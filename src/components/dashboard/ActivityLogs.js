@@ -15,8 +15,8 @@ export default function ActivityLogs({ activityLogs, loading }) {
       };
     } else if (type.includes('create') || type.includes('add') || type.includes('schedule') || type.includes('template')) {
       return {
-        bg: 'bg-indigo-650 dark:bg-indigo-500',
-        badge: 'bg-indigo-655 dark:bg-indigo-500',
+        bg: 'bg-indigo-600 dark:bg-indigo-500',
+        badge: 'bg-indigo-600 dark:bg-indigo-500',
       };
     } else {
       return {
@@ -32,7 +32,7 @@ export default function ActivityLogs({ activityLogs, loading }) {
   };
 
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-150 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
+    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
       <div className="p-5 border-b border-slate-100 dark:border-slate-800">
         <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Activity History</h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Outreach log chronological history</p>
@@ -52,13 +52,13 @@ export default function ActivityLogs({ activityLogs, loading }) {
             ))}
           </div>
         ) : activityLogs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 text-center text-slate-450 dark:text-slate-500 h-full">
+          <div className="flex flex-col items-center justify-center p-12 text-center text-slate-400 dark:text-slate-500 h-full">
             <AlertCircle className="h-10 w-10 text-slate-300 dark:text-slate-700 mb-3" />
-            <span className="font-semibold text-sm text-slate-750 dark:text-slate-355">No activity recorded</span>
-            <p className="text-xs text-slate-500 dark:text-slate-450 mt-1 max-w-[200px]">Logs are generated automatically by the local background worker process.</p>
+            <span className="font-semibold text-sm text-slate-700 dark:text-slate-300">No activity recorded</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-[200px]">Logs are generated automatically by the local background worker process.</p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-50 dark:divide-slate-850">
+          <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {activityLogs.map((log) => {
               const style = getLogTypeStyles(log.action_type);
               return (

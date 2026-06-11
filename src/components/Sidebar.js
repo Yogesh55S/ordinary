@@ -86,7 +86,7 @@ export default function Sidebar() {
           {/* Backdrop overlay */}
           <div 
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-slate-900/40 dark:bg-slate-955/60 backdrop-blur-xs transition-opacity duration-300"
+            className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/60 backdrop-blur-xs transition-opacity duration-300"
           ></div>
 
           {/* Drawer content */}
@@ -104,7 +104,7 @@ export default function Sidebar() {
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="text-slate-505 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-205 rounded-lg p-1.5 focus:outline-none"
+                className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg p-1.5 focus:outline-none"
                 aria-label="Close menu"
               >
                 <X className="h-5 w-5" />
@@ -195,7 +195,7 @@ export default function Sidebar() {
           {/* Light/Dark Toggle */}
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-slate-650 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all border border-slate-200 dark:border-slate-800"
+            className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all border border-slate-200 dark:border-slate-800"
           >
             <span className="flex items-center space-x-2">
               {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-500" /> : <Moon className="h-4 w-4 text-slate-400" />}

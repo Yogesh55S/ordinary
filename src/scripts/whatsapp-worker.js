@@ -85,6 +85,7 @@ async function triggerSheetsWebhook(payload) {
       .from('clients')
       .select('notes')
       .eq('business_name', 'SYSTEM_EXCEL_SYNC')
+      .limit(1)
       .maybeSingle();
 
     if (error || !data || !data.notes) {
@@ -308,6 +309,7 @@ async function processSchedules() {
           .from('clients')
           .select('notes')
           .eq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+          .limit(1)
           .maybeSingle();
 
         if (smtpErr || !smtpGateway || !smtpGateway.notes) {
@@ -627,6 +629,7 @@ async function checkGatewaySignals() {
       .from('clients')
       .select('*')
       .eq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
+      .limit(1)
       .maybeSingle();
       
     if (!error && data) {
@@ -681,6 +684,7 @@ async function checkGatewaySignals() {
       .from('clients')
       .select('*')
       .eq('business_name', 'SYSTEM_EMAIL_GATEWAY')
+      .limit(1)
       .maybeSingle();
 
     if (!error && data && data.notes) {
@@ -767,6 +771,7 @@ async function checkGatewaySignals() {
       .from('clients')
       .select('*')
       .eq('business_name', 'SYSTEM_EXCEL_SYNC')
+      .limit(1)
       .maybeSingle();
 
     if (!error && data && data.notes) {
@@ -852,6 +857,7 @@ async function startWorker() {
     .from('clients')
     .select('status')
     .eq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
+    .limit(1)
     .maybeSingle();
 
   let dbStatus = 'disconnected';
