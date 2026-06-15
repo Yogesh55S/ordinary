@@ -540,13 +540,16 @@ async function processSchedules() {
           await sock.sendMessage(recipientJid, { text: messageText });
           
           // Send any attachments
+          let mediaItems = [];
           if (schedule.attachments && schedule.attachments.length > 0) {
-            const { data: mediaItems } = await supabase
+            const { data: fetchedMedia } = await supabase
               .from('media')
               .select('*')
               .in('id', schedule.attachments);
+            mediaItems = fetchedMedia || [];
+          }
 
-            if (mediaItems && mediaItems.length > 0) {
+          if (mediaItems.length > 0) {
               for (const media of mediaItems) {
                 try {
                   console.log(`Downloading WhatsApp file attachment: ${media.file_name}...`);
@@ -568,7 +571,6 @@ async function processSchedules() {
                 }
               }
             }
-          }
 
           // Update schedule status to Sent
           await supabase.from('outreach_schedules')
@@ -582,7 +584,7 @@ async function processSchedules() {
           });
           
           console.log(`Successfully sent outreach to ${cleanedPhone}`);
-          const attachmentNames = (mediaItems || []).map(m => m.file_name).join(', ');
+          const attachmentNames = mediaItems.map(m => m.file_name).join(', ');
           await triggerSheetsWebhook({
             business_name: businessName,
             phone_number: phoneNumber,
@@ -610,7 +612,7 @@ async function processSchedules() {
             channel: 'whatsapp',
             status: 'Failed',
             message: messageText,
-            attachments: (mediaItems || []).map(m => m.file_name).join(', '),
+            attachments: mediaItems.map(m => m.file_name).join(', '),
             error_message: sendErr.message
           });
         }
