@@ -171,7 +171,7 @@ async function connectToWhatsApp() {
       }
 
       if (connection === 'open') {
-        const userId = sock.user.id;
+        const userId = sock.user?.id || '';
         const phoneDigits = userId.split(':')[0].split('@')[0];
         console.log(`WhatsApp Link Connected successfully! Linked phone: ${phoneDigits}`);
         
