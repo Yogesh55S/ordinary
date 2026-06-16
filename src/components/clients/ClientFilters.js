@@ -40,6 +40,7 @@ export default function ClientFilters({
             <option value="Lead" className="dark:bg-[#111625]">Lead</option>
             <option value="Active" className="dark:bg-[#111625]">Active</option>
             <option value="Inactive" className="dark:bg-[#111625]">Inactive</option>
+            <option value="Archived" className="dark:bg-[#111625]">Archived</option>
           </select>
         </div>
 

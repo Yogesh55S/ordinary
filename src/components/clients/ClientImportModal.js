@@ -155,7 +155,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
       let clientStatus = 'New';
       if (row.status) {
         const testStatus = row.status.trim().toLowerCase();
-        if (['new', 'lead', 'active', 'inactive'].includes(testStatus)) {
+        if (['new', 'lead', 'active', 'inactive', 'archived'].includes(testStatus)) {
           clientStatus = testStatus.charAt(0).toUpperCase() + testStatus.slice(1);
         }
       }

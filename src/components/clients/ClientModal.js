@@ -152,6 +152,7 @@ export default function ClientModal({
                 <option value="Lead" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Lead</option>
                 <option value="Active" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Active</option>
                 <option value="Inactive" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Inactive</option>
+                <option value="Archived" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Archived</option>
               </select>
             </div>
           </div>

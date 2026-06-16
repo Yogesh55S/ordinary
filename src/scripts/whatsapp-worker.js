@@ -33,6 +33,41 @@ let isConnecting = false;
 let checkInterval = null;
 let scheduleInterval = null;
 
+// Helper to format a phone number to a WhatsApp JID
+function formatToWhatsappJid(phone, senderPhone) {
+  let cleaned = phone.trim();
+  
+  // Strip leading '+' or '00'
+  if (cleaned.startsWith('+')) {
+    cleaned = cleaned.slice(1);
+  } else if (cleaned.startsWith('00')) {
+    cleaned = cleaned.slice(2);
+  }
+  
+  // Remove all non-digits
+  cleaned = cleaned.replace(/\D/g, '');
+  
+  // Strip leading '0' if it's an 11-digit number (e.g. 09876543210 -> 9876543210)
+  if (cleaned.startsWith('0') && cleaned.length === 11) {
+    cleaned = cleaned.slice(1);
+  }
+  
+  // If the number length is 10 (or less), we need to prepend a country code
+  if (cleaned.length <= 10) {
+    let countryCode = '91'; // default fallback for India
+    if (senderPhone) {
+      const cleanSender = senderPhone.replace(/\D/g, '');
+      if (cleanSender.length > 10) {
+        countryCode = cleanSender.slice(0, cleanSender.length - 10);
+      }
+    }
+    cleaned = countryCode + cleaned;
+    console.log(`Auto-formatted recipient number ${phone} using country code ${countryCode} -> ${cleaned}`);
+  }
+  
+  return `${cleaned}@s.whatsapp.net`;
+}
+
 // Helper to clean up auth credentials directory
 function clearAuthDir() {
   const authDir = path.resolve(__dirname, '../../.baileys_auth');
@@ -80,6 +115,10 @@ async function updateGatewayStatus(fields) {
 
 // Trigger Google Sheets Webhook Sync
 async function triggerSheetsWebhook(payload) {
+  // Only sync successfully sent messages to Google Sheets
+  if (payload.status !== 'Sent') {
+    return;
+  }
   try {
     const { data, error } = await supabase
       .from('clients')
@@ -529,18 +568,25 @@ async function processSchedules() {
         messageText = messageText.replace(/\{business_name\}/g, businessName);
         messageText = messageText.replace(/\{owner_name\}/g, ownerName);
 
-        // Clean phone number (leave digits only)
-        const cleanedPhone = phoneNumber.replace(/\D/g, '');
-        const recipientJid = `${cleanedPhone}@s.whatsapp.net`;
+        const senderId = sock?.user?.id || '';
+        const senderPhone = senderId.split(':')[0].split('@')[0];
+        const recipientJid = formatToWhatsappJid(phoneNumber, senderPhone);
+        const cleanedPhone = recipientJid.split('@')[0];
         
+        let mediaItems = [];
         try {
-          console.log(`Sending WhatsApp message to ${recipientJid}...`);
+          console.log(`Verifying WhatsApp registration for ${recipientJid}...`);
+          const onWaResults = await sock.onWhatsApp(recipientJid);
+          if (!onWaResults || onWaResults.length === 0 || !onWaResults[0].exists) {
+            throw new Error(`The phone number ${phoneNumber} is not registered on WhatsApp.`);
+          }
+          const verifiedJid = onWaResults[0].jid;
+          console.log(`Sending WhatsApp message to ${verifiedJid}...`);
           
           // Send primary text message
-          await sock.sendMessage(recipientJid, { text: messageText });
+          await sock.sendMessage(verifiedJid, { text: messageText });
           
           // Send any attachments
-          let mediaItems = [];
           if (schedule.attachments && schedule.attachments.length > 0) {
             const { data: fetchedMedia } = await supabase
               .from('media')
@@ -550,32 +596,45 @@ async function processSchedules() {
           }
 
           if (mediaItems.length > 0) {
-              for (const media of mediaItems) {
-                try {
-                  console.log(`Downloading WhatsApp file attachment: ${media.file_name}...`);
-                  const buffer = await downloadFile(media.file_url);
-                  const mimeType = media.file_type || '';
-                  
-                  console.log(`Sending WhatsApp attachment ${media.file_name} (${mimeType})...`);
-                  if (mimeType.startsWith('image/')) {
-                    await sock.sendMessage(recipientJid, { image: buffer, caption: media.file_name });
-                  } else if (mimeType.startsWith('video/')) {
-                    await sock.sendMessage(recipientJid, { video: buffer, caption: media.file_name });
-                  } else if (mimeType.startsWith('audio/')) {
-                    await sock.sendMessage(recipientJid, { audio: buffer, mimetype: mimeType });
-                  } else {
-                    await sock.sendMessage(recipientJid, { document: buffer, fileName: media.file_name, mimetype: mimeType });
-                  }
-                } catch (dlErr) {
-                  console.error(`Failed to send attachment ${media.file_name}:`, dlErr.message);
+            for (const media of mediaItems) {
+              try {
+                console.log(`Downloading WhatsApp file attachment: ${media.file_name}...`);
+                const buffer = await downloadFile(media.file_url);
+                const mimeType = media.file_type || '';
+                
+                console.log(`Sending WhatsApp attachment ${media.file_name} (${mimeType})...`);
+                if (mimeType.startsWith('image/')) {
+                  await sock.sendMessage(verifiedJid, { image: buffer, caption: media.file_name });
+                } else if (mimeType.startsWith('video/')) {
+                  await sock.sendMessage(verifiedJid, { video: buffer, caption: media.file_name });
+                } else if (mimeType.startsWith('audio/')) {
+                  await sock.sendMessage(verifiedJid, { audio: buffer, mimetype: mimeType });
+                } else {
+                  await sock.sendMessage(verifiedJid, { document: buffer, fileName: media.file_name, mimetype: mimeType });
                 }
+              } catch (dlErr) {
+                console.error(`Failed to send attachment ${media.file_name}:`, dlErr.message);
               }
             }
+          }
 
           // Update schedule status to Sent
           await supabase.from('outreach_schedules')
             .update({ status: 'Sent' })
             .eq('id', schedule.id);
+
+          // Update client status to Archived (only for WhatsApp dispatches)
+          if (schedule.client_id) {
+            const { error: clientUpdateErr } = await supabase
+              .from('clients')
+              .update({ status: 'Archived', updated_at: new Date().toISOString() })
+              .eq('id', schedule.client_id);
+            if (clientUpdateErr) {
+              console.error(`Failed to update client ${schedule.client_id} status to Archived:`, clientUpdateErr.message);
+            } else {
+              console.log(`Successfully updated client ${schedule.client_id} status to Archived`);
+            }
+          }
             
           // Log to activity_logs
           await supabase.from('activity_logs').insert({
