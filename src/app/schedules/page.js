@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Plus, AlertCircle } from 'lucide-react';
+import { Plus, AlertCircle, Calendar, RefreshCw } from 'lucide-react';
 import { uploadAttachment } from '@/lib/media';
 
 // Import modular schedules subcomponents
-import StatusFilters from '@/components/schedules/StatusFilters';
 import ScheduleTable from '@/components/schedules/ScheduleTable';
 import ScheduleModal from '@/components/schedules/ScheduleModal';
 import ViewMessageModal from '@/components/schedules/ViewMessageModal';
@@ -18,16 +17,9 @@ export default function SchedulesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Queue stats
-  const [counts, setCounts] = useState({
-    Pending: 0,
-    Sent: 0,
-    Failed: 0,
-  });
+  // Category filter state
+  const [categoryFilter, setCategoryFilter] = useState('All');
 
-  // Filter & Search
-  const [statusFilter, setStatusFilter] = useState('All');
-  
   // Modals state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
@@ -58,7 +50,7 @@ export default function SchedulesPage() {
       const [clientsRes, templatesRes, schedulesRes, mediaRes] = await Promise.all([
         supabase
           .from('clients')
-          .select('id, business_name, owner_name, phone_number, email')
+          .select('id, business_name, owner_name, phone_number, email, category, status')
           .neq('business_name', 'SYSTEM_WHATSAPP_GATEWAY')
           .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
           .neq('business_name', 'SYSTEM_EXCEL_SYNC')
@@ -79,7 +71,7 @@ export default function SchedulesPage() {
             schedule_time,
             status,
             created_at,
-            clients ( business_name, owner_name, phone_number, email ),
+            clients ( business_name, owner_name, phone_number, email, category, status ),
             templates ( template_name )
           `)
           .order('schedule_date', { ascending: true })
@@ -115,19 +107,6 @@ export default function SchedulesPage() {
       setClients(clientsRes.data || []);
       setTemplates(templatesRes.data || []);
       setSchedules(scheduleData);
-
-      // Compute status count chips
-      const c = { Pending: 0, Sent: 0, Failed: 0 };
-      scheduleData.forEach((item) => {
-        if (item.status === 'Pending' || item.status === 'Scheduled') {
-          c.Pending += 1;
-        } else if (item.status === 'Sent') {
-          c.Sent += 1;
-        } else if (item.status === 'Failed') {
-          c.Failed += 1;
-        }
-      });
-      setCounts(c);
       setError(null);
     } catch (err) {
       console.error('Error fetching schedules data:', err);
@@ -141,10 +120,26 @@ export default function SchedulesPage() {
     fetchData();
   }, []);
 
-  const filteredSchedules = schedules.filter((item) => {
-    if (statusFilter === 'All') return true;
-    if (statusFilter === 'Pending') return item.status === 'Pending' || item.status === 'Scheduled';
-    return item.status === statusFilter;
+  // Compute categories dynamically
+  const uniqueCategories = ['All', ...new Set(clients.map(c => c.category).filter(Boolean))];
+
+  // Category Filtered Schedules
+  const categoryFilteredSchedules = schedules.filter((item) => {
+    if (categoryFilter === 'All') return true;
+    return item.clients?.category === categoryFilter;
+  });
+
+  // Split into Active (Pending/Scheduled)
+  const pendingSchedules = categoryFilteredSchedules.filter(
+    (item) => item.status === 'Pending' || item.status === 'Scheduled'
+  );
+
+  // Compute status counts for the selected category
+  const counts = { Pending: 0 };
+  categoryFilteredSchedules.forEach((item) => {
+    if (item.status === 'Pending' || item.status === 'Scheduled') {
+      counts.Pending += 1;
+    }
   });
 
   const handleAddClick = () => {
@@ -233,9 +228,7 @@ export default function SchedulesPage() {
     } else {
       setFormData(prev => ({
         ...prev,
-        template_id: templateId,
-        // Keep other values but remove template association
-        template_id: ''
+        template_id: '',
       }));
     }
   };
@@ -449,22 +442,53 @@ export default function SchedulesPage() {
         </div>
       )}
 
-      {/* Status Counters Component */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
-        <StatusFilters
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          counts={counts}
-        />
-        <div className="text-right text-xs font-medium text-slate-400 dark:text-slate-500 hidden sm:block">
-          Worker polls updates every 30s
+      {/* Filters and Stats Bar */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
+        <div className="flex flex-wrap items-center gap-6">
+          {/* Category Filter */}
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider block">Client Category Filter</span>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-350 min-w-[180px]"
+            >
+              {uniqueCategories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === 'All' ? 'All Categories' : cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Stats Chips */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="px-3.5 py-2.5 bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/20 rounded-xl flex items-center space-x-2 text-xs">
+              <span className="h-2 w-2 rounded-full bg-amber-500"></span>
+              <span className="text-slate-500 dark:text-slate-450">Pending / Scheduled:</span>
+              <span className="font-bold text-amber-700 dark:text-amber-400">{counts.Pending}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 hidden lg:block">
+          Worker polls queue updates every 30s
         </div>
       </div>
 
-      {/* Main Outreach Table Component */}
+      {/* Active Queue Table Component (Full Width) */}
       <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
+        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/40">
+          <div>
+            <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">Active Outreach Queue</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pending and scheduled messages waiting for automatic dispatch</p>
+          </div>
+          <span className="px-2.5 py-1 text-[11px] font-bold bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-lg">
+            {pendingSchedules.length} Active
+          </span>
+        </div>
         <ScheduleTable
-          schedules={filteredSchedules}
+          schedules={pendingSchedules}
           loading={loading}
           onView={(item) => {
             setSelectedSchedule(item);
@@ -474,6 +498,7 @@ export default function SchedulesPage() {
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
           getStatusBadgeStyles={getStatusBadgeStyles}
+          isHistory={false}
         />
       </div>
 
@@ -486,6 +511,7 @@ export default function SchedulesPage() {
         onSubmit={handleFormSubmit}
         clients={clients}
         templates={templates}
+        schedules={schedules}
         onTemplateChange={handleTemplateChange}
         formErrors={formErrors}
         editingSchedule={editingSchedule}

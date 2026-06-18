@@ -46,21 +46,29 @@ export default function GatewayConsole({
       sheet.appendRow([
         "Timestamp", 
         "Business Name", 
-        "Recipient Contact", 
+        "Owner Name",
+        "Phone Number",
+        "Email Address",
+        "Category",
+        "City",
         "Channel", 
         "Status", 
-        "Message Content", 
+        "Template Name", 
         "Attachments", 
         "Error Details"
       ]);
-      sheet.getRange(1, 1, 1, 8).setFontWeight("bold");
+      sheet.getRange(1, 1, 1, 12).setFontWeight("bold");
     }
     
     // Append row
     sheet.appendRow([
       data.timestamp || new Date(),
       data.business_name || "",
-      data.phone_number || data.email || "",
+      data.owner_name || "",
+      data.phone_number || "",
+      data.email || "",
+      data.category || "",
+      data.city || "",
       data.channel || "whatsapp",
       data.status || "Sent",
       data.message || "",

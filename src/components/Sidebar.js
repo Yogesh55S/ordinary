@@ -14,7 +14,8 @@ import {
   X,
   MessageSquare,
   Sun,
-  Moon
+  Moon,
+  History
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -45,6 +46,7 @@ export default function Sidebar() {
     { name: 'Clients', href: '/clients', icon: Users },
     { name: 'Templates', href: '/templates', icon: FileText },
     { name: 'Schedules', href: '/schedules', icon: Calendar },
+    { name: 'History', href: '/history', icon: History },
     { name: 'WhatsApp Link', href: '/settings', icon: Settings },
   ];
 

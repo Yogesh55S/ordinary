@@ -8,7 +8,6 @@ import Link from 'next/link';
 // Import modular dashboard subcomponents
 import StatsGrid from '@/components/dashboard/StatsGrid';
 import UpcomingQueue from '@/components/dashboard/UpcomingQueue';
-import ActivityLogs from '@/components/dashboard/ActivityLogs';
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -19,7 +18,6 @@ export default function Dashboard() {
     failedDelivery: 0,
   });
   const [upcomingSchedules, setUpcomingSchedules] = useState([]);
-  const [activityLogs, setActivityLogs] = useState([]);
   const [error, setError] = useState(null);
 
   const fetchDashboardData = async () => {
@@ -31,8 +29,7 @@ export default function Dashboard() {
         pendingRes, 
         sentRes, 
         failedRes,
-        upcomingRes,
-        logsRes
+        upcomingRes
       ] = await Promise.all([
         supabase
           .from('clients')
@@ -68,12 +65,7 @@ export default function Dashboard() {
           .in('status', ['Pending', 'Scheduled'])
           .order('schedule_date', { ascending: true })
           .order('schedule_time', { ascending: true })
-          .limit(5),
-        supabase
-          .from('activity_logs')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(8)
+          .limit(5)
       ]);
 
       if (clientsRes.error) throw clientsRes.error;
@@ -81,7 +73,6 @@ export default function Dashboard() {
       if (sentRes.error) throw sentRes.error;
       if (failedRes.error) throw failedRes.error;
       if (upcomingRes.error) throw upcomingRes.error;
-      if (logsRes.error) throw logsRes.error;
 
       setStats({
         totalClients: clientsRes.count || 0,
@@ -91,7 +82,6 @@ export default function Dashboard() {
       });
 
       setUpcomingSchedules(upcomingRes.data || []);
-      setActivityLogs(logsRes.data || []);
       setError(null);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
@@ -141,16 +131,9 @@ export default function Dashboard() {
       {/* Stats Cards Grid Component */}
       <StatsGrid stats={stats} loading={loading} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      <div className="w-full">
         {/* Upcoming Schedules Table Component */}
-        <div className="lg:col-span-3">
-          <UpcomingQueue upcomingSchedules={upcomingSchedules} loading={loading} />
-        </div>
-
-        {/* Activity Logs Panel Component */}
-        <div className="lg:col-span-2">
-          <ActivityLogs activityLogs={activityLogs} loading={loading} />
-        </div>
+        <UpcomingQueue upcomingSchedules={upcomingSchedules} loading={loading} />
       </div>
     </div>
   );

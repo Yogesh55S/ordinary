@@ -282,7 +282,8 @@ async function processSchedules() {
         schedule_date,
         schedule_time,
         status,
-        clients ( business_name, owner_name, phone_number, email )
+        clients ( business_name, owner_name, phone_number, email, category, city ),
+        templates ( template_name )
       `)
       .in('status', ['Pending', 'Scheduled']);
       
@@ -311,6 +312,9 @@ async function processSchedules() {
       const ownerName = client ? client.owner_name : '';
       const phoneNumber = client ? client.phone_number : '';
       const emailAddress = client ? client.email : '';
+      const category = client ? client.category : '';
+      const city = client ? client.city : '';
+      const templateName = schedule.templates?.template_name || 'Custom Message';
       
       console.log(`Processing outreach ID ${schedule.id} for "${businessName}"`);
 
@@ -333,11 +337,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'email',
             status: 'Failed',
-            message: schedule.custom_message || '',
+            message: templateName,
             error_message: 'Missing email address'
           });
           continue;
@@ -363,11 +370,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'email',
             status: 'Failed',
-            message: schedule.custom_message || '',
+            message: templateName,
             error_message: 'SMTP settings not configured'
           });
           continue;
@@ -400,11 +410,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'email',
             status: 'Failed',
-            message: schedule.custom_message || '',
+            message: templateName,
             error_message: 'Incomplete SMTP config'
           });
           continue;
@@ -484,11 +497,14 @@ async function processSchedules() {
           console.log(`Successfully sent email outreach to ${emailAddress}`);
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'email',
             status: 'Sent',
-            message: messageText,
+            message: templateName,
             attachments: emailAttachments.map(a => a.filename).join(', ')
           });
         } catch (sendErr) {
@@ -504,11 +520,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'email',
             status: 'Failed',
-            message: messageText,
+            message: templateName,
             attachments: emailAttachments.map(a => a.filename).join(', '),
             error_message: sendErr.message
           });
@@ -531,11 +550,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'whatsapp',
             status: 'Failed',
-            message: messageText,
+            message: templateName,
             error_message: 'WhatsApp Gateway offline'
           });
           continue;
@@ -553,11 +575,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'whatsapp',
             status: 'Failed',
-            message: messageText,
+            message: templateName,
             error_message: 'Missing phone number'
           });
           continue;
@@ -646,11 +671,14 @@ async function processSchedules() {
           const attachmentNames = mediaItems.map(m => m.file_name).join(', ');
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'whatsapp',
             status: 'Sent',
-            message: messageText,
+            message: templateName,
             attachments: attachmentNames
           });
         } catch (sendErr) {
@@ -666,11 +694,14 @@ async function processSchedules() {
           });
           await triggerSheetsWebhook({
             business_name: businessName,
+            owner_name: ownerName,
             phone_number: phoneNumber,
             email: emailAddress,
+            category: category,
+            city: city,
             channel: 'whatsapp',
             status: 'Failed',
-            message: messageText,
+            message: templateName,
             attachments: mediaItems.map(m => m.file_name).join(', '),
             error_message: sendErr.message
           });
@@ -848,11 +879,14 @@ async function checkGatewaySignals() {
           const testPayload = {
             timestamp: new Date().toISOString(),
             business_name: "Test Business Inc.",
+            owner_name: "John Doe",
             phone_number: "+919876543200",
             email: "test@business.com",
+            category: "Retail",
+            city: "Mumbai",
             channel: "whatsapp",
             status: "Sent",
-            message: "Hello! This is a test outreach webhook log from ordinary CRM settings.",
+            message: "Test Template",
             attachments: "test_invoice.pdf",
             error_message: ""
           };

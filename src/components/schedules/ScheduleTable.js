@@ -7,7 +7,8 @@ export default function ScheduleTable({
   onSendNow,
   onEdit,
   onDelete,
-  getStatusBadgeStyles
+  getStatusBadgeStyles,
+  isHistory = false
 }) {
   if (loading && schedules.length === 0) {
     return (
@@ -43,7 +44,7 @@ export default function ScheduleTable({
             <th className="px-6 py-4">Client Info</th>
             <th className="px-6 py-4">Channel</th>
             <th className="px-6 py-4">Template Used</th>
-            <th className="px-6 py-4">Schedule Time</th>
+            <th className="px-6 py-4">{isHistory ? 'Sent Time' : 'Schedule Time'}</th>
             <th className="px-6 py-4">Status</th>
             <th className="px-6 py-4 text-right">Actions</th>
           </tr>
@@ -121,7 +122,7 @@ export default function ScheduleTable({
                     </button>
                     
                     {/* Send Now */}
-                    {(item.status === 'Pending' || item.status === 'Scheduled' || item.status === 'Failed') && (
+                    {!isHistory && (item.status === 'Pending' || item.status === 'Scheduled' || item.status === 'Failed') && (
                       <button
                         onClick={() => onSendNow(item)}
                         className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg transition-colors"
@@ -132,19 +133,21 @@ export default function ScheduleTable({
                     )}
                     
                     {/* Edit */}
-                    <button
-                      onClick={() => onEdit(item)}
-                      className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 rounded-lg transition-colors"
-                      title="Edit Schedule"
-                    >
-                      <Edit2 className="h-4.5 w-4.5" />
-                    </button>
+                    {!isHistory && (
+                      <button
+                        onClick={() => onEdit(item)}
+                        className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 rounded-lg transition-colors"
+                        title="Edit Schedule"
+                      >
+                        <Edit2 className="h-4.5 w-4.5" />
+                      </button>
+                    )}
                     
                     {/* Delete */}
                     <button
                       onClick={() => onDelete(item)}
                       className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"
-                      title="Delete / Cancel Schedule"
+                      title={isHistory ? "Delete History Record" : "Delete / Cancel Schedule"}
                     >
                       <Trash2 className="h-4.5 w-4.5" />
                     </button>
