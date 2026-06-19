@@ -1,14 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Plus, AlertCircle, Calendar, RefreshCw } from 'lucide-react';
+import { Plus, AlertCircle, Calendar, RefreshCw, Search, X, Filter } from 'lucide-react';
 import { uploadAttachment } from '@/lib/media';
 
 // Import modular schedules subcomponents
 import ScheduleTable from '@/components/schedules/ScheduleTable';
 import ScheduleModal from '@/components/schedules/ScheduleModal';
 import ViewMessageModal from '@/components/schedules/ViewMessageModal';
+
+// Default empty form state — used as a single source of truth for resetting
+const EMPTY_FORM = {
+  client_id: '',
+  template_id: '',
+  custom_message: '',
+  schedule_date: '',
+  schedule_time: '',
+  channel: 'whatsapp',
+  subject: '',
+  attachments: [],
+};
 
 export default function SchedulesPage() {
   const [schedules, setSchedules] = useState([]);
@@ -17,8 +29,12 @@ export default function SchedulesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Category filter state
+  // Category filter state (main page level)
   const [categoryFilter, setCategoryFilter] = useState('All');
+
+  // Queue table search & date filter
+  const [queueSearch, setQueueSearch] = useState('');
+  const [queueDateFilter, setQueueDateFilter] = useState('');
 
   // Modals state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,16 +44,7 @@ export default function SchedulesPage() {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   // Form State
-  const [formData, setFormData] = useState({
-    client_id: '',
-    template_id: '',
-    custom_message: '',
-    schedule_date: '',
-    schedule_time: '',
-    channel: 'whatsapp', // 'whatsapp' | 'email'
-    subject: '', // For email subject
-    attachments: [], // For attached files metadata
-  });
+  const [formData, setFormData] = useState({ ...EMPTY_FORM });
 
   const [formErrors, setFormErrors] = useState({});
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -134,6 +141,32 @@ export default function SchedulesPage() {
     (item) => item.status === 'Pending' || item.status === 'Scheduled'
   );
 
+  // Apply queue search & date filter on top of pending schedules
+  const displayedSchedules = useMemo(() => {
+    return pendingSchedules.filter((item) => {
+      // Text search — matches client name, owner, phone, email, template name
+      if (queueSearch.trim()) {
+        const q = queueSearch.toLowerCase();
+        const fields = [
+          item.clients?.business_name,
+          item.clients?.owner_name,
+          item.clients?.phone_number,
+          item.clients?.email,
+          item.templates?.template_name,
+        ];
+        const matches = fields.some((f) => (f || '').toLowerCase().includes(q));
+        if (!matches) return false;
+      }
+
+      // Date filter
+      if (queueDateFilter && item.schedule_date !== queueDateFilter) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [pendingSchedules, queueSearch, queueDateFilter]);
+
   // Compute status counts for the selected category
   const counts = { Pending: 0 };
   categoryFilteredSchedules.forEach((item) => {
@@ -142,25 +175,24 @@ export default function SchedulesPage() {
     }
   });
 
-  const handleAddClick = () => {
-    setEditingSchedule(null);
-    
+  // Hard reset form to empty — clears ALL previous client data completely
+  const resetFormToEmpty = useCallback(() => {
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
     const timeStr = now.toTimeString().substring(0, 5);
 
     setFormData({
-      client_id: '',
-      template_id: '',
-      custom_message: '',
+      ...EMPTY_FORM,
       schedule_date: todayStr,
       schedule_time: timeStr,
-      channel: 'whatsapp',
-      subject: '',
-      attachments: [],
     });
     setFormErrors({});
     setUploadError(null);
+  }, []);
+
+  const handleAddClick = () => {
+    setEditingSchedule(null);
+    resetFormToEmpty();
     setIsModalOpen(true);
   };
 
@@ -397,6 +429,8 @@ export default function SchedulesPage() {
       }
 
       setIsModalOpen(false);
+      // Hard reset form after successful save — prevents data bleed
+      resetFormToEmpty();
       fetchData();
     } catch (err) {
       console.error('Error saving schedule:', err);
@@ -404,6 +438,14 @@ export default function SchedulesPage() {
       setLoading(false);
     }
   };
+
+  // Close modal handler — also resets form
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false);
+    setEditingSchedule(null);
+    // Reset form on close to prevent stale data from leaking into next open
+    setTimeout(() => resetFormToEmpty(), 150);
+  }, [resetFormToEmpty]);
 
   const getStatusBadgeStyles = (status) => {
     switch (status) {
@@ -417,6 +459,8 @@ export default function SchedulesPage() {
         return 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/30';
     }
   };
+
+  const hasActiveFilters = queueSearch.trim() || queueDateFilter;
 
   return (
     <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full relative">
@@ -478,17 +522,73 @@ export default function SchedulesPage() {
 
       {/* Active Queue Table Component (Full Width) */}
       <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/40">
-          <div>
-            <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">Active Outreach Queue</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pending and scheduled messages waiting for automatic dispatch</p>
+        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 bg-slate-50/50 dark:bg-slate-900/40">
+          {/* Title row */}
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">Active Outreach Queue</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pending and scheduled messages waiting for automatic dispatch</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {hasActiveFilters && (
+                <button
+                  onClick={() => { setQueueSearch(''); setQueueDateFilter(''); }}
+                  className="inline-flex items-center px-2.5 py-1.5 text-[11px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/30 transition-colors space-x-1"
+                >
+                  <X className="h-3 w-3" />
+                  <span>Clear Filters</span>
+                </button>
+              )}
+              <span className="px-2.5 py-1 text-[11px] font-bold bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-lg">
+                {displayedSchedules.length}{hasActiveFilters ? ` / ${pendingSchedules.length}` : ''} Active
+              </span>
+            </div>
           </div>
-          <span className="px-2.5 py-1 text-[11px] font-bold bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-lg">
-            {pendingSchedules.length} Active
-          </span>
+
+          {/* Queue search & date filter row */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            {/* Search input */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search by client name, phone, email, template..."
+                value={queueSearch}
+                onChange={(e) => setQueueSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
+              />
+              {queueSearch && (
+                <button
+                  onClick={() => setQueueSearch('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Date filter */}
+            <div className="flex items-center gap-2">
+              <Filter className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+              <input
+                type="date"
+                value={queueDateFilter}
+                onChange={(e) => setQueueDateFilter(e.target.value)}
+                className="px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300"
+              />
+              {queueDateFilter && (
+                <button
+                  onClick={() => setQueueDateFilter('')}
+                  className="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
         <ScheduleTable
-          schedules={pendingSchedules}
+          schedules={displayedSchedules}
           loading={loading}
           onView={(item) => {
             setSelectedSchedule(item);
@@ -505,7 +605,7 @@ export default function SchedulesPage() {
       {/* Add/Edit Modal Component */}
       <ScheduleModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleModalClose}
         formData={formData}
         setFormData={setFormData}
         onSubmit={handleFormSubmit}

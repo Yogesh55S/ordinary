@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { X, Paperclip, RefreshCw } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { X, Paperclip, RefreshCw, Search, Users, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export default function ScheduleModal({
   isOpen,
@@ -22,59 +22,120 @@ export default function ScheduleModal({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [sendStateFilter, setSendStateFilter] = useState('All'); // 'All' | 'unsent' | 'sent'
+  const [scheduleStateFilter, setScheduleStateFilter] = useState('All');
+  // 'All' | 'no_pending' (no pending schedule) | 'has_pending' (already has pending)
+  // | 'never_sent' (never had a Sent schedule) | 'already_sent' (has at least one Sent)
 
-  // Reset filters on open
+  // Hard reset ALL filters every time modal opens — prevents stale filter context
   useEffect(() => {
     if (isOpen) {
       setSearchQuery('');
       setCategoryFilter('All');
-      setSendStateFilter('All');
+      setScheduleStateFilter('All');
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   // Extract unique categories for filtering
-  const uniqueCategories = [...new Set(clients.map(c => c.category).filter(Boolean))];
+  const uniqueCategories = useMemo(() => {
+    return [...new Set((clients || []).map(c => c.category).filter(Boolean))];
+  }, [clients]);
 
-  // Identify clients that already have a successful outreach sent
-  const sentClientIds = new Set(
-    schedules
-      .filter((s) => s.status === 'Sent')
-      .map((s) => s.client_id)
-  );
+  // Precompute client schedule states for smart filtering
+  // This gives us a clear picture per client: do they have a Pending schedule? A Sent one?
+  const clientScheduleState = useMemo(() => {
+    const state = {};
+    (schedules || []).forEach((s) => {
+      if (!state[s.client_id]) {
+        state[s.client_id] = { hasPending: false, hasSent: false };
+      }
+      if (s.status === 'Pending' || s.status === 'Scheduled') {
+        state[s.client_id].hasPending = true;
+      }
+      if (s.status === 'Sent') {
+        state[s.client_id].hasSent = true;
+      }
+    });
+    return state;
+  }, [schedules]);
 
   // Apply filters to clients dropdown list
-  const filteredClientsForDropdown = clients.filter((client) => {
-    // 1. Search Query filter (Business Name, Owner Name, Contact details)
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const nameMatch = (client.business_name || '').toLowerCase().includes(q);
-      const ownerMatch = (client.owner_name || '').toLowerCase().includes(q);
-      const phoneMatch = (client.phone_number || '').toLowerCase().includes(q);
-      const emailMatch = (client.email || '').toLowerCase().includes(q);
-      if (!nameMatch && !ownerMatch && !phoneMatch && !emailMatch) {
+  const filteredClientsForDropdown = useMemo(() => {
+    return (clients || []).filter((client) => {
+      // Exclude if already added to schedule (has any pending or sent schedule)
+      const state = clientScheduleState[client.id] || { hasPending: false, hasSent: false };
+      const hasBeenScheduledOrSent = state.hasPending || state.hasSent || client.status === 'Archived';
+      
+      // Keep if it is the currently selected client in the form (so editing/viewing still works)
+      const isCurrentlySelected = formData.client_id === client.id;
+
+      if (hasBeenScheduledOrSent && !isCurrentlySelected) {
         return false;
       }
-    }
 
-    // 2. Category filter
-    if (categoryFilter !== 'All' && client.category !== categoryFilter) {
-      return false;
-    }
+      // 1. Search Query filter (Business Name, Owner Name, Contact details)
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const nameMatch = (client.business_name || '').toLowerCase().includes(q);
+        const ownerMatch = (client.owner_name || '').toLowerCase().includes(q);
+        const phoneMatch = (client.phone_number || '').toLowerCase().includes(q);
+        const emailMatch = (client.email || '').toLowerCase().includes(q);
+        if (!nameMatch && !ownerMatch && !phoneMatch && !emailMatch) {
+          return false;
+        }
+      }
 
-    // 3. Send state filter
-    const isSent = client.status === 'Archived' || sentClientIds.has(client.id);
-    if (sendStateFilter === 'unsent' && isSent) {
-      return false;
-    }
-    if (sendStateFilter === 'sent' && !isSent) {
-      return false;
-    }
+      // 2. Category filter
+      if (categoryFilter !== 'All' && client.category !== categoryFilter) {
+        return false;
+      }
 
-    return true;
-  });
+      // 3. Schedule state filter — smart scoped filtering
+      switch (scheduleStateFilter) {
+        case 'no_pending':
+          // Clients WITHOUT any pending/scheduled outreach
+          if (state.hasPending) return false;
+          break;
+        case 'has_pending':
+          // Clients that ALREADY have a pending schedule (to avoid duplicates)
+          if (!state.hasPending) return false;
+          break;
+        case 'never_sent':
+          // Clients who have NEVER been sent a message (brand new targets)
+          if (state.hasSent || client.status === 'Archived') return false;
+          break;
+        case 'already_sent':
+          // Clients who have received at least one Sent message
+          if (!state.hasSent && client.status !== 'Archived') return false;
+          break;
+        default:
+          break;
+      }
+
+      return true;
+    });
+  }, [clients, searchQuery, categoryFilter, scheduleStateFilter, clientScheduleState, formData.client_id]);
+
+  // Count how many are in each filter bucket (for the badges)
+  const filterCounts = useMemo(() => {
+    const counts = { all: (clients || []).length, no_pending: 0, has_pending: 0, never_sent: 0, already_sent: 0 };
+    (clients || []).forEach((client) => {
+      // Apply category filter first
+      if (categoryFilter !== 'All' && client.category !== categoryFilter) return;
+      
+      const state = clientScheduleState[client.id] || { hasPending: false, hasSent: false };
+      if (!state.hasPending) counts.no_pending++;
+      if (state.hasPending) counts.has_pending++;
+      if (!state.hasSent && client.status !== 'Archived') counts.never_sent++;
+      if (state.hasSent || client.status === 'Archived') counts.already_sent++;
+    });
+    return counts;
+  }, [clients, clientScheduleState, categoryFilter]);
+
+  // Build visual indicator for selected client
+  const selectedClient = formData.client_id ? (clients || []).find(c => c.id === formData.client_id) : null;
+  const selectedClientState = selectedClient ? (clientScheduleState[selectedClient.id] || { hasPending: false, hasSent: false }) : null;
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -115,13 +176,23 @@ export default function ScheduleModal({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {/* Search */}
               <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-slate-400 dark:text-slate-500 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search name/phone..."
+                  placeholder="Search name / phone..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-3 pr-3 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                  className="w-full pl-7 pr-3 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
               </div>
               
               {/* Category selector */}
@@ -138,42 +209,125 @@ export default function ScheduleModal({
                 </select>
               </div>
 
-              {/* Sent Status Selector */}
+              {/* Schedule State Filter — the key improvement */}
               <div>
                 <select
-                  value={sendStateFilter}
-                  onChange={(e) => setSendStateFilter(e.target.value)}
+                  value={scheduleStateFilter}
+                  onChange={(e) => setScheduleStateFilter(e.target.value)}
                   className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
                 >
-                  <option value="All">All Statuses</option>
-                  <option value="unsent">🆕 New / Unsent Clients</option>
-                  <option value="sent">✔️ Already Sent Clients</option>
+                  <option value="All">All Clients</option>
+                  <option value="no_pending">📭 No Pending Schedule ({filterCounts.no_pending})</option>
+                  <option value="has_pending">📬 Already in Queue ({filterCounts.has_pending})</option>
+                  <option value="never_sent">🆕 Never Contacted ({filterCounts.never_sent})</option>
+                  <option value="already_sent">✔️ Previously Sent ({filterCounts.already_sent})</option>
                 </select>
               </div>
             </div>
 
-            {/* Target Client Dropdown */}
-            <select
-              value={formData.client_id}
-              onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-              className={`w-full px-3.5 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300 ${
-                formErrors.client_id 
-                  ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
-                  : 'border-slate-200 dark:border-slate-800/80'
-              }`}
-            >
-              <option value="" className="dark:bg-[#111625]">-- Choose Recipient --</option>
-              {filteredClientsForDropdown.map((client) => {
-                const isSent = client.status === 'Archived' || sentClientIds.has(client.id);
-                return (
-                  <option key={client.id} value={client.id} className="dark:bg-[#111625]">
-                    {client.business_name} ({client.phone_number || client.email}) {client.category ? `[${client.category}]` : ''} {isSent ? '✔️ (Sent)' : '🆕 (New)'}
-                  </option>
-                );
-              })}
-            </select>
+            {/* Target Client Selection List */}
+            <div className={`border rounded-xl overflow-hidden bg-white dark:bg-[#0e1320] ${
+              formErrors.client_id 
+                ? 'border-rose-300 dark:border-rose-900/50' 
+                : 'border-slate-200 dark:border-slate-800/80'
+            }`}>
+              <div className="max-h-48 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60 custom-scrollbar">
+                {filteredClientsForDropdown.length === 0 ? (
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                    No clients found matching the filters.
+                  </div>
+                ) : (
+                  filteredClientsForDropdown.map((client) => {
+                    const state = clientScheduleState[client.id] || { hasPending: false, hasSent: false };
+                    const isSelected = formData.client_id === client.id;
+                    
+                    let statusLabel = '';
+                    let statusColor = '';
+                    if (state.hasPending) {
+                      statusLabel = 'In Queue';
+                      statusColor = 'bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/30';
+                    } else if (state.hasSent || client.status === 'Archived') {
+                      statusLabel = 'Sent Before';
+                      statusColor = 'bg-slate-50 dark:bg-slate-900/40 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800';
+                    } else {
+                      statusLabel = 'New Target';
+                      statusColor = 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border-emerald-250 dark:border-emerald-900/30';
+                    }
+
+                    return (
+                      <button
+                        key={client.id}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, client_id: client.id })}
+                        className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all text-xs ${
+                          isSelected 
+                            ? 'bg-indigo-50/50 dark:bg-indigo-950/15 border-l-2 border-indigo-600' 
+                            : 'border-l-2 border-transparent'
+                        }`}
+                      >
+                        <div className="min-w-0 flex-1 pr-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`font-bold ${isSelected ? 'text-indigo-650 dark:text-indigo-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                              {client.business_name}
+                            </span>
+                            {client.category && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-550 dark:text-slate-400 border border-slate-200/50 dark:border-slate-700/50">
+                                {client.category}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-slate-500 dark:text-slate-450 mt-1 flex items-center space-x-1.5 truncate">
+                            <span>{client.owner_name}</span>
+                            <span>•</span>
+                            <span className="font-mono">{client.phone_number || client.email}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 shrink-0">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${statusColor}`}>
+                            {statusLabel}
+                          </span>
+                          {isSelected && (
+                            <span className="h-4 w-4 rounded-full bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shrink-0 font-bold text-[10px]">
+                              ✓
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
             {formErrors.client_id && (
               <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 block mt-1">{formErrors.client_id}</span>
+            )}
+
+            {/* Selected client info card — shows clearly who is selected */}
+            {selectedClient && (
+              <div className={`flex items-start gap-3 p-3 rounded-xl border text-xs ${
+                selectedClientState?.hasPending 
+                  ? 'bg-amber-50/50 dark:bg-amber-950/10 border-amber-200 dark:border-amber-900/30' 
+                  : 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900/30'
+              }`}>
+                {selectedClientState?.hasPending ? (
+                  <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                ) : (
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <span className="font-bold text-slate-800 dark:text-slate-200 block">Selected: {selectedClient.business_name}</span>
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {selectedClient.owner_name} • {selectedClient.phone_number || selectedClient.email}
+                    {selectedClient.category ? ` • ${selectedClient.category}` : ''}
+                  </span>
+                  {selectedClientState?.hasPending && !editingSchedule && (
+                    <span className="block mt-1 font-semibold text-amber-700 dark:text-amber-400">
+                      ⚠ This client already has a pending schedule in the queue
+                    </span>
+                  )}
+                </div>
+              </div>
             )}
           </div>
 
