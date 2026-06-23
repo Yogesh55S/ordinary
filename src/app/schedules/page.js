@@ -480,7 +480,7 @@ export default function SchedulesPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-905/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-850 dark:text-amber-400">
+        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
           <AlertCircle className="h-5 w-5 shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
@@ -491,11 +491,11 @@ export default function SchedulesPage() {
         <div className="flex flex-wrap items-center gap-6">
           {/* Category Filter */}
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider block">Client Category Filter</span>
+            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Client Category Filter</span>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-350 min-w-[180px]"
+              className="px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300 min-w-[180px]"
             >
               {uniqueCategories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -509,7 +509,7 @@ export default function SchedulesPage() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="px-3.5 py-2.5 bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/20 rounded-xl flex items-center space-x-2 text-xs">
               <span className="h-2 w-2 rounded-full bg-amber-500"></span>
-              <span className="text-slate-500 dark:text-slate-450">Pending / Scheduled:</span>
+              <span className="text-slate-500 dark:text-slate-400">Pending / Scheduled:</span>
               <span className="font-bold text-amber-700 dark:text-amber-400">{counts.Pending}</span>
             </div>
           </div>

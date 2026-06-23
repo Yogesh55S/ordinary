@@ -30,8 +30,8 @@ export default function ClientTable({
     return (
       <div className="p-16 text-center text-slate-400 dark:text-slate-500 flex flex-col items-center justify-center">
         <Building className="h-12 w-12 text-slate-300 dark:text-slate-700 mb-3" />
-        <span className="font-semibold text-base text-slate-700 dark:text-slate-350">No clients found</span>
-        <p className="text-xs text-slate-500 dark:text-slate-455 mt-1 max-w-sm">No clients match your search criteria. Try modifying your filters or add a new client.</p>
+        <span className="font-semibold text-base text-slate-700 dark:text-slate-300">No clients found</span>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">No clients match your search criteria. Try modifying your filters or add a new client.</p>
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function ClientTable({
                 </td>
                 <td className="px-6 py-4">
                   {client.category ? (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-transparent dark:border-slate-750">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-transparent dark:border-slate-700">
                       {client.category}
                     </span>
                   ) : (

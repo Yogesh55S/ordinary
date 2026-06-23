@@ -100,7 +100,7 @@ export default function GatewayConsole({
             className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
               activeTab === 'whatsapp'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-205'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             <Smartphone className="h-4 w-4" />
@@ -111,7 +111,7 @@ export default function GatewayConsole({
             className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
               activeTab === 'email'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-205'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             <Mail className="h-4 w-4" />
@@ -122,7 +122,7 @@ export default function GatewayConsole({
             className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
               activeTab === 'sheets'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
-                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-205'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             <FileSpreadsheet className="h-4 w-4" />

@@ -46,7 +46,7 @@ export default function ClientDrawer({
                   {client.status}
                 </span>
                 {client.category && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-350 border border-transparent dark:border-slate-750">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-transparent dark:border-slate-700">
                     {client.category}
                   </span>
                 )}
@@ -59,7 +59,7 @@ export default function ClientDrawer({
                 <Users className="h-4.5 w-4.5 text-slate-400 dark:text-slate-500 mt-0.5 shrink-0" />
                 <div>
                   <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Owner / Contact Person</span>
-                  <span className="text-slate-905 dark:text-slate-200 font-medium">{client.owner_name || 'Not Specified'}</span>
+                  <span className="text-slate-900 dark:text-slate-200 font-medium">{client.owner_name || 'Not Specified'}</span>
                 </div>
               </div>
 
@@ -135,7 +135,7 @@ export default function ClientDrawer({
                 ))}
               </div>
             ) : (
-              <span className="text-xs text-slate-400 dark:text-slate-550 italic">No tags assigned.</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 italic">No tags assigned.</span>
             )}
           </div>
 

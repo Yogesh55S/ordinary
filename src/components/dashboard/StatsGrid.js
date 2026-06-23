@@ -10,7 +10,7 @@ export default function StatsGrid({ stats, loading }) {
       description: (
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
           <TrendingUp className="h-3.5 w-3.5 text-emerald-500 inline mr-1 shrink-0 align-text-bottom" />
-          <span className="text-emerald-600 dark:text-emerald-450 font-bold">Active CRM</span> database entries
+          <span className="text-emerald-600 dark:text-emerald-400 font-bold">Active CRM</span> database entries
         </p>
       )
     },
@@ -18,7 +18,7 @@ export default function StatsGrid({ stats, loading }) {
       title: 'Pending Messages',
       value: stats.pendingTasks,
       icon: Clock,
-      colorClass: 'bg-amber-50 dark:bg-amber-955/30 text-amber-600 dark:text-amber-400',
+      colorClass: 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400',
       description: (
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
           In outreach queue list
@@ -29,10 +29,10 @@ export default function StatsGrid({ stats, loading }) {
       title: 'Sent Outreach',
       value: stats.sentMessages,
       icon: CheckCircle2,
-      colorClass: 'bg-emerald-50 dark:bg-emerald-955/30 text-emerald-600 dark:text-emerald-400',
+      colorClass: 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400',
       description: (
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
-          <span className="text-emerald-605 dark:text-emerald-400 font-bold">Successfully</span> delivered to WhatsApp / Email
+          <span className="text-emerald-600 dark:text-emerald-400 font-bold">Successfully</span> delivered to WhatsApp / Email
         </p>
       )
     },
@@ -40,7 +40,7 @@ export default function StatsGrid({ stats, loading }) {
       title: 'Failed Delivery',
       value: stats.failedDelivery,
       icon: XCircle,
-      colorClass: 'bg-rose-50 dark:bg-rose-955/30 text-rose-600 dark:text-rose-400',
+      colorClass: 'bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400',
       description: (
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
           Needs contact check or retry
@@ -63,7 +63,7 @@ export default function StatsGrid({ stats, loading }) {
               {loading ? (
                 <div className="h-8 w-16 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg"></div>
               ) : (
-                <h2 className="text-3xl font-extrabold text-slate-805 dark:text-slate-100 leading-none">{card.value}</h2>
+                <h2 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 leading-none">{card.value}</h2>
               )}
               {card.description}
             </div>

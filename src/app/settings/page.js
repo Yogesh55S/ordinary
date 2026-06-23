@@ -585,7 +585,7 @@ export default function SettingsPage() {
           title: 'Disconnected',
           description: 'WhatsApp Gateway integration is offline.',
           badgeColor: 'bg-slate-400 dark:bg-slate-600',
-          textColor: 'text-slate-700 dark:text-slate-355',
+          textColor: 'text-slate-700 dark:text-slate-300',
           panelBg: 'bg-slate-50 border-slate-200 dark:bg-slate-900 dark:border-slate-800',
           icon: WifiOff
         };
@@ -603,7 +603,7 @@ export default function SettingsPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-955/20 border border-amber-205 dark:border-amber-900/30 rounded-xl text-amber-850 dark:text-amber-400">
+        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
           <AlertCircle className="h-5 w-5 shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
