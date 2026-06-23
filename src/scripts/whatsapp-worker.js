@@ -32,6 +32,9 @@ let sock = null;
 let isConnecting = false;
 let checkInterval = null;
 let scheduleInterval = null;
+let isProcessingSchedules = false;
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Helper to format a phone number to a WhatsApp JID
 function formatToWhatsappJid(phone, senderPhone) {
@@ -267,6 +270,11 @@ async function connectToWhatsApp() {
 
 // Process schedules
 async function processSchedules() {
+  if (isProcessingSchedules) {
+    console.log("processSchedules is already running. Skipping this cycle to prevent overlaps.");
+    return;
+  }
+  isProcessingSchedules = true;
   console.log("Checking pending schedules queue...");
   
   try {
@@ -707,9 +715,17 @@ async function processSchedules() {
           });
         }
       }
+
+      // Add a randomized delay (e.g. 15 to 30 seconds) between outreach messages
+      // to mimic human behavior and avoid WhatsApp's reach-out spam filters (Error 463).
+      const cooldownMs = Math.floor(Math.random() * 15000) + 15000;
+      console.log(`Outreach processed. Cooling down for ${cooldownMs / 1000}s before next send...`);
+      await delay(cooldownMs);
     }
   } catch (err) {
     console.error("Error in processSchedules cycle:", err.message);
+  } finally {
+    isProcessingSchedules = false;
   }
 }
 
