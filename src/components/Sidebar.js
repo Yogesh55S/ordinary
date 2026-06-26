@@ -4,18 +4,19 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Users, 
-  FileText, 
-  Calendar, 
-  Settings, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  Calendar,
+  Settings,
+  Menu,
   X,
   MessageSquare,
   Sun,
   Moon,
-  History
+  History,
+  MapPin
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -44,6 +45,7 @@ export default function Sidebar() {
   const links = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Clients', href: '/clients', icon: Users },
+    { name: 'Prospect Finder', href: '/prospect', icon: MapPin },
     { name: 'Templates', href: '/templates', icon: FileText },
     { name: 'Schedules', href: '/schedules', icon: Calendar },
     { name: 'History', href: '/history', icon: History },
