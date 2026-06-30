@@ -55,7 +55,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="flex items-center justify-between bg-white dark:bg-[#0e1320] px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 md:hidden transition-colors duration-200">
+      <div className="flex items-center justify-between bg-white dark:bg-black px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 md:hidden transition-colors duration-200">
         <div className="flex items-center space-x-2">
           <Image
             src="/icon.png"
@@ -94,7 +94,7 @@ export default function Sidebar() {
           ></div>
 
           {/* Drawer content */}
-          <div className="relative flex flex-col w-72 max-w-xs bg-white dark:bg-[#0e1320] h-full shadow-2xl transition-transform duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800">
+          <div className="relative flex flex-col w-72 max-w-xs bg-white dark:bg-black h-full shadow-2xl transition-transform duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center space-x-2">
                 <Image
@@ -162,7 +162,7 @@ export default function Sidebar() {
       )}
 
       {/* Desktop Persistent Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0e1320] border-r border-slate-200 dark:border-slate-800 h-screen sticky top-0 transition-colors duration-200">
+      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-black border-r border-slate-200 dark:border-slate-800 h-screen sticky top-0 transition-colors duration-200">
         <div className="flex items-center space-x-2.5 px-6 py-5 border-b border-slate-200 dark:border-slate-800">
           <Image
             src="/icon.png"

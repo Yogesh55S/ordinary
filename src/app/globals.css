@@ -3,20 +3,45 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #ffffff; /* Pure White */
+  --foreground: #000000; /* Jet Black */
 }
 
 .dark {
-  --background: #090d16;
-  --foreground: #f1f5f9;
+  --background: #000000; /* Jet Black */
+  --foreground: #ffffff; /* Pure White */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-montserrat);
+  
+  /* Map indigo (primary color) to neutral monochrome tones for the brand DNA */
+  --color-indigo-50: #fafafa;
+  --color-indigo-100: #f4f4f5;
+  --color-indigo-200: #e4e4e7;
+  --color-indigo-300: #d4d4d8;
+  --color-indigo-400: #a1a1aa;
+  --color-indigo-500: #71717a;
+  --color-indigo-600: #2B2B2B; /* Onyx Black */
+  --color-indigo-700: #18181b;
+  --color-indigo-800: #09090b;
+  --color-indigo-900: #000000; /* Jet Black */
+  --color-indigo-950: #000000;
+  
+  /* Map emerald (secondary/active) to neutral monochrome tones for brand DNA */
+  --color-emerald-50: #fafafa;
+  --color-emerald-100: #f4f4f5;
+  --color-emerald-200: #e4e4e7;
+  --color-emerald-300: #d4d4d8;
+  --color-emerald-400: #a1a1aa;
+  --color-emerald-500: #52525b;
+  --color-emerald-600: #3f3f46;
+  --color-emerald-700: #27272a;
+  --color-emerald-800: #18181b;
+  --color-emerald-900: #000000;
+  --color-emerald-950: #000000;
 }
 
 body {
