@@ -15,12 +15,12 @@ export default function ClientsPage() {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Search and Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  
+
   // Checkbox Selection State
   const [selectedIds, setSelectedIds] = useState([]);
 
@@ -29,7 +29,7 @@ export default function ClientsPage() {
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
-  
+
   // Pagination & Infinite Scroll State
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0);
@@ -37,7 +37,7 @@ export default function ClientsPage() {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const loaderRef = useRef(null);
   const PAGE_SIZE = 20;
-  
+
   // Form State
   const [formData, setFormData] = useState({
     business_name: '',
@@ -59,6 +59,7 @@ export default function ClientsPage() {
     setSelectedIds([]);
   }, [searchTerm, statusFilter, categoryFilter]);
 
+
   const fetchCategories = async () => {
     try {
       const { data, error } = await supabase
@@ -69,7 +70,7 @@ export default function ClientsPage() {
         .neq('business_name', 'SYSTEM_EMAIL_GATEWAY')
         .neq('business_name', 'SYSTEM_EXCEL_SYNC');
       if (error) throw error;
-      
+
       const uniqueCats = Array.from(
         new Set(data.map((c) => c.category).filter((cat) => cat && cat.trim() !== ''))
       );
@@ -87,7 +88,7 @@ export default function ClientsPage() {
       } else {
         setIsFetchingMore(true);
       }
-      
+
       let query = supabase
         .from('clients')
         .select('*', { count: 'exact' })
@@ -113,13 +114,13 @@ export default function ClientsPage() {
 
       const from = pageNum * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
-      
+
       query = query
         .order('created_at', { ascending: false })
         .range(from, to);
 
       const { data, error, count } = await query;
-      
+
       if (error) throw error;
 
       if (pageNum === 0) {
@@ -227,14 +228,14 @@ export default function ClientsPage() {
           created_at
         `)
         .in('client_id', selectedIds);
-        
+
       if (schedulesErr) throw schedulesErr;
 
       // 2. Fetch media files lookup map
       const { data: media, error: mediaErr } = await supabase
         .from('media')
         .select('id, file_name, file_url');
-      
+
       const mediaMap = {};
       if (!mediaErr && media) {
         media.forEach(m => {
@@ -340,7 +341,7 @@ export default function ClientsPage() {
         action_type: 'Exported Clients',
         details: `Exported ${selectedIds.length} client profiles and message history to Excel/CSV.`
       });
-      
+
       setSelectedIds([]);
     } catch (err) {
       console.error('Error exporting clients:', err);
@@ -397,16 +398,16 @@ export default function ClientsPage() {
     if (!confirm(`Are you sure you want to delete client "${client.business_name}"? This will also remove their scheduled outreach messages.`)) {
       return;
     }
-    
+
     try {
       setLoading(true);
       const { error: deleteError } = await supabase
         .from('clients')
         .delete()
         .eq('id', client.id);
-        
+
       if (deleteError) throw deleteError;
-      
+
       // Add activity log
       await supabase.from('activity_logs').insert({
         action_type: 'Deleted Client',
@@ -417,7 +418,7 @@ export default function ClientsPage() {
       if (selectedClient?.id === client.id) {
         setSelectedClient(null);
       }
-      
+
       handleRefresh();
     } catch (err) {
       console.error('Error deleting client:', err);
@@ -437,7 +438,7 @@ export default function ClientsPage() {
     } else if (!/^\+?\d{8,15}$/.test(formData.phone_number.replace(/[\s-()]/g, ''))) {
       errors.phone_number = 'Provide a valid phone number with country code (e.g. +1234567890)';
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -446,7 +447,7 @@ export default function ClientsPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     const formattedTags = formData.tagsString
       .split(',')
       .map((tag) => tag.trim())
@@ -474,7 +475,7 @@ export default function ClientsPage() {
           .from('clients')
           .update(clientPayload)
           .eq('id', editingClient.id);
-          
+
         if (updateError) throw updateError;
 
         await supabase.from('activity_logs').insert({
@@ -491,7 +492,7 @@ export default function ClientsPage() {
         const { error: insertError } = await supabase
           .from('clients')
           .insert(clientPayload);
-          
+
         if (insertError) throw insertError;
 
         await supabase.from('activity_logs').insert({
@@ -499,7 +500,7 @@ export default function ClientsPage() {
           details: `Created new client "${clientPayload.business_name}".`
         });
       }
-      
+
       setIsModalOpen(false);
       handleRefresh();
     } catch (err) {
