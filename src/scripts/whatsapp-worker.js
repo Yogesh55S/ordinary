@@ -59,7 +59,8 @@ function formatToWhatsappJid(phone, senderPhone) {
   if (cleaned.length <= 10) {
     let countryCode = '91'; // default fallback for India
     if (senderPhone) {
-      const cleanSender = senderPhone.replace(/\D/g, '');
+      const jidUser = senderPhone.split(':')[0].split('@')[0];
+      const cleanSender = jidUser.replace(/\D/g, '');
       if (cleanSender.length > 10) {
         countryCode = cleanSender.slice(0, cleanSender.length - 10);
       }
