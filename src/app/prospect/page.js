@@ -3,10 +3,13 @@
 import { useState, useRef } from 'react';
 import {
   Search, MapPin, Users, Download, Globe,
-  X, ChevronRight, Loader2, AlertCircle, CheckCircle,
+  X, ChevronRight, Loader2, AlertCircle, CheckCircle, Send,
 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import ProspectTable from '@/components/prospect/ProspectTable';
 import AddClientModal from '@/components/prospect/AddClientModal';
+import BulkSendModal from '@/components/prospect/BulkSendModal';
+import SendProgressModal from '@/components/prospect/SendProgressModal';
 import { mapPlaceTypeToCategory, extractCityFromAddress, formatCSVCell } from '@/lib/placeUtils';
 
 const FILTER_OPTIONS = [
@@ -27,7 +30,42 @@ export default function ProspectPage() {
   const [filter, setFilter] = useState('all');
   const [addingPlace, setAddingPlace] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [clientStatusMap, setClientStatusMap] = useState({});
+  const [bulkSending, setBulkSending] = useState(false);
+  const [progressItems, setProgressItems] = useState(null);
   const inputRef = useRef(null);
+
+  const refreshClientStatus = async (placeIds) => {
+    if (!placeIds.length) return;
+    const { data: clientRows, error: clientErr } = await supabase
+      .from('clients')
+      .select('id, place_id')
+      .in('place_id', placeIds);
+
+    if (clientErr || !clientRows?.length) return;
+
+    const clientIds = clientRows.map((c) => c.id);
+    const { data: scheduleRows } = await supabase
+      .from('outreach_schedules')
+      .select('client_id, status')
+      .in('client_id', clientIds);
+
+    const scheduleByClient = {};
+    (scheduleRows || []).forEach((s) => {
+      if (!scheduleByClient[s.client_id]) scheduleByClient[s.client_id] = { hasPending: false, hasSent: false };
+      if (s.status === 'Pending' || s.status === 'Scheduled') scheduleByClient[s.client_id].hasPending = true;
+      if (s.status === 'Sent') scheduleByClient[s.client_id].hasSent = true;
+    });
+
+    setClientStatusMap((prev) => {
+      const next = { ...prev };
+      clientRows.forEach((c) => {
+        const sched = scheduleByClient[c.id] || { hasPending: false, hasSent: false };
+        next[c.place_id] = { clientId: c.id, ...sched };
+      });
+      return next;
+    });
+  };
 
   const applyFilter = (list) => {
     if (filter === 'hasWebsite') return list.filter((r) => !!r.website);
@@ -48,6 +86,7 @@ export default function ProspectPage() {
         setResults([]);
         setSelectedIds([]);
         setNextPageToken(null);
+        setClientStatusMap({});
       }
 
       const params = new URLSearchParams();
@@ -69,6 +108,9 @@ export default function ProspectPage() {
         setHasSearched(true);
       }
       setNextPageToken(data.next_page_token || null);
+
+      const placeIds = (data.results || []).map((r) => r.place_id).filter(Boolean);
+      refreshClientStatus(placeIds);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -147,6 +189,7 @@ export default function ProspectPage() {
   };
 
   const handleAddClientSuccess = (businessName) => {
+    if (addingPlace?.place_id) refreshClientStatus([addingPlace.place_id]);
     setAddingPlace(null);
     setSuccessMsg(`"${businessName}" added to Clients successfully!`);
     setTimeout(() => setSuccessMsg(null), 4000);
@@ -259,6 +302,7 @@ export default function ProspectPage() {
               onSelectRow={handleSelectRow}
               onSelectAll={handleSelectAll}
               onAddClient={setAddingPlace}
+              clientStatusMap={clientStatusMap}
             />
           </div>
 
@@ -307,19 +351,19 @@ export default function ProspectPage() {
 
       {/* Floating Bulk Action Bar */}
       {selectedIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex items-center justify-between space-x-6 max-w-lg w-[calc(100%-2rem)]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-5 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6 max-w-xl w-[calc(100%-2rem)]">
           <div className="flex items-center space-x-2.5">
-            <div className="bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 p-2 rounded-xl">
+            <div className="bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 p-2 rounded-xl shrink-0">
               <Users className="h-5 w-5" />
             </div>
             <div>
               <div className="font-bold text-sm text-slate-800 dark:text-slate-200">
                 {selectedIds.length} Prospect{selectedIds.length > 1 ? 's' : ''} Selected
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">Export as CSV to import into Clients</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">Add to Clients &amp; queue a WhatsApp message, or export as CSV</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={() => setSelectedIds([])}
               className="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-semibold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
@@ -328,10 +372,17 @@ export default function ProspectPage() {
             </button>
             <button
               onClick={handleExportSelected}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-sm transition-all"
+              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs shadow-sm transition-all"
             >
               <Download className="h-4 w-4" />
               <span>Export CSV</span>
+            </button>
+            <button
+              onClick={() => setBulkSending(true)}
+              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-sm transition-all"
+            >
+              <Send className="h-4 w-4" />
+              <span>Add &amp; Send Message</span>
             </button>
           </div>
         </div>
@@ -343,6 +394,30 @@ export default function ProspectPage() {
           place={addingPlace}
           onClose={() => setAddingPlace(null)}
           onSuccess={handleAddClientSuccess}
+        />
+      )}
+
+      {/* Bulk Add & Send Modal */}
+      {bulkSending && (
+        <BulkSendModal
+          prospects={results.filter((r) => selectedIds.includes(r.place_id))}
+          clientStatusMap={clientStatusMap}
+          onClose={() => setBulkSending(false)}
+          onQueued={(queued) => {
+            const placeIds = queued.map((q) => q.placeId);
+            setBulkSending(false);
+            setSelectedIds([]);
+            setProgressItems(queued);
+            refreshClientStatus(placeIds);
+          }}
+        />
+      )}
+
+      {/* Send Progress Modal */}
+      {progressItems && (
+        <SendProgressModal
+          items={progressItems}
+          onClose={() => setProgressItems(null)}
         />
       )}
     </div>

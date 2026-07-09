@@ -91,6 +91,7 @@ export default function AddClientModal({ place, onClose, onSuccess }) {
         tags: [],
         notes: form.notes.trim() || null,
         status: form.status,
+        place_id: place.place_id || null,
         updated_at: new Date().toISOString(),
       };
 

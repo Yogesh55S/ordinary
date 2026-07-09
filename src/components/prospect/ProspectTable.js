@@ -3,10 +3,11 @@
 import {
   Globe, PhoneOff, Phone, Star,
   CheckSquare, Square, UserPlus, ExternalLink,
+  CheckCircle2, Clock, UserCheck,
 } from 'lucide-react';
 import { mapPlaceTypeToCategory } from '@/lib/placeUtils';
 
-export default function ProspectTable({ results, selectedIds, onSelectRow, onSelectAll, onAddClient }) {
+export default function ProspectTable({ results, selectedIds, onSelectRow, onSelectAll, onAddClient, clientStatusMap = {} }) {
   if (results.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -52,6 +53,7 @@ export default function ProspectTable({ results, selectedIds, onSelectRow, onSel
             const isSelected = selectedIds.includes(place.place_id);
             const hasWebsite = !!place.website;
             const category = mapPlaceTypeToCategory(place.types);
+            const status = clientStatusMap[place.place_id];
 
             return (
               <tr
@@ -142,13 +144,30 @@ export default function ProspectTable({ results, selectedIds, onSelectRow, onSel
                 </td>
 
                 <td className="px-4 py-3.5 text-right pr-5">
-                  <button
-                    onClick={() => onAddClient(place)}
-                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs transition-all shadow-sm whitespace-nowrap"
-                  >
-                    <UserPlus className="h-3.5 w-3.5 shrink-0" />
-                    <span>Add Client</span>
-                  </button>
+                  {status?.hasSent ? (
+                    <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30 whitespace-nowrap">
+                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                      <span>Message Sent</span>
+                    </span>
+                  ) : status?.hasPending ? (
+                    <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 whitespace-nowrap">
+                      <Clock className="h-3.5 w-3.5 shrink-0" />
+                      <span>In Queue</span>
+                    </span>
+                  ) : status?.clientId ? (
+                    <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/30 whitespace-nowrap">
+                      <UserCheck className="h-3.5 w-3.5 shrink-0" />
+                      <span>Already Added</span>
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => onAddClient(place)}
+                      className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs transition-all shadow-sm whitespace-nowrap"
+                    >
+                      <UserPlus className="h-3.5 w-3.5 shrink-0" />
+                      <span>Add Client</span>
+                    </button>
+                  )}
                 </td>
               </tr>
             );
