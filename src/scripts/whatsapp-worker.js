@@ -674,6 +674,15 @@ async function processSchedules() {
             action_type: 'Message Sent',
             details: `Outreach delivered to "${businessName}" (${phoneNumber}).`
           });
+
+          // Attempt to archive chat on WhatsApp app
+          try {
+            console.log(`Archiving chat on WhatsApp app for ${cleanedPhone}...`);
+            await sock.chatModify({ archive: true }, verifiedJid);
+            console.log(`Successfully archived chat for ${cleanedPhone} on device`);
+          } catch (archiveErr) {
+            console.error(`Failed to archive chat for ${cleanedPhone} on device:`, archiveErr.message);
+          }
           
           console.log(`Successfully sent outreach to ${cleanedPhone}`);
           const attachmentNames = mediaItems.map(m => m.file_name).join(', ');
