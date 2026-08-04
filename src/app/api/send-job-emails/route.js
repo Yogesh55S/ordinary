@@ -27,12 +27,12 @@ function escapeHtml(value) {
     .replace(/'/g, '&#x27;');
 }
 
-function renderTemplate(templateHtml, tokens) {
-  let html = templateHtml;
+function renderTemplate(template, tokens) {
+  let out = template;
   for (const [token, value] of Object.entries(tokens)) {
-    html = html.split(token).join(value);
+    out = out.split(token).join(value);
   }
-  return html;
+  return out;
 }
 
 function buildEmailHtml(templateHtml, { hrName, companyName, jobTitle, whyCompany, relevantSkills }) {
@@ -43,6 +43,21 @@ function buildEmailHtml(templateHtml, { hrName, companyName, jobTitle, whyCompan
     '{{WHY_COMPANY}}': escapeHtml(whyCompany || ''),
     '{{RELEVANT_SKILLS}}': escapeHtml(relevantSkills || ''),
     // URL tokens sit inside href attributes in the compiled template — do not HTML-escape them.
+    '{{PORTFOLIO_URL}}': PORTFOLIO_URL,
+    '{{GITHUB_URL}}': GITHUB_URL,
+    '{{LINKEDIN_URL}}': LINKEDIN_URL,
+    '{{RESUME_URL}}': RESUME_URL,
+  });
+}
+
+function buildEmailText(templateText, { hrName, companyName, jobTitle, whyCompany, relevantSkills }) {
+  if (!templateText) return null;
+  return renderTemplate(templateText, {
+    '{{HR_NAME}}': hrName || 'there',
+    '{{COMPANY_NAME}}': companyName || 'your team',
+    '{{JOB_TITLE}}': jobTitle || 'the open role',
+    '{{WHY_COMPANY}}': whyCompany || '',
+    '{{RELEVANT_SKILLS}}': relevantSkills || '',
     '{{PORTFOLIO_URL}}': PORTFOLIO_URL,
     '{{GITHUB_URL}}': GITHUB_URL,
     '{{LINKEDIN_URL}}': LINKEDIN_URL,
@@ -81,13 +96,26 @@ export async function POST(request) {
     );
   }
 
-  if (!fs.existsSync(TEMPLATE_PATH)) {
-    return NextResponse.json(
-      { error: `Compiled email template not found at ${TEMPLATE_PATH}. Run "npm run export" inside job-application-email/ first.` },
-      { status: 500 }
-    );
+  // Prefer the saved template from /job-applications/template (job_email_template table);
+  // fall back to the compiled react-email export if nothing has been saved yet.
+  const { data: savedTemplate } = await supabaseService
+    .from('job_email_template')
+    .select('*')
+    .limit(1)
+    .maybeSingle();
+
+  let templateHtml = savedTemplate?.html_content || null;
+  const templateText = savedTemplate?.plain_text_content || null;
+
+  if (!templateHtml) {
+    if (!fs.existsSync(TEMPLATE_PATH)) {
+      return NextResponse.json(
+        { error: `No saved template and no compiled email template found at ${TEMPLATE_PATH}. Save a template at /job-applications/template, or run "npm run export-job-application-template".` },
+        { status: 500 }
+      );
+    }
+    templateHtml = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
   }
-  const templateHtml = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
 
   let requestedBatchSize = null;
   try {
@@ -140,13 +168,16 @@ export async function POST(request) {
     const whyCompany = (profile.why_company_template || '').split('{{company_name}}').join(contact.company_name || 'your company');
 
     try {
-      const html = buildEmailHtml(templateHtml, {
+      const personalization = {
         hrName: contact.hr_name,
         companyName: contact.company_name,
         jobTitle,
         whyCompany,
         relevantSkills: profile.relevant_skills,
-      });
+      };
+
+      const html = buildEmailHtml(templateHtml, personalization);
+      const text = buildEmailText(templateText, personalization);
 
       const subject = `Application for ${jobTitle}${contact.company_name ? ` at ${contact.company_name}` : ''}`;
 
@@ -155,6 +186,7 @@ export async function POST(request) {
         to: contact.hr_email,
         subject,
         html,
+        ...(text ? { text } : {}),
       });
 
       await supabaseService

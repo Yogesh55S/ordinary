@@ -23,15 +23,20 @@ const categoryLabelStyle = {
   fontWeight: 700,
   letterSpacing: "0.5px",
   textTransform: "uppercase" as const,
-  margin: "0 0 8px 0",
+  margin: "0 0 10px 0",
 };
 
-const itemStyle = {
-  color: theme.colors.slate600,
+const chipStyle = {
+  display: "inline-block",
+  backgroundColor: theme.colors.blue50,
+  color: theme.colors.blue700,
   fontFamily: theme.font,
-  fontSize: "13.5px",
-  lineHeight: "1.7",
-  margin: 0,
+  fontSize: "12px",
+  fontWeight: 600,
+  padding: "5px 10px",
+  borderRadius: "4px",
+  marginRight: "6px",
+  marginBottom: "6px",
 };
 
 export function TechStack({ techStack }: TechStackProps) {
@@ -52,11 +57,13 @@ export function TechStack({ techStack }: TechStackProps) {
             style={{ verticalAlign: "top", padding: "20px 16px" }}
           >
             <Text style={categoryLabelStyle}>{group.category}</Text>
-            {group.items.map((item) => (
-              <Text key={item} style={itemStyle}>
-                {item}
-              </Text>
-            ))}
+            <div>
+              {group.items.map((item) => (
+                <span key={item} style={chipStyle}>
+                  {item}
+                </span>
+              ))}
+            </div>
           </Column>
         ))}
       </Row>

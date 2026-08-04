@@ -27,7 +27,14 @@ function escapeHtml(value: string): string {
 async function main() {
   let html = await render(JobApplicationEmail({ personalization: samplePersonalization }));
 
-  for (const key of Object.keys(TOKENS) as (keyof Personalization)[]) {
+  // Longest sample value first: some values are prefixes of others (e.g. resumeUrl embeds
+  // the exact githubUrl string), so tokenizing a shorter value first would corrupt the
+  // longer one mid-replacement. Processing longest-first avoids that collision generically.
+  const orderedKeys = (Object.keys(TOKENS) as (keyof Personalization)[]).sort(
+    (a, b) => samplePersonalization[b].length - samplePersonalization[a].length
+  );
+
+  for (const key of orderedKeys) {
     const sampleValue = samplePersonalization[key];
     const token = TOKENS[key];
     // Text content is HTML-escaped by React; URLs in href attributes are not.

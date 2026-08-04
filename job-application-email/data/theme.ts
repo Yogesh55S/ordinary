@@ -6,6 +6,7 @@ export const theme = {
     blue500: "#3B82F6",
     blue400: "#60A5FA",
     blue700: "#1D4ED8",
+    blue50: "#EFF6FF",
     white: "#FFFFFF",
     slate50: "#F8FAFC",
     slate100: "#F1F5F9",

@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run export-job-application-template",
     "dev": "next dev",
+    "prebuild": "npm run export-job-application-template",
     "build": "next build",
     "start": "next start",
+    "export-job-application-template": "cd job-application-email && ([ -d node_modules ] || npm install) && npm run export",
     "whatsapp-worker": "node src/scripts/whatsapp-worker.js",
     "job-application-worker": "node src/scripts/job-application-worker.js"
   },
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "pm2": "^7.0.3",
     "tailwindcss": "^4"
   }
 }

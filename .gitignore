@@ -48,6 +48,7 @@ next-env.d.ts
 .env.local
 .env.*
 .env*.local
+!.env.local.example
 
 # markdown files
 *.md

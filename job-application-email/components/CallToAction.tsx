@@ -17,10 +17,21 @@ export function CallToAction({ portfolioUrl, resumeUrl, githubUrl, linkedinUrl }
           fontFamily: theme.font,
           fontSize: "22px",
           fontWeight: 600,
-          margin: "0 0 24px 0",
+          margin: "0 0 8px 0",
         }}
       >
         Let's build something useful together.
+      </Text>
+      <Text
+        style={{
+          color: theme.colors.slate400,
+          fontFamily: theme.font,
+          fontSize: "14px",
+          lineHeight: "1.5",
+          margin: "0 0 28px 0",
+        }}
+      >
+        Take a look at my work, or grab a copy of my resume.
       </Text>
       <Row>
         <Column className="cta-btn-col" style={{ textAlign: "center", padding: "0 8px" }}>
@@ -64,7 +75,7 @@ export function CallToAction({ portfolioUrl, resumeUrl, githubUrl, linkedinUrl }
           color: theme.colors.slate400,
           fontFamily: theme.font,
           fontSize: "13.5px",
-          margin: "24px 0 0 0",
+          margin: "28px 0 0 0",
         }}
       >
         <Link href={githubUrl} style={{ color: theme.colors.blue400, textDecoration: "none" }}>

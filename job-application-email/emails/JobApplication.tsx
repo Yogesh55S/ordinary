@@ -26,20 +26,13 @@ export default function JobApplicationEmail({
         <meta name="supported-color-schemes" content="light" />
         <style>{`
           @media only screen and (max-width: 600px) {
-            .hero-section { padding: 28px 20px !important; }
+            .hero-section { padding: 36px 20px !important; }
             .content-section, .cta-section, .footer-section {
               padding-left: 20px !important;
               padding-right: 20px !important;
             }
-            .hero-text-col, .hero-image-col {
-              display: block !important;
-              width: 100% !important;
-              padding: 0 !important;
-              text-align: center !important;
-            }
-            .hero-image-col { margin-top: 20px !important; }
-            .hero-image-col img { margin: 0 auto !important; }
-            .hero-heading { font-size: 24px !important; }
+            .hero-heading { font-size: 26px !important; }
+            .hero-tagline { font-size: 15px !important; }
             .techstack-col {
               display: block !important;
               width: 100% !important;
@@ -60,7 +53,11 @@ export default function JobApplicationEmail({
               width: 100% !important;
               padding: 0 0 12px 0 !important;
             }
-            .cta-btn-col a { display: block !important; }
+            .cta-btn-col a {
+              display: block !important;
+              padding-top: 15px !important;
+              padding-bottom: 15px !important;
+            }
           }
         `}</style>
       </Head>

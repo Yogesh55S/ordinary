@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Palette } from 'lucide-react';
 
 import JobProfilesPanel from '@/components/job-applications/JobProfilesPanel';
 import AddHrContactsForm from '@/components/job-applications/AddHrContactsForm';
@@ -157,11 +158,20 @@ export default function JobApplicationsPage() {
 
   return (
     <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Job Applications</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Queue HR contacts, attach a job profile, and let a rate-limited loop send your application emails.
-        </p>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Job Applications</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">
+            Queue HR contacts, attach a job profile, and let a rate-limited loop send your application emails.
+          </p>
+        </div>
+        <Link
+          href="/job-applications/template"
+          className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-400 shadow-sm transition-all shrink-0"
+        >
+          <Palette className="h-3.5 w-3.5" />
+          <span>Edit Email Template</span>
+        </Link>
       </div>
 
       {error && (
