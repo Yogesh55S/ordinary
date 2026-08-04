@@ -16,7 +16,8 @@ import {
   Sun,
   Moon,
   History,
-  MapPin
+  MapPin,
+  Briefcase
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -48,6 +49,7 @@ export default function Sidebar() {
     { name: 'Prospect Finder', href: '/prospect', icon: MapPin },
     { name: 'Templates', href: '/templates', icon: FileText },
     { name: 'Schedules', href: '/schedules', icon: Calendar },
+    { name: 'Job Applications', href: '/job-applications', icon: Briefcase },
     { name: 'History', href: '/history', icon: History },
     { name: 'WhatsApp Link', href: '/settings', icon: Settings },
   ];

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "whatsapp-worker": "node src/scripts/whatsapp-worker.js"
+    "whatsapp-worker": "node src/scripts/whatsapp-worker.js",
+    "job-application-worker": "node src/scripts/job-application-worker.js"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
