@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Trash2, RotateCcw, Loader2, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, Trash2, RotateCcw, Loader2, Clock, CheckCircle2, XCircle, Pencil, Check, X } from 'lucide-react';
 
 const STATUS_FILTERS = [
   { key: 'all', label: 'All' },
@@ -25,10 +25,13 @@ function StatusBadge({ status }) {
   );
 }
 
-export default function QueueTable({ contacts, loading, onDelete, onRetry }) {
+export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpdate }) {
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [busyId, setBusyId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ hr_name: '', hr_email: '', company_name: '' });
+  const [editError, setEditError] = useState(null);
 
   const filtered = contacts.filter((c) => {
     const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
@@ -55,6 +58,42 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry }) {
     setBusyId(contact.id);
     try {
       await onRetry(contact.id);
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const startEdit = (contact) => {
+    setEditingId(contact.id);
+    setEditError(null);
+    setEditForm({
+      hr_name: contact.hr_name || '',
+      hr_email: contact.hr_email || '',
+      company_name: contact.company_name || '',
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditError(null);
+  };
+
+  const saveEdit = async (contact) => {
+    if (!editForm.hr_email.trim()) {
+      setEditError('HR email is required.');
+      return;
+    }
+    setBusyId(contact.id);
+    setEditError(null);
+    try {
+      await onUpdate(contact.id, {
+        hr_name: editForm.hr_name.trim() || null,
+        hr_email: editForm.hr_email.trim(),
+        company_name: editForm.company_name.trim() || null,
+      });
+      setEditingId(null);
+    } catch (err) {
+      setEditError(err.message || 'Failed to save changes.');
     } finally {
       setBusyId(null);
     }
@@ -113,44 +152,112 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {filtered.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors">
-                  <td className="px-4 py-3">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">{c.hr_name || '—'}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{c.hr_email}</p>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{c.company_name || '—'}</td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{c.job_profiles?.title || '—'}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={c.status} />
-                    {c.status === 'Failed' && c.error_message && (
-                      <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1 max-w-xs truncate" title={c.error_message}>{c.error_message}</p>
+              {filtered.map((c) => {
+                const isEditing = editingId === c.id;
+                return (
+                  <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors">
+                    {isEditing ? (
+                      <>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={editForm.hr_name}
+                            onChange={(e) => setEditForm((f) => ({ ...f, hr_name: e.target.value }))}
+                            placeholder="HR name"
+                            className="w-full mb-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                          />
+                          <input
+                            type="email"
+                            value={editForm.hr_email}
+                            onChange={(e) => setEditForm((f) => ({ ...f, hr_email: e.target.value }))}
+                            placeholder="HR email"
+                            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                          />
+                        </td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="text"
+                            value={editForm.company_name}
+                            onChange={(e) => setEditForm((f) => ({ ...f, company_name: e.target.value }))}
+                            placeholder="Company"
+                            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{c.job_profiles?.title || '—'}</td>
+                        <td className="px-4 py-3">
+                          <StatusBadge status={c.status} />
+                          {editError && <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1 max-w-xs">{editError}</p>}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end space-x-1.5">
+                            <button
+                              onClick={() => saveEdit(c)}
+                              disabled={busyId === c.id}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition-all disabled:opacity-50"
+                              aria-label={`Save changes for ${c.hr_email}`}
+                            >
+                              {busyId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              disabled={busyId === c.id}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all disabled:opacity-50"
+                              aria-label="Cancel editing"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="px-4 py-3">
+                          <p className="font-semibold text-slate-800 dark:text-slate-200">{c.hr_name || '—'}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{c.hr_email}</p>
+                        </td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{c.company_name || '—'}</td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{c.job_profiles?.title || '—'}</td>
+                        <td className="px-4 py-3">
+                          <StatusBadge status={c.status} />
+                          {c.status === 'Failed' && c.error_message && (
+                            <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1 max-w-xs truncate" title={c.error_message}>{c.error_message}</p>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end space-x-1.5">
+                            <button
+                              onClick={() => startEdit(c)}
+                              disabled={busyId === c.id}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-all disabled:opacity-50"
+                              aria-label={`Edit ${c.hr_email}`}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </button>
+                            {c.status === 'Failed' && (
+                              <button
+                                onClick={() => handleRetry(c)}
+                                disabled={busyId === c.id}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-all disabled:opacity-50"
+                                aria-label={`Retry ${c.hr_email}`}
+                              >
+                                {busyId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDelete(c)}
+                              disabled={busyId === c.id}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all disabled:opacity-50"
+                              aria-label={`Remove ${c.hr_email}`}
+                            >
+                              {busyId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                            </button>
+                          </div>
+                        </td>
+                      </>
                     )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end space-x-1.5">
-                      {c.status === 'Failed' && (
-                        <button
-                          onClick={() => handleRetry(c)}
-                          disabled={busyId === c.id}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-all disabled:opacity-50"
-                          aria-label={`Retry ${c.hr_email}`}
-                        >
-                          {busyId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDelete(c)}
-                        disabled={busyId === c.id}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all disabled:opacity-50"
-                        aria-label={`Remove ${c.hr_email}`}
-                      >
-                        {busyId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

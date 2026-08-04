@@ -12,26 +12,6 @@ export function Hero({ profile }: HeroProps) {
       className="hero-section"
       style={{ backgroundColor: theme.colors.navy900, padding: "48px 32px", textAlign: "center" }}
     >
-      <div style={{ margin: "0 0 20px 0" }}>
-        <span
-          className="hero-badge"
-          style={{
-            display: "inline-block",
-            backgroundColor: theme.colors.navy800,
-            border: `1px solid ${theme.colors.slateBorderDark}`,
-            color: theme.colors.blue400,
-            fontFamily: theme.font,
-            fontSize: "12px",
-            fontWeight: 700,
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-            padding: "7px 16px",
-            borderRadius: "999px",
-          }}
-        >
-          {profile.role}
-        </span>
-      </div>
       <Heading
         as="h1"
         className="hero-heading"
@@ -41,11 +21,24 @@ export function Hero({ profile }: HeroProps) {
           fontSize: "32px",
           fontWeight: 700,
           letterSpacing: "0.3px",
-          margin: "0 0 14px 0",
+          margin: "0 0 8px 0",
         }}
       >
         {profile.name}
       </Heading>
+      <Text
+        className="hero-role"
+        style={{
+          color: theme.colors.blue400,
+          fontFamily: theme.font,
+          fontSize: "15px",
+          fontWeight: 600,
+          letterSpacing: "0.4px",
+          margin: "0 0 16px 0",
+        }}
+      >
+        {profile.role}
+      </Text>
       <Text
         className="hero-tagline"
         style={{

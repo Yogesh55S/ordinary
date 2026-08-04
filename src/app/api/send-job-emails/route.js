@@ -3,6 +3,9 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { supabaseService } from '@/lib/supabase';
+import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
+
+const DEFAULT_TECH_STACK_HTML = buildTechStackSectionHtml(DEFAULT_TECH_STACK);
 
 // Hardcoded per product requirement — override via JOB_APPLICATION_SENDER_EMAIL if the sending
 // mailbox ever changes, but this is the address application emails are sent from.
@@ -47,6 +50,7 @@ function buildEmailHtml(templateHtml, { hrName, companyName, jobTitle, whyCompan
     '{{GITHUB_URL}}': GITHUB_URL,
     '{{LINKEDIN_URL}}': LINKEDIN_URL,
     '{{RESUME_URL}}': RESUME_URL,
+    '{{TECH_STACK_SECTION}}': DEFAULT_TECH_STACK_HTML,
   });
 }
 
@@ -96,11 +100,13 @@ export async function POST(request) {
     );
   }
 
-  // Prefer the saved template from /job-applications/template (job_email_template table);
-  // fall back to the compiled react-email export if nothing has been saved yet.
+  // The bulk-queue flow has no per-contact template picker, so it always uses whichever
+  // saved template is marked default (see /job-applications/templates); falls back to the
+  // compiled react-email export if no template has been saved yet.
   const { data: savedTemplate } = await supabaseService
     .from('job_email_template')
     .select('*')
+    .eq('is_default', true)
     .limit(1)
     .maybeSingle();
 
@@ -110,7 +116,7 @@ export async function POST(request) {
   if (!templateHtml) {
     if (!fs.existsSync(TEMPLATE_PATH)) {
       return NextResponse.json(
-        { error: `No saved template and no compiled email template found at ${TEMPLATE_PATH}. Save a template at /job-applications/template, or run "npm run export-job-application-template".` },
+        { error: `No default saved template and no compiled email template found at ${TEMPLATE_PATH}. Mark a template as default at /job-applications/templates, or run "npm run export-job-application-template".` },
         { status: 500 }
       );
     }

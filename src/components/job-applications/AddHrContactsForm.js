@@ -68,8 +68,8 @@ export default function AddHrContactsForm({ profiles, onAddContacts }) {
           <UserPlus className="h-4.5 w-4.5" />
         </div>
         <div>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Add HR Contacts</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Queue emails for the sending loop to pick up</p>
+          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Add HR Contacts to the Queue</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">These wait as "Pending" until the sending loop (timer, on the right) sends them automatically.</p>
         </div>
       </div>
 
@@ -98,17 +98,25 @@ export default function AddHrContactsForm({ profiles, onAddContacts }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-            HR Emails <span className="text-rose-500">*</span>
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              HR Emails <span className="text-rose-500">*</span>
+            </label>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">One HR contact per line</span>
+          </div>
+          <div className="mb-2 px-3 py-2 rounded-lg bg-slate-50 dark:bg-[#0e1320] border border-slate-100 dark:border-slate-800 text-[11px] font-mono text-slate-500 dark:text-slate-400 space-y-0.5">
+            <p><span className="text-slate-700 dark:text-slate-200">Format:</span> email, name (optional), company (optional)</p>
+            <p className="text-indigo-600 dark:text-indigo-400">hr@acme.com, Priya Sharma, Acme Inc</p>
+            <p className="text-indigo-600 dark:text-indigo-400">jobs@studio.io</p>
+          </div>
           <textarea
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
             rows={6}
-            placeholder={'One per line: email, HR name (optional), company (optional)\nhr@company.com, Priya Sharma, Acme Inc\njobs@studio.io'}
+            placeholder={'hr@acme.com, Priya Sharma, Acme Inc\njobs@studio.io'}
             className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors resize-none font-mono"
           />
-          <p className="mt-1.5 text-[11px] text-slate-400 dark:text-slate-500">Each line becomes one queued email. Name and company are optional and personalize the template.</p>
+          <p className="mt-1.5 text-[11px] text-slate-400 dark:text-slate-500">Only the email is required — commas separate optional name/company, which personalize the template.</p>
         </div>
 
         {skippedLines.length > 0 && (

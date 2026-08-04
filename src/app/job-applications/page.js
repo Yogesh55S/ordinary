@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { AlertCircle, Palette } from 'lucide-react';
+import { AlertCircle, Palette, SendHorizonal, ListPlus } from 'lucide-react';
 
 import JobProfilesPanel from '@/components/job-applications/JobProfilesPanel';
 import AddHrContactsForm from '@/components/job-applications/AddHrContactsForm';
+import ComposeCard from '@/components/job-applications/ComposeCard';
 import RateLimitSettings from '@/components/job-applications/RateLimitSettings';
 import QueueTable from '@/components/job-applications/QueueTable';
 
@@ -14,12 +15,14 @@ const DEFAULT_SETTINGS = { batch_size: 5, interval_value: 30, interval_unit: 'mi
 
 export default function JobApplicationsPage() {
   const [profiles, setProfiles] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sendingNow, setSendingNow] = useState(false);
   const [lastSendResult, setLastSendResult] = useState(null);
+  const [activeTab, setActiveTab] = useState('compose');
 
   const fetchSettings = useCallback(async () => {
     let { data, error: fetchError } = await supabase
@@ -49,19 +52,25 @@ export default function JobApplicationsPage() {
       setLoading(true);
       setError(null);
 
-      const [profilesRes, contactsRes] = await Promise.all([
+      const [profilesRes, contactsRes, templatesRes] = await Promise.all([
         supabase.from('job_profiles').select('*').order('created_at', { ascending: false }),
         supabase
           .from('job_hr_contacts')
           .select('*, job_profiles(id, title)')
           .order('created_at', { ascending: false }),
+        supabase.from('job_email_template').select('*').order('updated_at', { ascending: false }),
       ]);
 
       if (profilesRes.error) throw profilesRes.error;
       if (contactsRes.error) throw contactsRes.error;
+      // PGRST205/42703 = table/column not found — template library migration not run yet.
+      if (templatesRes.error && templatesRes.error.code !== 'PGRST205' && templatesRes.error.code !== '42703') {
+        throw templatesRes.error;
+      }
 
       setProfiles(profilesRes.data || []);
       setContacts(contactsRes.data || []);
+      setTemplates(templatesRes.data || []);
       await fetchSettings();
     } catch (err) {
       console.error('Error loading job applications data:', err);
@@ -128,6 +137,15 @@ export default function JobApplicationsPage() {
     await fetchAll();
   };
 
+  const handleUpdateContact = async (id, fields) => {
+    const { error: updateError } = await supabase
+      .from('job_hr_contacts')
+      .update(fields)
+      .eq('id', id);
+    if (updateError) throw updateError;
+    await fetchAll();
+  };
+
   const handleSaveSettings = async (form) => {
     if (!settings?.id) return;
     const { error: updateError } = await supabase
@@ -136,6 +154,18 @@ export default function JobApplicationsPage() {
       .eq('id', settings.id);
     if (updateError) throw updateError;
     await fetchSettings();
+  };
+
+  const handleComposeSend = async (payload) => {
+    const res = await fetch('/api/send-single-application', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to send.');
+    await fetchAll();
+    return data;
   };
 
   const handleSendNow = async () => {
@@ -166,11 +196,11 @@ export default function JobApplicationsPage() {
           </p>
         </div>
         <Link
-          href="/job-applications/template"
+          href="/job-applications/templates"
           className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-400 shadow-sm transition-all shrink-0"
         >
           <Palette className="h-3.5 w-3.5" />
-          <span>Edit Email Template</span>
+          <span>Email Templates</span>
         </Link>
       </div>
 
@@ -183,12 +213,45 @@ export default function JobApplicationsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <div className="lg:col-span-2 space-y-6">
-          <AddHrContactsForm profiles={profiles} onAddContacts={handleAddContacts} />
+          <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-xl p-1 w-fit">
+            <button
+              type="button"
+              onClick={() => setActiveTab('compose')}
+              className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'compose'
+                  ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+              }`}
+            >
+              <SendHorizonal className="h-3.5 w-3.5" />
+              <span>Compose & Send</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('bulk')}
+              className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'bulk'
+                  ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+              }`}
+            >
+              <ListPlus className="h-3.5 w-3.5" />
+              <span>Bulk Queue (Timer)</span>
+            </button>
+          </div>
+
+          {activeTab === 'compose' ? (
+            <ComposeCard profiles={profiles} templates={templates} onSend={handleComposeSend} />
+          ) : (
+            <AddHrContactsForm profiles={profiles} onAddContacts={handleAddContacts} />
+          )}
+
           <QueueTable
             contacts={contacts}
             loading={loading}
             onDelete={handleDeleteContact}
             onRetry={handleRetryContact}
+            onUpdate={handleUpdateContact}
           />
         </div>
 

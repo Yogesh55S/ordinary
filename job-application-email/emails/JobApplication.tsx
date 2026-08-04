@@ -77,7 +77,7 @@ export default function JobApplicationEmail({
             developerName={profile.name}
             developerRole={profile.role}
           />
-          <TechStack techStack={profile.techStack} />
+          <TechStack />
           <Projects projects={projects} />
           <Capabilities capabilities={profile.capabilities} />
           <CallToAction
