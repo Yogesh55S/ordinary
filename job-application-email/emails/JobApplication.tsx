@@ -33,11 +33,6 @@ export default function JobApplicationEmail({
             }
             .hero-heading { font-size: 26px !important; }
             .hero-tagline { font-size: 15px !important; }
-            .techstack-col {
-              display: block !important;
-              width: 100% !important;
-              border-bottom: 1px solid #E2E8F0;
-            }
             .project-image-col, .project-text-col {
               display: block !important;
               width: 100% !important;
