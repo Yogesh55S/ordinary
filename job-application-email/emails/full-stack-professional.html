@@ -1,0 +1,331 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="x-apple-disable-message-reformatting" content="" />
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+<meta name="color-scheme" content="light dark" />
+<meta name="supported-color-schemes" content="light dark" />
+<title>Full-Stack Developer — Professional Application</title>
+<!--[if mso]>
+<style type="text/css">
+  table, td { font-family: Arial, Helvetica, sans-serif !important; }
+</style>
+<![endif]-->
+<style>
+  body, table, td { margin: 0; padding: 0; }
+  table { border-collapse: collapse; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+  body { width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+  /* ---- Mobile ---- */
+  @media only screen and (max-width: 600px) {
+    .fs-container { width: 100% !important; max-width: 100% !important; }
+    .fs-header-pad { padding: 36px 22px !important; }
+    .fs-section-pad { padding-left: 22px !important; padding-right: 22px !important; }
+    .fs-heading { font-size: 25px !important; }
+    .fs-tagline { font-size: 14.5px !important; }
+    .fs-proj-col { display: block !important; width: 100% !important; padding: 0 0 14px 0 !important; text-align: center !important; }
+    .fs-proj-col:last-child { padding-bottom: 0 !important; }
+    .fs-btn-col { display: block !important; width: 100% !important; padding: 0 0 12px 0 !important; }
+    .fs-btn-col a { display: block !important; }
+  }
+
+  /*
+    Force the SAME palette in email clients that auto-apply dark mode (Apple/iOS Mail,
+    Outlook.com, Windows Mail honor prefers-color-scheme; Gmail's app-only dark mode
+    instead tags elements with [data-ogsc]/[data-ogsb] and ignores media queries — so
+    every rule below is duplicated under that selector too). Without this, clients
+    re-invert colors per-element using their own contrast heuristics, which is what
+    breaks a two-tone header like this one (navy bg + light-blue accent text) — the
+    background and the accent get "corrected" independently and stop matching.
+  */
+  @media (prefers-color-scheme: dark) {
+    .fs-body-bg { background-color: #F1F5F9 !important; }
+    .fs-card-bg { background-color: #FFFFFF !important; }
+    .fs-header-bg { background-color: #0B1120 !important; }
+    .fs-header-title { color: #FFFFFF !important; }
+    .fs-header-role { color: #60A5FA !important; }
+    .fs-header-tagline { color: #94A3B8 !important; }
+    .fs-accent-bar { background-color: #3B82F6 !important; }
+    .fs-eyebrow { color: #3B82F6 !important; }
+    .fs-heading-dark { color: #0F172A !important; }
+    .fs-body-text { color: #334155 !important; }
+    .fs-fit-card-bg { background-color: #F8FAFC !important; border-color: #E2E8F0 !important; }
+    .fs-fit-check { color: #3B82F6 !important; }
+    .fs-proj-name { color: #0F172A !important; }
+    .fs-proj-tech { color: #1D4ED8 !important; }
+    .fs-proj-link { color: #3B82F6 !important; }
+    .fs-proj-thumb-bg { background-color: #F8FAFC !important; border-color: #E2E8F0 !important; }
+    .fs-cta-bg { background-color: #0B1120 !important; }
+    .fs-cta-heading { color: #FFFFFF !important; }
+    .fs-cta-sub { color: #94A3B8 !important; }
+    .fs-btn-primary { background-color: #3B82F6 !important; color: #FFFFFF !important; }
+    .fs-btn-secondary { color: #FFFFFF !important; border-color: #FFFFFF !important; }
+    .fs-cta-link { color: #60A5FA !important; }
+    .fs-footer-bg { background-color: #F8FAFC !important; }
+    .fs-footer-border { border-color: #E2E8F0 !important; }
+    .fs-footer-name { color: #0F172A !important; }
+    .fs-chip { background-color: #FFFFFF !important; border-color: #E2E8F0 !important; color: #334155 !important; }
+  }
+  [data-ogsc] .fs-body-bg, [data-ogsb] .fs-body-bg { background-color: #F1F5F9 !important; }
+  [data-ogsc] .fs-card-bg, [data-ogsb] .fs-card-bg { background-color: #FFFFFF !important; }
+  [data-ogsc] .fs-header-bg, [data-ogsb] .fs-header-bg { background-color: #0B1120 !important; }
+  [data-ogsc] .fs-header-title { color: #FFFFFF !important; }
+  [data-ogsc] .fs-header-role { color: #60A5FA !important; }
+  [data-ogsc] .fs-header-tagline { color: #94A3B8 !important; }
+  [data-ogsc] .fs-accent-bar, [data-ogsb] .fs-accent-bar { background-color: #3B82F6 !important; }
+  [data-ogsc] .fs-eyebrow { color: #3B82F6 !important; }
+  [data-ogsc] .fs-heading-dark { color: #0F172A !important; }
+  [data-ogsc] .fs-body-text { color: #334155 !important; }
+  [data-ogsc] .fs-fit-card-bg, [data-ogsb] .fs-fit-card-bg { background-color: #F8FAFC !important; border-color: #E2E8F0 !important; }
+  [data-ogsc] .fs-fit-check { color: #3B82F6 !important; }
+  [data-ogsc] .fs-proj-name { color: #0F172A !important; }
+  [data-ogsc] .fs-proj-tech { color: #1D4ED8 !important; }
+  [data-ogsc] .fs-proj-link { color: #3B82F6 !important; }
+  [data-ogsc] .fs-proj-thumb-bg, [data-ogsb] .fs-proj-thumb-bg { background-color: #F8FAFC !important; border-color: #E2E8F0 !important; }
+  [data-ogsc] .fs-cta-bg, [data-ogsb] .fs-cta-bg { background-color: #0B1120 !important; }
+  [data-ogsc] .fs-cta-heading { color: #FFFFFF !important; }
+  [data-ogsc] .fs-cta-sub { color: #94A3B8 !important; }
+  [data-ogsc] .fs-btn-primary, [data-ogsb] .fs-btn-primary { background-color: #3B82F6 !important; color: #FFFFFF !important; }
+  [data-ogsc] .fs-btn-secondary { color: #FFFFFF !important; border-color: #FFFFFF !important; }
+  [data-ogsc] .fs-cta-link { color: #60A5FA !important; }
+  [data-ogsc] .fs-footer-bg, [data-ogsb] .fs-footer-bg { background-color: #F8FAFC !important; }
+  [data-ogsc] .fs-footer-border { border-color: #E2E8F0 !important; }
+  [data-ogsc] .fs-footer-name { color: #0F172A !important; }
+  [data-ogsc] .fs-chip, [data-ogsb] .fs-chip { background-color: #FFFFFF !important; border-color: #E2E8F0 !important; color: #334155 !important; }
+</style>
+</head>
+<body class="fs-body-bg" style="margin:0;padding:0;background-color:#F1F5F9;">
+
+  <!-- Inbox preview text (hidden) -->
+  <div style="display:none;font-size:1px;color:#F1F5F9;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
+    Yogesh Kumar — Full-Stack Developer, applying for {{JOB_TITLE}} at {{COMPANY_NAME}}
+  </div>
+  <div style="display:none;white-space:nowrap;font:15px courier;line-height:0;">
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+  </div>
+
+  <table role="presentation" border="0" width="100%" cellpadding="0" cellspacing="0" align="center" class="fs-body-bg" style="background-color:#F1F5F9;">
+  <tbody>
+  <tr>
+    <td style="margin:0;padding:0;background-color:#F1F5F9;">
+      <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-container fs-card-bg" style="max-width:600px;margin:0 auto;background-color:#FFFFFF;">
+      <tbody>
+      <tr style="width:100%">
+        <td>
+
+          <!-- Header -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-header-bg fs-header-pad" style="background-color:#0B1120;padding:48px 32px;text-align:center;">
+          <tbody>
+          <tr>
+            <td align="center" style="padding:0;">
+              <p class="fs-header-title fs-heading" style="margin:0 0 8px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:32px;line-height:1.25;font-weight:700;letter-spacing:0.3px;color:#FFFFFF;">
+                Yogesh Kumar
+              </p>
+              <p class="fs-header-role" style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.4;font-weight:600;letter-spacing:0.4px;color:#60A5FA;">
+                Full-Stack Developer
+              </p>
+              <p class="fs-header-tagline fs-tagline" style="margin:0 auto;max-width:420px;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#94A3B8;">
+                Building complete products end to end — schema, API, and the interface a user actually touches.
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto 0 auto;">
+              <tbody>
+              <tr>
+                <td class="fs-accent-bar" width="48" height="3" style="background-color:#3B82F6;border-radius:2px;font-size:1px;line-height:1px;">&nbsp;</td>
+              </tr>
+              </tbody>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+          <!-- Intro -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-card-bg fs-section-pad" style="background-color:#FFFFFF;">
+          <tbody>
+          <tr>
+            <td style="padding:36px 32px 8px 32px;">
+              <p class="fs-body-text" style="margin:0 0 14px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.6;color:#334155;">
+                Hi {{HR_NAME}},
+              </p>
+              <p class="fs-body-text" style="margin:0 0 14px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.6;color:#334155;">
+                I'm Yogesh, a Full-Stack Developer who likes owning a feature end to end — schema design, API architecture, and the interface a user actually touches. I'm reaching out about the {{JOB_TITLE}} role at {{COMPANY_NAME}}.
+              </p>
+              <p class="fs-body-text" style="margin:0 0 14px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.6;color:#334155;">
+                {{WHY_COMPANY}}
+              </p>
+              <p class="fs-body-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:15.5px;line-height:1.6;color:#334155;">
+                My background in {{RELEVANT_SKILLS}} lines up closely with what this role needs — and it's production experience, not tutorials: real users, real traffic, real on-call incidents.
+              </p>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+          <!-- What I bring -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-card-bg fs-section-pad" style="background-color:#FFFFFF;">
+          <tbody>
+          <tr>
+            <td style="padding:24px 32px 8px 32px;">
+              <p class="fs-eyebrow" style="margin:0 0 14px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:24px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3B82F6;">
+                Why a Full-Stack Hire
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="fs-fit-card-bg" style="background-color:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+              <tbody>
+              <tr>
+                <td style="padding:18px 20px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tbody>
+                  <tr>
+                    <td width="22" valign="top" style="padding:0 0 12px 0;"><span class="fs-fit-check" style="font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#3B82F6;">✓</span></td>
+                    <td valign="top" style="padding:0 0 12px 0;">
+                      <p class="fs-body-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55;color:#334155;"><strong style="color:#0F172A;">End-to-end ownership</strong> — comfortable across frontend, backend, database, and deployment, so a feature doesn't stall waiting on a handoff.</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="22" valign="top" style="padding:0 0 12px 0;"><span class="fs-fit-check" style="font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#3B82F6;">✓</span></td>
+                    <td valign="top" style="padding:0 0 12px 0;">
+                      <p class="fs-body-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55;color:#334155;"><strong style="color:#0F172A;">API & integration design</strong> — REST services, webhooks, and third-party payment, video, and messaging providers wired up correctly the first time.</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="22" valign="top" style="padding:0 0 12px 0;"><span class="fs-fit-check" style="font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#3B82F6;">✓</span></td>
+                    <td valign="top" style="padding:0 0 12px 0;">
+                      <p class="fs-body-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55;color:#334155;"><strong style="color:#0F172A;">Reliability mindset</strong> — caching, queuing, rate limiting, and monitoring, not just "it works on my machine."</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="22" valign="top" style="padding:0;"><span class="fs-fit-check" style="font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#3B82F6;">✓</span></td>
+                    <td valign="top" style="padding:0;">
+                      <p class="fs-body-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55;color:#334155;"><strong style="color:#0F172A;">Shipped, not just built</strong> — production deployments across fintech, real-time video, and e-commerce, with real users on the other end.</p>
+                    </td>
+                  </tr>
+                  </tbody>
+                  </table>
+                </td>
+              </tr>
+              </tbody>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+          <!-- Tech stack (rendered per-application from the skills picker) -->
+          {{TECH_STACK_SECTION}}
+
+          <!-- Recently shipped -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-card-bg fs-section-pad" style="background-color:#FFFFFF;">
+          <tbody>
+          <tr>
+            <td style="padding:8px 32px 32px 32px;">
+              <p class="fs-eyebrow" style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:24px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3B82F6;">
+                Recently Shipped
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tbody>
+              <tr>
+                <td class="fs-proj-col" width="33%" valign="top" align="center" style="padding:0 8px 0 0;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" class="fs-proj-thumb-bg" style="background-color:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+                  <tbody>
+                  <tr><td width="80" height="80" align="center" valign="middle" style="padding:8px;">
+                    <img src="https://lxumfxehqcgyyqrmbunr.supabase.co/storage/v1/object/public/outreach-media/job-application-email/pawgloo.png" width="64" height="64" alt="Pawgloo" style="display:block;width:64px;height:64px;object-fit:contain;" />
+                  </td></tr>
+                  </tbody>
+                  </table>
+                  <p class="fs-proj-name" style="margin:10px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12.5px;font-weight:700;color:#0F172A;">Pawgloo</p>
+                  <p class="fs-proj-tech" style="margin:2px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:10.5px;color:#1D4ED8;">Vet telehealth</p>
+                </td>
+                <td class="fs-proj-col" width="33%" valign="top" align="center" style="padding:0 8px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" class="fs-proj-thumb-bg" style="background-color:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+                  <tbody>
+                  <tr><td width="80" height="80" align="center" valign="middle" style="padding:8px;">
+                    <img src="https://lxumfxehqcgyyqrmbunr.supabase.co/storage/v1/object/public/outreach-media/job-application-email/genesis.png" width="64" height="64" alt="Genesis Classes" style="display:block;width:64px;height:64px;object-fit:contain;" />
+                  </td></tr>
+                  </tbody>
+                  </table>
+                  <p class="fs-proj-name" style="margin:10px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12.5px;font-weight:700;color:#0F172A;">Genesis Classes</p>
+                  <p class="fs-proj-tech" style="margin:2px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:10.5px;color:#1D4ED8;">Ed-tech platform</p>
+                </td>
+                <td class="fs-proj-col" width="33%" valign="top" align="center" style="padding:0 0 0 8px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" class="fs-proj-thumb-bg" style="background-color:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+                  <tbody>
+                  <tr><td width="80" height="80" align="center" valign="middle" style="padding:8px;">
+                    <img src="https://lxumfxehqcgyyqrmbunr.supabase.co/storage/v1/object/public/outreach-media/job-application-email/kitkat.webp" width="64" height="64" alt="Rabbit Auto Care" style="display:block;width:64px;height:64px;object-fit:contain;" />
+                  </td></tr>
+                  </tbody>
+                  </table>
+                  <p class="fs-proj-name" style="margin:10px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12.5px;font-weight:700;color:#0F172A;">Rabbit Auto Care</p>
+                  <p class="fs-proj-tech" style="margin:2px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:10.5px;color:#1D4ED8;">E-commerce</p>
+                </td>
+              </tr>
+              </tbody>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+          <!-- CTA -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-cta-bg fs-section-pad" style="background-color:#0B1120;text-align:center;">
+          <tbody>
+          <tr>
+            <td align="center" style="padding:40px 32px;">
+              <p class="fs-cta-heading" style="margin:0 0 8px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:22px;font-weight:600;color:#FFFFFF;">
+                Let's build something useful together.
+              </p>
+              <p class="fs-cta-sub" style="margin:0 0 28px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#94A3B8;">
+                Take a look at my work, or grab a copy of my resume.
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+              <tbody>
+              <tr>
+                <td class="fs-btn-col" style="padding:0 8px;">
+                  <a href="{{PORTFOLIO_URL}}" class="fs-btn-primary" style="display:inline-block;background-color:#3B82F6;color:#FFFFFF;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;padding:14px 28px;border-radius:6px;text-decoration:none;">VIEW PORTFOLIO</a>
+                </td>
+                <td class="fs-btn-col" style="padding:0 8px;">
+                  <a href="{{RESUME_URL}}" class="fs-btn-secondary" style="display:inline-block;background-color:transparent;color:#FFFFFF;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;padding:12.5px 26.5px;border-radius:6px;text-decoration:none;border:1.5px solid #FFFFFF;">VIEW RESUME</a>
+                </td>
+              </tr>
+              </tbody>
+              </table>
+              <p style="margin:28px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:13.5px;color:#94A3B8;">
+                <a href="{{GITHUB_URL}}" class="fs-cta-link" style="color:#60A5FA;text-decoration:none;">GitHub</a>
+                &nbsp;&nbsp;·&nbsp;&nbsp;
+                <a href="{{LINKEDIN_URL}}" class="fs-cta-link" style="color:#60A5FA;text-decoration:none;">LinkedIn</a>
+              </p>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+          <!-- Footer -->
+          <table role="presentation" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" class="fs-footer-bg fs-footer-border fs-section-pad" style="background-color:#F8FAFC;border-top:1px solid #E2E8F0;text-align:center;">
+          <tbody>
+          <tr>
+            <td align="center" style="padding:28px 32px;">
+              <p class="fs-footer-name" style="margin:0 0 14px 0;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:13.5px;font-weight:700;color:#0F172A;">
+                Yogesh Kumar — Full-Stack Developer
+              </p>
+              <a href="mailto:Yogeshama914@gmail.com" class="fs-chip" style="display:inline-block;background-color:#FFFFFF;border:1px solid #E2E8F0;color:#334155;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;margin:0 8px 8px 0;">Email</a>
+              <a href="{{PORTFOLIO_URL}}" class="fs-chip" style="display:inline-block;background-color:#FFFFFF;border:1px solid #E2E8F0;color:#334155;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;margin:0 8px 8px 0;">Portfolio</a>
+              <a href="{{GITHUB_URL}}" class="fs-chip" style="display:inline-block;background-color:#FFFFFF;border:1px solid #E2E8F0;color:#334155;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;margin:0 8px 8px 0;">GitHub</a>
+              <a href="{{LINKEDIN_URL}}" class="fs-chip" style="display:inline-block;background-color:#FFFFFF;border:1px solid #E2E8F0;color:#334155;font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;margin:0;">LinkedIn</a>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+
+        </td>
+      </tr>
+      </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+</body>
+</html>

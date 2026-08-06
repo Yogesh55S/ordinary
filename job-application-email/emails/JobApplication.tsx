@@ -53,6 +53,14 @@ export default function JobApplicationEmail({
               padding-top: 15px !important;
               padding-bottom: 15px !important;
             }
+            .footer-col {
+              display: block !important;
+              width: 100% !important;
+              padding: 0 0 18px 0 !important;
+            }
+            .footer-col:last-child {
+              padding-bottom: 0 !important;
+            }
           }
         `}</style>
       </Head>

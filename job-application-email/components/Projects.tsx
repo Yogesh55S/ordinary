@@ -1,4 +1,4 @@
-import { Section, Row, Column, Img, Text, Link } from "@react-email/components";
+import { Section, Row, Column, Img, Text, Button } from "@react-email/components";
 import { theme } from "../data/theme";
 import type { Project } from "../data/projects";
 
@@ -93,18 +93,23 @@ export function Projects({ projects }: ProjectsProps) {
             >
               {project.description}
             </Text>
-            <Link
+            <Button
               href={project.url}
               style={{
+                display: "inline-block",
+                border: `1.5px solid ${theme.colors.blue500}`,
                 color: theme.colors.blue500,
                 fontFamily: theme.font,
-                fontSize: "13.5px",
-                fontWeight: 600,
+                fontSize: "12px",
+                fontWeight: 700,
+                letterSpacing: "0.3px",
+                padding: "8px 16px",
+                borderRadius: "6px",
                 textDecoration: "none",
               }}
             >
-              View Project →
-            </Link>
+              VIEW PROJECT →
+            </Button>
           </Column>
         </Row>
       ))}

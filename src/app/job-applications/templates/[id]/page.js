@@ -18,6 +18,8 @@ import {
   Info,
   Monitor,
   Smartphone,
+  Star,
+  Pencil,
 } from 'lucide-react';
 
 const PREVIEW_WIDTHS = { desktop: 600, mobile: 375 };
@@ -185,25 +187,41 @@ export default function TemplateEditorPage() {
 
   return (
     <div className="flex-1 p-6 md:p-8 space-y-6 max-w-[1600px] mx-auto w-full">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-start justify-between flex-wrap gap-4">
         <div className="min-w-0 flex-1">
           <Link
             href="/job-applications/templates"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-2"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-3"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to Templates</span>
           </Link>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Template name"
-            className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 bg-transparent focus:outline-none focus:bg-slate-50 dark:focus:bg-[#111625] rounded-lg px-1 -mx-1 w-full max-w-xl"
-          />
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
-            {isDefault ? 'Default template — used by the bulk-queue sending loop.' : 'Edit the HTML and plain-text versions, then preview them live before saving.'}
-          </p>
+
+          <label className="block text-[11px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
+            Template name
+          </label>
+          <div className="relative w-full max-w-md">
+            <Pencil className="h-4 w-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none" />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Template name"
+              className="w-full text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 mt-2.5">
+            {isDefault && (
+              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400">
+                <Star className="h-2.5 w-2.5 fill-current" />
+                <span>Default</span>
+              </span>
+            )}
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {isDefault ? 'Used by the bulk-queue sending loop.' : 'Edit the HTML and plain-text versions, then preview them live before saving.'}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center space-x-2 shrink-0">
