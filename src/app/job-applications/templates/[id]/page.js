@@ -20,6 +20,8 @@ import {
   Smartphone,
   Star,
   Pencil,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 const PREVIEW_WIDTHS = { desktop: 600, mobile: 375 };
@@ -93,6 +95,7 @@ export default function TemplateEditorPage() {
   const [plainTextContent, setPlainTextContent] = useState('');
   const [activeTab, setActiveTab] = useState('html');
   const [previewDevice, setPreviewDevice] = useState('desktop');
+  const [previewTheme, setPreviewTheme] = useState('light');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [resetting, setResetting] = useState(false);
@@ -140,7 +143,18 @@ export default function TemplateEditorPage() {
     })();
   }, [id]);
 
-  const previewHtml = useMemo(() => substituteTokens(htmlContent), [htmlContent]);
+  const previewHtml = useMemo(() => {
+    let html = substituteTokens(htmlContent);
+    if (previewTheme === 'dark') {
+      const darkMeta = `<meta name="color-scheme" content="light dark">\n<style>\n  :root { color-scheme: dark; }\n  body { background-color: #121212 !important; color: #e5e7eb !important; }\n</style>\n`;
+      if (html.includes('</head>')) {
+        html = html.replace('</head>', `${darkMeta}</head>`);
+      } else {
+        html = `${darkMeta}${html}`;
+      }
+    }
+    return html;
+  }, [htmlContent, previewTheme]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -363,39 +377,70 @@ export default function TemplateEditorPage() {
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Live Preview</span>
                 <span className="text-[11px] text-slate-400 dark:text-slate-500 hidden sm:inline">(sample data — updates as you type)</span>
               </div>
-              <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-lg p-1">
-                <button
-                  type="button"
-                  onClick={() => setPreviewDevice('desktop')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
-                    previewDevice === 'desktop'
-                      ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  <Monitor className="h-3.5 w-3.5" />
-                  <span>Desktop</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPreviewDevice('mobile')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
-                    previewDevice === 'mobile'
-                      ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  <Smartphone className="h-3.5 w-3.5" />
-                  <span>Mobile</span>
-                </button>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-lg p-1">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewTheme('light')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
+                      previewTheme === 'light'
+                        ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <Sun className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Light</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewTheme('dark')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
+                      previewTheme === 'dark'
+                        ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <Moon className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Dark</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-lg p-1">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice('desktop')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
+                      previewDevice === 'desktop'
+                        ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <Monitor className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Desktop</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice('mobile')}
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold transition-all ${
+                      previewDevice === 'mobile'
+                        ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <Smartphone className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Mobile</span>
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="h-[560px] bg-slate-100 dark:bg-[#0a0e17] overflow-y-auto flex justify-center py-4 px-4">
+            <div className={`h-[560px] ${previewTheme === 'dark' ? 'bg-[#050505]' : 'bg-slate-100 dark:bg-[#0a0e17]'} overflow-y-auto flex justify-center py-4 px-4 transition-colors`}>
               <iframe
                 title="Email preview"
                 srcDoc={previewHtml}
                 style={{ width: PREVIEW_WIDTHS[previewDevice] }}
-                className={`h-full bg-white shrink-0 border border-slate-200 dark:border-slate-800 transition-all duration-200 ${
+                className={`h-full shrink-0 border border-slate-200 dark:border-slate-800 transition-all duration-200 ${
+                  previewTheme === 'dark' ? 'bg-[#121212]' : 'bg-white'
+                } ${
                   previewDevice === 'mobile' ? 'rounded-2xl shadow-md' : 'rounded-lg shadow-sm'
                 }`}
                 sandbox=""

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { SendHorizonal, Loader2, AlertCircle, CheckCircle2, Eye, Pencil, Monitor, Smartphone } from 'lucide-react';
 import SkillsMultiSelect from './SkillsMultiSelect';
 import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
@@ -53,6 +53,13 @@ export default function ComposeCard({ profiles, templates, onSend }) {
     });
     return initial;
   });
+
+  useEffect(() => {
+    if (!templateId && templates.length > 0) {
+      const def = templates.find((t) => t.is_default) || templates[0];
+      setTemplateId(def?.id || '');
+    }
+  }, [templates, templateId]);
 
   const [reviewing, setReviewing] = useState(false);
   const [reviewError, setReviewError] = useState(null);

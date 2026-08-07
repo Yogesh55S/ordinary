@@ -8,7 +8,7 @@
     "prebuild": "npm run export-job-application-template",
     "build": "next build",
     "start": "next start",
-    "export-job-application-template": "cd job-application-email && ([ -d node_modules ] || npm install) && npm run export",
+    "export-job-application-template": "cd job-application-email && node -e \"if(!require('fs').existsSync('node_modules')) require('child_process').execSync('npm install', {stdio:'inherit', shell:true})\" && npm run export",
     "whatsapp-worker": "node src/scripts/whatsapp-worker.js",
     "job-application-worker": "node src/scripts/job-application-worker.js"
   },
