@@ -62,67 +62,65 @@ export default function AddHrContactsForm({ profiles, onAddContacts }) {
   };
 
   return (
-    <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs p-6 space-y-4">
-      <div className="flex items-center space-x-2.5">
-        <div className="h-9 w-9 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center shrink-0">
-          <UserPlus className="h-4.5 w-4.5" />
+    <div className="bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs p-5 space-y-4 transition-colors">
+      <div className="flex items-center space-x-2.5 border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30 pb-3">
+        <div className="h-8 w-8 bg-[#CBDDE9]/30 dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md flex items-center justify-center shrink-0">
+          <UserPlus className="h-4 w-4" />
         </div>
         <div>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Add HR Contacts to the Queue</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">These wait as "Pending" until the sending loop (timer, on the right) sends them automatically.</p>
+          <h2 className="text-sm font-bold text-black dark:text-white">Batch Add HR Contacts</h2>
+          <p className="text-xs text-black/60 dark:text-[#CBDDE9]">Imports contacts into the Pending queue for the sending loop</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         {error && (
-          <div className="flex items-start space-x-2 p-2.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-lg text-rose-700 dark:text-rose-400 text-xs font-medium">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div className="flex items-start space-x-2 p-2 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
+            <AlertCircle className="h-3.5 w-3.5 text-[#2A72A1] shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-            Job Profile <span className="text-rose-500">*</span>
+          <label className="block text-xs font-semibold text-black dark:text-white mb-1">
+            Target Job Profile <span className="text-[#2A72A1]">*</span>
           </label>
           <select
             value={jobProfileId}
             onChange={(e) => setJobProfileId(e.target.value)}
-            className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
+            className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] transition-colors"
           >
-            <option value="">-- Select a job profile --</option>
+            <option value="" className="bg-white dark:bg-black text-black dark:text-white">-- Select target profile --</option>
             {profiles.map((p) => (
-              <option key={p.id} value={p.id}>{p.title}</option>
+              <option key={p.id} value={p.id} className="bg-white dark:bg-black text-black dark:text-white">{p.title}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              HR Emails <span className="text-rose-500">*</span>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-xs font-semibold text-black dark:text-white">
+              HR Email List <span className="text-[#2A72A1]">*</span>
             </label>
-            <span className="text-[11px] text-slate-400 dark:text-slate-500">One HR contact per line</span>
+            <span className="text-[11px] text-black/60 dark:text-[#CBDDE9]/70">1 contact per line</span>
           </div>
-          <div className="mb-2 px-3 py-2 rounded-lg bg-slate-50 dark:bg-[#0e1320] border border-slate-100 dark:border-slate-800 text-[11px] font-mono text-slate-500 dark:text-slate-400 space-y-0.5">
-            <p><span className="text-slate-700 dark:text-slate-200">Format:</span> email, name (optional), company (optional)</p>
-            <p className="text-indigo-600 dark:text-indigo-400">hr@acme.com, Priya Sharma, Acme Inc</p>
-            <p className="text-indigo-600 dark:text-indigo-400">jobs@studio.io</p>
+          <div className="mb-1.5 px-2.5 py-1.5 rounded-md bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-[11px] font-mono text-black/70 dark:text-[#CBDDE9]">
+            <span className="text-black dark:text-white font-semibold">Format: </span>
+            <span>email, name (opt), company (opt)</span>
           </div>
           <textarea
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
-            rows={6}
-            placeholder={'hr@acme.com, Priya Sharma, Acme Inc\njobs@studio.io'}
-            className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors resize-none font-mono"
+            rows={5}
+            placeholder={'hr@acme.com, Priya Sharma, Acme Inc\nrecruiter@tech.co'}
+            className="w-full px-3 py-2 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1] transition-colors resize-none font-mono"
           />
-          <p className="mt-1.5 text-[11px] text-slate-400 dark:text-slate-500">Only the email is required — commas separate optional name/company, which personalize the template.</p>
         </div>
 
         {skippedLines.length > 0 && (
-          <div className="p-2.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg text-amber-800 dark:text-amber-400 text-xs">
-            <p className="font-semibold mb-1">Skipped {skippedLines.length} line{skippedLines.length > 1 ? 's' : ''} (invalid email):</p>
-            <ul className="list-disc list-inside space-y-0.5 font-mono">
+          <div className="p-2 bg-[#CBDDE9]/25 dark:bg-black border border-[#2A72A1] rounded-md text-black dark:text-white text-xs">
+            <p className="font-bold mb-1">Skipped {skippedLines.length} invalid line{skippedLines.length > 1 ? 's' : ''}:</p>
+            <ul className="list-disc list-inside space-y-0.5 font-mono text-[11px]">
               {skippedLines.map((l, i) => <li key={i} className="truncate">{l}</li>)}
             </ul>
           </div>
@@ -131,10 +129,10 @@ export default function AddHrContactsForm({ profiles, onAddContacts }) {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
+          className="w-full inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
         >
-          {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
-          <span>{submitting ? 'Queuing...' : 'Add to Queue'}</span>
+          {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UserPlus className="h-3.5 w-3.5" />}
+          <span>{submitting ? 'Adding to Queue...' : 'Queue Contacts'}</span>
         </button>
       </form>
     </div>

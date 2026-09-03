@@ -5,33 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yogesh Kumar - Resume Email Template</title>
     <style>
-        /* CSS resets and layout */
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400;700&display=swap');
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', Arial, sans-serif;
-            background-color: #f4f6f8;
+            background-color: #CBDDE9;
             -webkit-font-smoothing: antialiased;
         }
 
         .template-wrapper {
             max-width: 650px;
             margin: 40px auto;
-            background-color: #ffffff;
+            background-color: #FFFFFF;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             position: relative;
         }
 
         /* HEADER */
         .header {
-            background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
-            background-size: cover;
-            background-position: center;
+            background-color: #2A72A1;
             padding: 60px 30px;
             text-align: center;
-            color: #ffffff;
+            color: #FFFFFF;
         }
 
         .header h1 {
@@ -40,10 +37,11 @@
             margin: 0;
             letter-spacing: 2px;
             text-transform: uppercase;
+            color: #FFFFFF;
         }
 
         .header h2 {
-            color: #ffcc00; /* Yellow accent */
+            color: #CBDDE9;
             font-size: 18px;
             font-weight: 400;
             margin: 10px 0 25px 0;
@@ -53,28 +51,29 @@
 
         .header .btn {
             display: inline-block;
-            background-color: #ffcc00;
-            color: #111;
+            background-color: #FFFFFF;
+            color: #2A72A1;
             padding: 12px 25px;
             text-decoration: none;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 14px;
-            border-radius: 4px;
+            border-radius: 6px;
             margin-bottom: 20px;
-            transition: background 0.3s;
+            transition: opacity 0.3s;
         }
         
         .header .btn:hover {
-            background-color: #e6b800;
+            opacity: 0.9;
         }
 
         .header .contact-links {
             font-size: 14px;
+            color: #CBDDE9;
         }
 
         .header .contact-links a {
-            color: #fff;
+            color: #CBDDE9;
             text-decoration: none;
             margin: 0 10px;
             border-bottom: 1px solid transparent;
@@ -82,7 +81,8 @@
         }
 
         .header .contact-links a:hover {
-            border-bottom: 1px solid #ffcc00;
+            border-bottom: 1px solid #FFFFFF;
+            color: #FFFFFF;
         }
 
         /* CONTENT SECTIONS */
@@ -99,7 +99,7 @@
             bottom: 0;
             left: 50%;
             width: 2px;
-            border-left: 3px dashed #ffcc00;
+            border-left: 3px dashed #2A72A1;
             transform: translateX(-50%);
             z-index: 1;
         }
@@ -117,7 +117,6 @@
             flex-direction: row-reverse;
         }
 
-        /* Visual indicator on the dashed line */
         .section::before {
             content: '';
             position: absolute;
@@ -125,8 +124,8 @@
             top: 50%;
             width: 14px;
             height: 14px;
-            background-color: #ffcc00;
-            border: 4px solid #fff;
+            background-color: #2A72A1;
+            border: 4px solid #FFFFFF;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             z-index: 3;
@@ -140,29 +139,31 @@
         .image-col img {
             width: 100%;
             border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             display: block;
+            border: 1px solid #CBDDE9;
         }
 
         .text-col {
             width: 48%;
-            background: #fff;
+            background: #FFFFFF;
             padding: 20px;
             border-radius: 8px;
+            border: 1px solid #CBDDE9;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .text-col h3 {
             font-family: 'Oswald', sans-serif;
             font-size: 22px;
-            color: #111;
+            color: #000000;
             margin: 0 0 15px 0;
             text-transform: uppercase;
         }
 
         .text-col p {
             font-size: 13.5px;
-            color: #555;
+            color: #000000;
             line-height: 1.6;
             margin: 0 0 10px 0;
         }
@@ -170,7 +171,7 @@
         .text-col ul {
             padding-left: 20px;
             margin: 0;
-            color: #555;
+            color: #000000;
             font-size: 13.5px;
             line-height: 1.6;
         }
@@ -181,20 +182,20 @@
         
         .badge {
             display: inline-block;
-            background: #f0f0f0;
+            background: #CBDDE9;
             padding: 3px 8px;
             border-radius: 4px;
             font-size: 11px;
             font-weight: 700;
-            color: #333;
+            color: #000000;
             margin-right: 5px;
             margin-bottom: 5px;
         }
 
         /* FOOTER */
         .footer {
-            background-color: #111;
-            color: #fff;
+            background-color: #000000;
+            color: #FFFFFF;
             text-align: center;
             padding: 40px 30px;
         }
@@ -203,36 +204,35 @@
             font-family: 'Oswald', sans-serif;
             font-size: 28px;
             margin: 0 0 10px 0;
-            color: #ffcc00;
+            color: #2A72A1;
             text-transform: uppercase;
         }
 
         .footer p {
             font-size: 13px;
-            color: #999;
+            color: #CBDDE9;
             margin: 0 0 20px 0;
         }
 
         .footer .social-icons a {
             display: inline-block;
             margin: 0 10px;
-            color: #fff;
+            color: #FFFFFF;
             text-decoration: none;
             font-size: 14px;
             font-weight: 700;
         }
         .footer .social-icons a:hover {
-            color: #ffcc00;
+            color: #2A72A1;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 600px) {
             .section {
                 flex-direction: column !important;
                 padding: 20px;
             }
             .content-area::before, .section::before {
-                display: none; /* Hide dashed line on mobile */
+                display: none;
             }
             .image-col, .text-col {
                 width: 100%;
@@ -263,7 +263,6 @@
         <!-- Summary Section -->
         <div class="section">
             <div class="image-col">
-                <!-- Replace with your database image URL -->
                 <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Coding">
             </div>
             <div class="text-col">
@@ -276,7 +275,6 @@
         <!-- Technical Skills Section -->
         <div class="section">
             <div class="image-col">
-                <!-- Replace with your database image URL -->
                 <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Skills">
             </div>
             <div class="text-col">
@@ -302,7 +300,6 @@
         <!-- Experience Section -->
         <div class="section">
             <div class="image-col">
-                <!-- Replace with your database image URL -->
                 <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Experience">
             </div>
             <div class="text-col">
@@ -319,7 +316,6 @@
         <!-- Projects Section -->
         <div class="section">
             <div class="image-col">
-                <!-- Replace with your database image URL -->
                 <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Projects">
             </div>
             <div class="text-col">
@@ -339,7 +335,6 @@
         <!-- Education Section -->
         <div class="section">
             <div class="image-col">
-                <!-- Replace with your database image URL -->
                 <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Education">
             </div>
             <div class="text-col">

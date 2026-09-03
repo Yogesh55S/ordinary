@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { supabaseService } from '@/lib/supabase';
 import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
+import { getTransporter, getSmtpConfig } from '@/lib/mailer';
 
 const DEFAULT_TECH_STACK_HTML = buildTechStackSectionHtml(DEFAULT_TECH_STACK);
 
@@ -67,21 +67,6 @@ function buildEmailText(templateText, { hrName, companyName, jobTitle, whyCompan
     '{{LINKEDIN_URL}}': LINKEDIN_URL,
     '{{RESUME_URL}}': RESUME_URL,
   });
-}
-
-function getSmtpConfig() {
-  // Job applications send from a hardcoded address, which usually needs its own SMTP
-  // credentials (most providers reject or silently rewrite a From that doesn't match
-  // the authenticated account). Falls back to the shared outreach SMTP config if no
-  // dedicated JOB_APPLICATION_SMTP_* credentials are set.
-  const host = process.env.JOB_APPLICATION_SMTP_HOST || process.env.SMTP_HOST;
-  const port = parseInt(process.env.JOB_APPLICATION_SMTP_PORT || process.env.SMTP_PORT, 10) || 587;
-  const user = process.env.JOB_APPLICATION_SMTP_USER || process.env.SMTP_USER;
-  const pass = process.env.JOB_APPLICATION_SMTP_PASS || process.env.SMTP_PASS;
-  const secure = (process.env.JOB_APPLICATION_SMTP_SECURE ?? process.env.SMTP_SECURE) === 'true';
-
-  if (!host || !user || !pass) return null;
-  return { host, port, secure, auth: { user, pass } };
 }
 
 export async function POST(request) {
@@ -163,7 +148,7 @@ export async function POST(request) {
     return NextResponse.json({ sent: 0, failed: 0, remaining: 0, message: 'Queue is empty.' });
   }
 
-  const transporter = nodemailer.createTransport(smtpConfig);
+  const transporter = getTransporter();
 
   let sent = 0;
   let failed = 0;

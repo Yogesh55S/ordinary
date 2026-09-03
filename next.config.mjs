@@ -1,6 +1,10 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  turbopack: {
+    root: path.resolve('.'),
+  },
 
   // Ensures the compiled job application email template ships with the serverless
   // function bundles that read it at runtime via fs.readFileSync.
@@ -11,3 +15,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+

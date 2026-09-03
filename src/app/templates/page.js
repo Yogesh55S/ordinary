@@ -307,12 +307,12 @@ export default function TemplatesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Message Templates</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Design customizable WhatsApp and Email outreach message patterns with tags.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-black dark:text-white">Message Templates</h1>
+          <p className="text-black/70 dark:text-[#CBDDE9] mt-1">Design customizable WhatsApp and Email outreach message patterns with tags.</p>
         </div>
         <button
           onClick={handleAddClick}
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-[#2A72A1] hover:opacity-90 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
         >
           <Plus className="h-4.5 w-4.5" />
           <span>Add Template</span>
@@ -320,8 +320,8 @@ export default function TemplatesPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-955/20 border border-amber-205 dark:border-amber-900/30 rounded-xl text-amber-850 dark:text-amber-400">
-          <AlertCircle className="h-5 w-5 shrink-0" />
+        <div className="flex items-center space-x-3 p-4 bg-[#CBDDE9]/30 dark:bg-black border border-black dark:border-white rounded-xl text-black dark:text-white">
+          <AlertCircle className="h-5 w-5 text-[#2A72A1] shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
       )}

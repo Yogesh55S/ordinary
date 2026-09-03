@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "npm run export-job-application-template",
+    "predev": "node -e \"if(!require('fs').existsSync('job-application-email/dist/template.html')) require('child_process').execSync('npm run export-job-application-template', {stdio:'inherit'})\"",
     "dev": "next dev",
     "prebuild": "npm run export-job-application-template",
     "build": "next build",

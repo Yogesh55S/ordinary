@@ -1,17 +1,26 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { AlertCircle, Palette, SendHorizonal, ListPlus } from 'lucide-react';
+import {
+  AlertCircle,
+  Palette,
+  SendHorizonal,
+  ListPlus,
+  Briefcase,
+  CheckCircle2,
+  Clock,
+  LayoutGrid,
+  Timer
+} from 'lucide-react';
 
 import JobProfilesPanel from '@/components/job-applications/JobProfilesPanel';
 import AddHrContactsForm from '@/components/job-applications/AddHrContactsForm';
 import ComposeCard from '@/components/job-applications/ComposeCard';
-import RateLimitSettings from '@/components/job-applications/RateLimitSettings';
 import QueueTable from '@/components/job-applications/QueueTable';
 
-const DEFAULT_SETTINGS = { batch_size: 5, interval_value: 30, interval_unit: 'minutes', is_active: false };
+const DEFAULT_SETTINGS = { batch_size: 1, interval_value: 15, interval_unit: 'minutes', is_active: true };
 
 export default function JobApplicationsPage() {
   const [profiles, setProfiles] = useState([]);
@@ -21,8 +30,8 @@ export default function JobApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sendingNow, setSendingNow] = useState(false);
-  const [lastSendResult, setLastSendResult] = useState(null);
   const [activeTab, setActiveTab] = useState('compose');
+  const [nextDueSeconds, setNextDueSeconds] = useState(null);
 
   const fetchSettings = useCallback(async () => {
     let { data, error: fetchError } = await supabase
@@ -63,7 +72,6 @@ export default function JobApplicationsPage() {
 
       if (profilesRes.error) throw profilesRes.error;
       if (contactsRes.error) throw contactsRes.error;
-      // PGRST205/42703 = table/column not found — template library migration not run yet.
       if (templatesRes.error && templatesRes.error.code !== 'PGRST205' && templatesRes.error.code !== '42703') {
         throw templatesRes.error;
       }
@@ -146,132 +154,314 @@ export default function JobApplicationsPage() {
     await fetchAll();
   };
 
-  const handleSaveSettings = async (form) => {
-    if (!settings?.id) return;
-    const { error: updateError } = await supabase
-      .from('job_application_settings')
-      .update({ ...form, updated_at: new Date().toISOString() })
-      .eq('id', settings.id);
-    if (updateError) throw updateError;
-    await fetchSettings();
-  };
-
-  const handleComposeSend = async (payload) => {
-    const res = await fetch('/api/send-single-application', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to send.');
-    await fetchAll();
-    return data;
-  };
-
-  const handleSendNow = async () => {
+  const handleSendNow = useCallback(async (requestedBatchSize = null) => {
     setSendingNow(true);
-    setLastSendResult(null);
     try {
-      const res = await fetch('/api/send-job-emails', { method: 'POST' });
+      const res = await fetch('/api/send-job-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        ...(requestedBatchSize ? { body: JSON.stringify({ batchSize: requestedBatchSize }) } : {}),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Batch send failed.');
-      setLastSendResult(data);
       await fetchAll();
+      return data;
     } catch (err) {
-      setLastSendResult({ error: err.message });
+      throw err;
     } finally {
       setSendingNow(false);
     }
+  }, [fetchAll]);
+
+  // Unified Compose & Send Handler
+  const handleComposeSend = async (payload) => {
+    // 1. Direct Immediate Delivery
+    if (payload.deliveryMode === 'immediate') {
+      const res = await fetch('/api/send-single-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send.');
+      await fetchAll();
+      return { success: true, message: `Application email sent immediately to ${payload.hrEmail}!` };
+    }
+
+    // 2. Throttled Rate-Limited Delivery
+    if (payload.rateLimit && settings?.id) {
+      await supabase
+        .from('job_application_settings')
+        .update({
+          batch_size: payload.rateLimit.batch_size,
+          interval_value: payload.rateLimit.interval_value,
+          interval_unit: payload.rateLimit.interval_unit,
+          is_active: payload.rateLimit.is_active,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', settings.id);
+    }
+
+    const contactsToQueue = payload.recipientType === 'bulk' && payload.bulkContacts?.length
+      ? payload.bulkContacts
+      : [{
+          hr_email: payload.hrEmail,
+          hr_name: payload.hrName || null,
+          company_name: payload.companyName || null,
+        }];
+
+    const rows = contactsToQueue.map((c) => ({
+      job_profile_id: payload.jobProfileId || null,
+      hr_email: c.hr_email,
+      hr_name: c.hr_name || null,
+      company_name: c.company_name || null,
+      status: 'Pending',
+      template_id: payload.templateId,
+    }));
+
+    const { error: insertError } = await supabase.from('job_hr_contacts').insert(rows);
+    if (insertError) throw insertError;
+
+    await supabase.from('activity_logs').insert({
+      action_type: 'Job Applications Queued',
+      details: `Queued ${rows.length} application(s) with ${payload.rateLimit.interval_value} ${payload.rateLimit.interval_unit} interval delay.`,
+    });
+
+    let immediateNotice = '';
+    if (payload.rateLimit?.sendFirstImmediately) {
+      try {
+        const batchResult = await handleSendNow(1);
+        if (batchResult?.sent > 0) {
+          immediateNotice = rows.length > 1
+            ? `1st application sent immediately to ${rows[0].hr_email}! Remaining ${rows.length - 1} queued with ${payload.rateLimit.interval_value} ${payload.rateLimit.interval_unit} delay.`
+            : `Application sent immediately to ${rows[0].hr_email}!`;
+        }
+      } catch (err) {
+        console.warn('Immediate first batch notice:', err);
+      }
+    }
+
+    await fetchAll();
+    return {
+      success: true,
+      message: immediateNotice || `Queued ${rows.length} application(s) with a ${payload.rateLimit.interval_value} ${payload.rateLimit.interval_unit} time gap between emails.`,
+    };
   };
 
+  const sentCount = contacts.filter((c) => c.status === 'Sent').length;
   const pendingCount = contacts.filter((c) => c.status === 'Pending').length;
+  const defaultTemplate = templates.find((t) => t.is_default) || templates[0];
+
+  // In-Browser Auto-Dispatch Heartbeat:
+  const isSendingRef = useRef(false);
+  isSendingRef.current = sendingNow;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!settings?.is_active || pendingCount === 0) {
+        setNextDueSeconds(null);
+        return;
+      }
+
+      const multiplier = settings.interval_unit === 'hours' ? 3600000 : 60000;
+      const intervalMs = (settings.interval_value || 15) * multiplier;
+      const lastRun = settings.last_run_at ? new Date(settings.last_run_at).getTime() : 0;
+      const nextDue = lastRun + intervalMs;
+      const diffMs = nextDue - Date.now();
+
+      if (diffMs <= 0) {
+        setNextDueSeconds(0);
+        if (!isSendingRef.current) {
+          handleSendNow(settings.batch_size || 1).catch((e) => console.error('Loop auto-trigger error:', e));
+        }
+      } else {
+        setNextDueSeconds(Math.ceil(diffMs / 1000));
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [settings, pendingCount, handleSendNow]);
+
+  const formatCountdown = (secs) => {
+    if (secs === null) return 'Paused / Idle';
+    if (secs <= 0) return 'Sending now...';
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}m ${s < 10 ? '0' : ''}${s}s`;
+  };
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+    <div className="flex-1 p-5 md:p-7 space-y-5 max-w-7xl mx-auto w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Job Applications</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
-            Queue HR contacts, attach a job profile, and let a rate-limited loop send your application emails.
+          <h1 className="text-2xl font-bold tracking-tight text-black dark:text-white">Job Applications</h1>
+          <p className="text-black/60 dark:text-[#CBDDE9] mt-0.5 text-xs">
+            Direct dispatch and rate-limited loop automation for HR application outreach
           </p>
         </div>
         <Link
           href="/job-applications/templates"
-          className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-400 shadow-sm transition-all shrink-0"
+          className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/50 hover:bg-[#CBDDE9]/25 shadow-xs transition-all shrink-0"
         >
           <Palette className="h-3.5 w-3.5" />
           <span>Email Templates</span>
         </Link>
       </div>
 
+      {/* KPI Stats Bar with Live Rate Limit Status */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
+          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
+            <span>Delivered</span>
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#2A72A1]" />
+          </div>
+          <p className="text-xl font-bold text-black dark:text-white mt-1">{sentCount}</p>
+        </div>
+        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
+          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
+            <span>Pending in Queue</span>
+            <Clock className="h-3.5 w-3.5 text-[#2A72A1]" />
+          </div>
+          <p className="text-xl font-bold text-black dark:text-white mt-1">{pendingCount}</p>
+        </div>
+        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
+          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
+            <span>Rate Limit Throttle</span>
+            <Timer className="h-3.5 w-3.5 text-[#2A72A1]" />
+          </div>
+          <div className="mt-1 flex items-center space-x-1.5">
+            <span className={`h-2 w-2 rounded-full ${settings?.is_active && pendingCount > 0 ? 'bg-[#2A72A1] animate-pulse' : 'bg-[#CBDDE9]'}`} />
+            <p className="text-xs font-bold text-black dark:text-white">
+              {pendingCount > 0 ? formatCountdown(nextDueSeconds) : 'Queue Empty'}
+            </p>
+          </div>
+        </div>
+        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
+          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
+            <span>Default Template</span>
+            <LayoutGrid className="h-3.5 w-3.5 text-[#2A72A1]" />
+          </div>
+          <p className="text-xs font-bold text-black dark:text-white truncate mt-1.5" title={defaultTemplate?.name || 'Default'}>
+            {defaultTemplate?.name || 'Default Template'}
+          </p>
+        </div>
+      </div>
+
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-xl text-rose-700 dark:text-rose-400">
-          <AlertCircle className="h-5 w-5 shrink-0" />
-          <span className="text-sm font-medium">{error}</span>
+        <div className="flex items-center space-x-2.5 p-3 bg-[#CBDDE9]/25 dark:bg-black border border-[#2A72A1] rounded-lg text-black dark:text-white text-xs font-medium">
+          <AlertCircle className="h-4 w-4 text-[#2A72A1] shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-xl p-1 w-fit">
-            <button
-              type="button"
-              onClick={() => setActiveTab('compose')}
-              className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'compose'
-                  ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-              }`}
-            >
-              <SendHorizonal className="h-3.5 w-3.5" />
-              <span>Compose & Send</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('bulk')}
-              className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'bulk'
-                  ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-              }`}
-            >
-              <ListPlus className="h-3.5 w-3.5" />
-              <span>Bulk Queue (Timer)</span>
-            </button>
-          </div>
-
-          {activeTab === 'compose' ? (
-            <ComposeCard profiles={profiles} templates={templates} onSend={handleComposeSend} />
-          ) : (
-            <AddHrContactsForm profiles={profiles} onAddContacts={handleAddContacts} />
-          )}
-
-          <QueueTable
-            contacts={contacts}
-            loading={loading}
-            onDelete={handleDeleteContact}
-            onRetry={handleRetryContact}
-            onUpdate={handleUpdateContact}
-          />
-        </div>
-
-        <div className="space-y-6">
-          <RateLimitSettings
-            settings={settings}
-            pendingCount={pendingCount}
-            onSave={handleSaveSettings}
-            onSendNow={handleSendNow}
-            sendingNow={sendingNow}
-            lastSendResult={lastSendResult}
-          />
-          <JobProfilesPanel
-            profiles={profiles}
-            loading={loading}
-            onAddProfile={handleAddProfile}
-            onDeleteProfile={handleDeleteProfile}
-          />
-        </div>
+      {/* Structured View Switcher */}
+      <div className="flex items-center bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-1 w-full sm:w-fit overflow-x-auto">
+        <button
+          type="button"
+          onClick={() => setActiveTab('compose')}
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
+            activeTab === 'compose'
+              ? 'bg-[#2A72A1] text-white shadow-xs'
+              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+          }`}
+        >
+          <SendHorizonal className="h-3.5 w-3.5" />
+          <span>Compose & Dispatch</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('bulk')}
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
+            activeTab === 'bulk'
+              ? 'bg-[#2A72A1] text-white shadow-xs'
+              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+          }`}
+        >
+          <ListPlus className="h-3.5 w-3.5" />
+          <span>Bulk Queue Importer</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('profiles')}
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
+            activeTab === 'profiles'
+              ? 'bg-[#2A72A1] text-white shadow-xs'
+              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+          }`}
+        >
+          <Briefcase className="h-3.5 w-3.5" />
+          <span>Job Profiles</span>
+        </button>
       </div>
+
+      {/* Tab Panels without redundant RateLimitSettings card */}
+      {activeTab === 'compose' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <div className="lg:col-span-7">
+            <ComposeCard
+              profiles={profiles}
+              templates={templates}
+              settings={settings}
+              onSend={handleComposeSend}
+            />
+          </div>
+          <div className="lg:col-span-5">
+            <QueueTable
+              contacts={contacts}
+              loading={loading}
+              onDelete={handleDeleteContact}
+              onRetry={handleRetryContact}
+              onUpdate={handleUpdateContact}
+            />
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'bulk' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <div className="lg:col-span-7">
+            <AddHrContactsForm profiles={profiles} onAddContacts={handleAddContacts} />
+          </div>
+          <div className="lg:col-span-5">
+            <QueueTable
+              contacts={contacts}
+              loading={loading}
+              onDelete={handleDeleteContact}
+              onRetry={handleRetryContact}
+              onUpdate={handleUpdateContact}
+            />
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'profiles' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <div className="lg:col-span-7">
+            <JobProfilesPanel
+              profiles={profiles}
+              loading={loading}
+              onAddProfile={handleAddProfile}
+              onDeleteProfile={handleDeleteProfile}
+            />
+          </div>
+          <div className="lg:col-span-5 space-y-4">
+            <div className="p-4 bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#2A72A1] dark:text-[#CBDDE9]">How Profiles Work</h3>
+              <p className="text-xs text-black/70 dark:text-[#CBDDE9] leading-relaxed">
+                Profiles allow you to configure distinct job titles, relevant skills, and tailored &quot;Why This Company&quot; pitch lines. When composing applications, attaching a profile automatically fills in the personalized email tokens.
+              </p>
+            </div>
+            <QueueTable
+              contacts={contacts}
+              loading={loading}
+              onDelete={handleDeleteContact}
+              onRetry={handleRetryContact}
+              onUpdate={handleUpdateContact}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

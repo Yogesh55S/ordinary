@@ -1,13 +1,26 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { SendHorizonal, Loader2, AlertCircle, CheckCircle2, Eye, Pencil, Monitor, Smartphone } from 'lucide-react';
+import {
+  SendHorizonal,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  Pencil,
+  Monitor,
+  Smartphone,
+  Timer,
+  Zap,
+  Clock,
+  Building2,
+  Users
+} from 'lucide-react';
 import SkillsMultiSelect from './SkillsMultiSelect';
 import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
 
 const PREVIEW_WIDTHS = { desktop: 600, mobile: 375 };
 
-// Same real links used in the template editor's preview — public info, not secrets.
 const REAL_LINKS = {
   portfolioUrl: 'https://portfolio-pink-nu-30.vercel.app/',
   githubUrl: 'https://github.com/Yogesh55S',
@@ -34,10 +47,50 @@ function renderTemplate(template, tokens) {
   return out;
 }
 
-export default function ComposeCard({ profiles, templates, onSend }) {
+function parseBulkLines(raw) {
+  const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+  const valid = [];
+  for (const line of lines) {
+    const [emailRaw, nameRaw, companyRaw] = line.split(',').map((p) => (p || '').trim());
+    if (emailRaw && EMAIL_RE.test(emailRaw)) {
+      valid.push({
+        hr_email: emailRaw,
+        hr_name: nameRaw || null,
+        company_name: companyRaw || null,
+      });
+    }
+  }
+  return valid;
+}
+
+export default function ComposeCard({ profiles, templates, settings, onSend }) {
+  // Dispatch Mode: 'immediate' (Send right now) vs 'rate_limited' (Send with time gap)
+  const [deliveryMode, setDeliveryMode] = useState('immediate');
+  const [recipientType, setRecipientType] = useState('single'); // 'single' vs 'bulk'
+
+  // Single recipient fields
   const [hrEmail, setHrEmail] = useState('');
   const [hrName, setHrName] = useState('');
   const [companyName, setCompanyName] = useState('');
+
+  // Bulk recipient fields
+  const [bulkText, setBulkText] = useState('');
+
+  // Rate Limiting parameters
+  const [batchSize, setBatchSize] = useState(settings?.batch_size || 1);
+  const [intervalValue, setIntervalValue] = useState(settings?.interval_value || 15);
+  const [intervalUnit, setIntervalUnit] = useState(settings?.interval_unit || 'minutes');
+  const [sendFirstImmediately, setSendFirstImmediately] = useState(true);
+
+  useEffect(() => {
+    if (settings) {
+      if (settings.batch_size) setBatchSize(settings.batch_size);
+      if (settings.interval_value) setIntervalValue(settings.interval_value);
+      if (settings.interval_unit) setIntervalUnit(settings.interval_unit);
+    }
+  }, [settings]);
+
+  // Profile & Content fields
   const [jobProfileId, setJobProfileId] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [whyCompany, setWhyCompany] = useState('');
@@ -67,9 +120,6 @@ export default function ComposeCard({ profiles, templates, onSend }) {
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
 
-  // If migration 0003 hasn't run yet, `name`/`is_default` won't exist on any row —
-  // detect that so we can tell the user exactly what's wrong instead of showing a
-  // template dropdown with blank-looking option text.
   const migrationPending = templates.length > 0 && templates.every((t) => t.is_default === undefined);
 
   const handleProfileChange = (id) => {
@@ -112,11 +162,24 @@ export default function ComposeCard({ profiles, templates, onSend }) {
 
   const selectedTemplate = templates.find((t) => t.id === templateId);
 
+  // Derive preview recipient
+  const previewRecipient = useMemo(() => {
+    if (deliveryMode === 'rate_limited' && recipientType === 'bulk') {
+      const parsed = parseBulkLines(bulkText);
+      return parsed[0] || { hr_email: 'recipient@company.com', hr_name: 'there', company_name: 'your team' };
+    }
+    return {
+      hr_email: hrEmail || 'recipient@company.com',
+      hr_name: hrName || 'there',
+      company_name: companyName || 'your team',
+    };
+  }, [deliveryMode, recipientType, bulkText, hrEmail, hrName, companyName]);
+
   const previewHtml = useMemo(() => {
     if (!selectedTemplate) return '';
     return renderTemplate(selectedTemplate.html_content, {
-      '{{HR_NAME}}': escapeHtml(hrName || 'there'),
-      '{{COMPANY_NAME}}': escapeHtml(companyName || 'your team'),
+      '{{HR_NAME}}': escapeHtml(previewRecipient.hr_name || 'there'),
+      '{{COMPANY_NAME}}': escapeHtml(previewRecipient.company_name || 'your team'),
       '{{JOB_TITLE}}': escapeHtml(jobTitle || 'the open role'),
       '{{WHY_COMPANY}}': escapeHtml(whyCompany || ''),
       '{{RELEVANT_SKILLS}}': escapeHtml(relevantSkills || ''),
@@ -126,18 +189,35 @@ export default function ComposeCard({ profiles, templates, onSend }) {
       '{{RESUME_URL}}': REAL_LINKS.resumeUrl,
       '{{TECH_STACK_SECTION}}': buildTechStackSectionHtml(selectedSkillCategories),
     });
-  }, [selectedTemplate, hrName, companyName, jobTitle, whyCompany, relevantSkills, selectedSkillCategories]);
+  }, [selectedTemplate, previewRecipient, jobTitle, whyCompany, relevantSkills, selectedSkillCategories]);
 
   const handleReview = () => {
     setResult(null);
-    if (!hrEmail || !EMAIL_RE.test(hrEmail)) {
-      setReviewError('Enter a valid HR email address first.');
-      return;
+    if (deliveryMode === 'immediate') {
+      if (!hrEmail || !EMAIL_RE.test(hrEmail)) {
+        setReviewError('Enter a valid HR email address.');
+        return;
+      }
+    } else {
+      if (recipientType === 'single') {
+        if (!hrEmail || !EMAIL_RE.test(hrEmail)) {
+          setReviewError('Enter a valid HR email address to queue.');
+          return;
+        }
+      } else {
+        const parsed = parseBulkLines(bulkText);
+        if (parsed.length === 0) {
+          setReviewError('Enter at least one valid HR email in the list.');
+          return;
+        }
+      }
     }
+
     if (!templateId) {
-      setReviewError('Select a template first.');
+      setReviewError('Please select an email template.');
       return;
     }
+
     setReviewError(null);
     setReviewing(true);
   };
@@ -146,10 +226,24 @@ export default function ComposeCard({ profiles, templates, onSend }) {
     setSending(true);
     setResult(null);
     try {
-      await onSend({
-        hrEmail,
-        hrName,
-        companyName,
+      const parsedBulk = deliveryMode === 'rate_limited' && recipientType === 'bulk'
+        ? parseBulkLines(bulkText)
+        : [];
+
+      const res = await onSend({
+        deliveryMode,
+        recipientType,
+        hrEmail: hrEmail.trim(),
+        hrName: hrName.trim(),
+        companyName: companyName.trim(),
+        bulkContacts: parsedBulk,
+        rateLimit: {
+          batch_size: batchSize,
+          interval_value: intervalValue,
+          interval_unit: intervalUnit,
+          is_active: true,
+          sendFirstImmediately,
+        },
         templateId,
         jobProfileId: jobProfileId || null,
         jobTitle,
@@ -157,106 +251,301 @@ export default function ComposeCard({ profiles, templates, onSend }) {
         relevantSkills,
         selectedSkills: selectedSkillCategories,
       });
-      setResult({ success: true });
-      setHrEmail('');
-      setHrName('');
-      setCompanyName('');
+
+      setResult({
+        success: true,
+        message: res?.message || (deliveryMode === 'immediate'
+          ? 'Application email dispatched immediately!'
+          : `Queued with a ${intervalValue} ${intervalUnit} time gap!`),
+      });
+
+      if (deliveryMode === 'immediate') {
+        setHrEmail('');
+        setHrName('');
+        setCompanyName('');
+      } else if (recipientType === 'bulk') {
+        setBulkText('');
+      } else {
+        setHrEmail('');
+        setHrName('');
+        setCompanyName('');
+      }
       setReviewing(false);
     } catch (err) {
-      setResult({ error: err.message || 'Failed to send.' });
+      setResult({ error: err.message || 'Failed to dispatch.' });
     } finally {
       setSending(false);
     }
   };
 
+  const parsedBulkCount = useMemo(() => {
+    if (recipientType !== 'bulk' || !bulkText) return 0;
+    return parseBulkLines(bulkText).length;
+  }, [recipientType, bulkText]);
+
   return (
-    <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs p-6 space-y-4">
-      <div>
-        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Compose & Send</h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400">Sends immediately — not the batch queue</p>
+    <div className="bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs p-5 space-y-4 transition-colors">
+      {/* Header & Flow Mode Selector */}
+      <div className="border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30 pb-3 space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 className="text-sm font-bold text-black dark:text-white">Compose Application</h2>
+            <p className="text-xs text-black/60 dark:text-[#CBDDE9]">Configure target company and choose delivery throttle</p>
+          </div>
+
+          {/* Delivery Mode Tabs */}
+          <div className="flex items-center bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-0.5">
+            <button
+              type="button"
+              onClick={() => setDeliveryMode('immediate')}
+              className={`flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-bold transition-all ${
+                deliveryMode === 'immediate'
+                  ? 'bg-[#2A72A1] text-white shadow-xs'
+                  : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+              }`}
+            >
+              <Zap className="h-3 w-3" />
+              <span>Send Immediately</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeliveryMode('rate_limited')}
+              className={`flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-bold transition-all ${
+                deliveryMode === 'rate_limited'
+                  ? 'bg-[#2A72A1] text-white shadow-xs'
+                  : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+              }`}
+            >
+              <Timer className="h-3 w-3" />
+              <span>With Time Gap (Rate Limited)</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Real-time Mode Description Badge */}
+        <div className={`p-2.5 rounded-md border text-xs flex items-center justify-between flex-wrap gap-2 ${
+          deliveryMode === 'immediate'
+            ? 'bg-[#CBDDE9]/20 dark:bg-black border-[#CBDDE9] dark:border-[#2A72A1]/30 text-black dark:text-white'
+            : 'bg-[#CBDDE9]/35 dark:bg-black border-[#2A72A1] text-black dark:text-white'
+        }`}>
+          <div className="flex items-center space-x-2">
+            {deliveryMode === 'immediate' ? (
+              <Zap className="h-3.5 w-3.5 text-[#2A72A1]" />
+            ) : (
+              <Clock className="h-3.5 w-3.5 text-[#2A72A1]" />
+            )}
+            <span>
+              {deliveryMode === 'immediate'
+                ? 'Direct Delivery: Dispatches email to HR right now without waiting.'
+                : `Throttled Outreach: Queues applications to send every ${intervalValue} ${intervalUnit} to safeguard spam score.`}
+            </span>
+          </div>
+
+          {deliveryMode === 'rate_limited' && (
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#2A72A1] text-white shrink-0">
+              Auto-Throttle Protected
+            </span>
+          )}
+        </div>
       </div>
 
-      {migrationPending && (
-        <div className="flex items-start space-x-2 px-3 py-2.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg text-amber-800 dark:text-amber-400 text-xs">
-          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-          <span>Template names/default aren't loading correctly — the template-library migration (<code className="font-mono">0003_template_library.sql</code>) hasn't been run in Supabase yet. Run it, then reload this page.</span>
-        </div>
-      )}
-
       {result?.success && (
-        <div className="flex items-center space-x-2 px-3 py-2.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 rounded-lg text-emerald-700 dark:text-emerald-400 text-xs font-medium">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          <span>Sent! Check the queue below for the record.</span>
+        <div className="flex items-center space-x-2 p-2.5 bg-[#CBDDE9]/40 dark:bg-black border border-[#2A72A1] rounded-md text-black dark:text-white text-xs font-medium">
+          <CheckCircle2 className="h-4 w-4 text-[#2A72A1] shrink-0" />
+          <span>{result.message}</span>
         </div>
       )}
       {result?.error && (
-        <div className="flex items-center space-x-2 px-3 py-2.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-lg text-rose-700 dark:text-rose-400 text-xs font-medium">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="flex items-center space-x-2 p-2.5 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
+          <AlertCircle className="h-4 w-4 text-[#2A72A1] shrink-0" />
           <span>{result.error}</span>
         </div>
       )}
 
       {templates.length === 0 ? (
-        <p className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg p-3">
-          No templates yet — create one under "Email Templates" first.
+        <p className="text-xs text-black dark:text-white bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-3">
+          No email templates found — please create or export a template first.
         </p>
       ) : (
         <>
-          <fieldset disabled={reviewing} className={reviewing ? 'opacity-60 pointer-events-none space-y-4' : 'space-y-4'}>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="sm:col-span-3">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  HR Email <span className="text-rose-500">*</span>
+          <fieldset disabled={reviewing} className={reviewing ? 'opacity-60 pointer-events-none space-y-3' : 'space-y-3'}>
+            
+            {/* If Rate Limited: Allow Single vs Bulk contacts */}
+            {deliveryMode === 'rate_limited' && (
+              <div className="flex items-center space-x-3 text-xs pb-1">
+                <span className="font-semibold text-black dark:text-white">Target Scope:</span>
+                <label className="flex items-center space-x-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="recipientType"
+                    checked={recipientType === 'single'}
+                    onChange={() => setRecipientType('single')}
+                    className="accent-[#2A72A1]"
+                  />
+                  <Building2 className="h-3 w-3 text-[#2A72A1]" />
+                  <span className="text-black dark:text-white">Single Company</span>
                 </label>
+                <label className="flex items-center space-x-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="recipientType"
+                    checked={recipientType === 'bulk'}
+                    onChange={() => setRecipientType('bulk')}
+                    className="accent-[#2A72A1]"
+                  />
+                  <Users className="h-3 w-3 text-[#2A72A1]" />
+                  <span className="text-black dark:text-white">Multiple Companies (Bulk List)</span>
+                </label>
+              </div>
+            )}
+
+            {/* Recipient Details (Single) */}
+            {(deliveryMode === 'immediate' || recipientType === 'single') ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="sm:col-span-3">
+                  <label className="block text-xs font-semibold text-black dark:text-white mb-1">
+                    HR Email <span className="text-[#2A72A1]">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={hrEmail}
+                    onChange={(e) => setHrEmail(e.target.value)}
+                    placeholder="hr@company.com"
+                    className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                  />
+                </div>
                 <input
-                  type="email"
-                  value={hrEmail}
-                  onChange={(e) => setHrEmail(e.target.value)}
-                  placeholder="hr@company.com"
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                  type="text"
+                  value={hrName}
+                  onChange={(e) => setHrName(e.target.value)}
+                  placeholder="HR Contact Name"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                />
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="Company Name"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                />
+                <select
+                  value={jobProfileId}
+                  onChange={(e) => handleProfileChange(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                >
+                  <option value="" className="bg-white dark:bg-black text-black dark:text-white">-- Select Profile --</option>
+                  {profiles.map((p) => (
+                    <option key={p.id} value={p.id} className="bg-white dark:bg-black text-black dark:text-white">{p.title}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              /* Recipient Details (Bulk Multiline) */
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-black dark:text-white">
+                    HR Emails (1 per line) <span className="text-[#2A72A1]">*</span>
+                  </label>
+                  {parsedBulkCount > 0 && (
+                    <span className="text-[11px] font-bold text-[#2A72A1]">
+                      {parsedBulkCount} valid contact{parsedBulkCount > 1 ? 's' : ''} detected
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <select
+                    value={jobProfileId}
+                    onChange={(e) => handleProfileChange(e.target.value)}
+                    className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  >
+                    <option value="" className="bg-white dark:bg-black text-black dark:text-white">-- Attach Job Profile to Batch --</option>
+                    {profiles.map((p) => (
+                      <option key={p.id} value={p.id} className="bg-white dark:bg-black text-black dark:text-white">{p.title}</option>
+                    ))}
+                  </select>
+                  <div className="px-2.5 py-1 rounded-md bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-[11px] font-mono text-black/70 dark:text-[#CBDDE9] flex items-center">
+                    <span>Format: email, name, company</span>
+                  </div>
+                </div>
+                <textarea
+                  value={bulkText}
+                  onChange={(e) => setBulkText(e.target.value)}
+                  rows={4}
+                  placeholder={'hr@acme.com, Priya Sharma, Acme Inc\nrecruiter@meta.com, John, Meta\njobs@stripe.com'}
+                  className="w-full px-3 py-2 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1] transition-colors resize-none font-mono"
                 />
               </div>
-              <input
-                type="text"
-                value={hrName}
-                onChange={(e) => setHrName(e.target.value)}
-                placeholder="HR name"
-                className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
-              />
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Company"
-                className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
-              />
-              <select
-                value={jobProfileId}
-                onChange={(e) => handleProfileChange(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
-              >
-                <option value="">-- Job profile --</option>
-                {profiles.map((p) => (
-                  <option key={p.id} value={p.id}>{p.title}</option>
-                ))}
-              </select>
-            </div>
+            )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Embedded Time Gap & Rate Limiting Controls when in Rate Limited Mode */}
+            {deliveryMode === 'rate_limited' && (
+              <div className="p-3.5 bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-md space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-black dark:text-white flex items-center space-x-1.5">
+                    <Timer className="h-3.5 w-3.5 text-[#2A72A1]" />
+                    <span>Time Gap Throttle Settings</span>
+                  </span>
+                  <span className="text-[10px] text-black/60 dark:text-[#CBDDE9]">Controls dispatch delay</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 text-xs text-black dark:text-white">
+                  <span>Send</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={batchSize}
+                    onChange={(e) => setBatchSize(parseInt(e.target.value, 10) || 1)}
+                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  />
+                  <span>email(s) every</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={intervalValue}
+                    onChange={(e) => setIntervalValue(parseInt(e.target.value, 10) || 1)}
+                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  />
+                  <select
+                    value={intervalUnit}
+                    onChange={(e) => setIntervalUnit(e.target.value)}
+                    className="px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  >
+                    <option value="minutes" className="bg-white dark:bg-black text-black dark:text-white">Minutes</option>
+                    <option value="hours" className="bg-white dark:bg-black text-black dark:text-white">Hours</option>
+                  </select>
+                </div>
+
+                <label className="flex items-center space-x-2 text-xs text-black dark:text-white cursor-pointer pt-1">
+                  <input
+                    type="checkbox"
+                    checked={sendFirstImmediately}
+                    onChange={(e) => setSendFirstImmediately(e.target.checked)}
+                    className="accent-[#2A72A1] h-3.5 w-3.5 rounded"
+                  />
+                  <span className="font-semibold">Send 1st application immediately</span>
+                  <span className="text-black/60 dark:text-[#CBDDE9] text-[11px]">(space out remainder by {intervalValue} {intervalUnit})</span>
+                </label>
+              </div>
+            )}
+
+            {/* Template & Skills Selection */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Template</label>
+                <label className="block text-xs font-semibold text-black dark:text-white mb-1">Email Template</label>
                 <select
                   value={templateId}
                   onChange={(e) => setTemplateId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
                 >
                   {templates.map((t) => (
-                    <option key={t.id} value={t.id}>{t.name || 'Untitled Template'}{t.is_default ? ' (Default)' : ''}</option>
+                    <option key={t.id} value={t.id} className="bg-white dark:bg-black text-black dark:text-white">
+                      {t.name || 'Untitled Template'}{t.is_default ? ' (Default)' : ''}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Skills to show</label>
+                <label className="block text-xs font-semibold text-black dark:text-white mb-1">Tech Stack Skills</label>
                 <SkillsMultiSelect
                   categories={DEFAULT_TECH_STACK}
                   checkedSkills={checkedSkills}
@@ -266,40 +555,41 @@ export default function ComposeCard({ profiles, templates, onSend }) {
               </div>
             </div>
 
-            <details className="group">
-              <summary className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 cursor-pointer select-none list-none flex items-center space-x-1">
-                <span className="group-open:hidden">Edit job title / why-company / skills text</span>
-                <span className="hidden group-open:inline">Hide content fields</span>
+            {/* Pitch Text Customization */}
+            <details className="group pt-1">
+              <summary className="text-xs font-semibold text-[#2A72A1] dark:text-[#CBDDE9] cursor-pointer select-none list-none flex items-center space-x-1">
+                <span className="group-open:hidden">+ Customize intro & pitch text</span>
+                <span className="hidden group-open:inline">- Collapse pitch text</span>
               </summary>
-              <div className="mt-3 space-y-3">
+              <div className="mt-2.5 space-y-2">
                 <input
                   type="text"
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
-                  placeholder="Job title"
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                  placeholder="Job Title"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
                 />
                 <textarea
                   value={whyCompany}
                   onChange={(e) => setWhyCompany(e.target.value)}
                   rows={2}
                   placeholder="Why this company..."
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 resize-none"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] resize-none"
                 />
                 <input
                   type="text"
                   value={relevantSkills}
                   onChange={(e) => setRelevantSkills(e.target.value)}
-                  placeholder="Relevant skills (intro line)"
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                  placeholder="Relevant Skills intro phrase"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
                 />
               </div>
             </details>
           </fieldset>
 
           {reviewError && (
-            <div className="flex items-center space-x-2 px-3 py-2.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-lg text-rose-700 dark:text-rose-400 text-xs font-medium">
-              <AlertCircle className="h-4 w-4 shrink-0" />
+            <div className="flex items-center space-x-2 p-2 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
+              <AlertCircle className="h-3.5 w-3.5 text-[#2A72A1] shrink-0" />
               <span>{reviewError}</span>
             </div>
           )}
@@ -308,24 +598,37 @@ export default function ComposeCard({ profiles, templates, onSend }) {
             <button
               type="button"
               onClick={handleReview}
-              className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
+              className="w-full inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-[#2A72A1] hover:opacity-90 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
             >
-              <Eye className="h-4 w-4" />
-              <span>Review Application</span>
+              <Eye className="h-3.5 w-3.5" />
+              <span>
+                {deliveryMode === 'immediate'
+                  ? 'Review Application Email'
+                  : `Review & Queue with ${intervalValue}m Gap`}
+              </span>
             </button>
           ) : (
-            <div className="space-y-3">
-              <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0e1320]">
-                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">This is exactly what {hrEmail || 'the recipient'} will see</span>
-                  <div className="flex items-center bg-slate-100 dark:bg-[#0a0e17] rounded-lg p-1">
+            <div className="space-y-3 pt-2">
+              <div className="border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between px-3 py-2 border-b border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-[#CBDDE9]/25 dark:bg-black">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[11px] font-bold text-black dark:text-white">
+                      Preview for {previewRecipient.hr_email}
+                    </span>
+                    {deliveryMode === 'rate_limited' && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#2A72A1] text-white font-bold">
+                        {recipientType === 'bulk' ? `1 of ${parsedBulkCount} queued` : 'Queued with delay'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-md p-0.5">
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('desktop')}
-                      className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${
+                      className={`flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
                         previewDevice === 'desktop'
-                          ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                          : 'text-slate-500 dark:text-slate-400'
+                          ? 'bg-[#2A72A1] text-white shadow-xs'
+                          : 'text-black dark:text-[#CBDDE9]'
                       }`}
                     >
                       <Monitor className="h-3 w-3" />
@@ -334,10 +637,10 @@ export default function ComposeCard({ profiles, templates, onSend }) {
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('mobile')}
-                      className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${
+                      className={`flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
                         previewDevice === 'mobile'
-                          ? 'bg-white dark:bg-[#111625] text-indigo-700 dark:text-indigo-400 shadow-sm'
-                          : 'text-slate-500 dark:text-slate-400'
+                          ? 'bg-[#2A72A1] text-white shadow-xs'
+                          : 'text-black dark:text-[#CBDDE9]'
                       }`}
                     >
                       <Smartphone className="h-3 w-3" />
@@ -345,12 +648,12 @@ export default function ComposeCard({ profiles, templates, onSend }) {
                     </button>
                   </div>
                 </div>
-                <div className="h-[520px] bg-slate-100 dark:bg-[#0a0e17] overflow-y-auto flex justify-center py-4">
+                <div className="h-[460px] bg-[#CBDDE9]/20 dark:bg-black overflow-y-auto flex justify-center py-3 px-2">
                   <iframe
                     title="Application preview"
                     srcDoc={previewHtml}
-                    style={{ width: PREVIEW_WIDTHS[previewDevice] }}
-                    className="h-full bg-white shrink-0 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm"
+                    style={{ width: PREVIEW_WIDTHS[previewDevice], maxWidth: '100%' }}
+                    className="h-full bg-white shrink-0 border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md shadow-xs transition-all"
                     sandbox=""
                   />
                 </div>
@@ -361,19 +664,33 @@ export default function ComposeCard({ profiles, templates, onSend }) {
                   type="button"
                   onClick={() => setReviewing(false)}
                   disabled={sending}
-                  className="inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-white dark:bg-[#0e1320] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-semibold rounded-xl text-sm hover:border-slate-400 dark:hover:border-slate-500 transition-all disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-1 px-3.5 py-2 bg-white dark:bg-black text-black dark:text-white border border-[#CBDDE9] dark:border-[#2A72A1]/40 font-semibold rounded-md text-xs hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <Pencil className="h-3.5 w-3.5 text-[#2A72A1]" />
                   <span>Edit</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleSend}
                   disabled={sending}
-                  className="flex-1 inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
+                  className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
                 >
-                  {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizonal className="h-4 w-4" />}
-                  <span>{sending ? 'Sending...' : 'Looks good — Send Application'}</span>
+                  {sending ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : deliveryMode === 'immediate' ? (
+                    <SendHorizonal className="h-3.5 w-3.5" />
+                  ) : (
+                    <Timer className="h-3.5 w-3.5" />
+                  )}
+                  <span>
+                    {sending
+                      ? 'Dispatching...'
+                      : deliveryMode === 'immediate'
+                      ? 'Send Application Immediately'
+                      : sendFirstImmediately
+                      ? `Send 1st Now & Queue with ${intervalValue}m Delay`
+                      : `Queue with ${intervalValue}m Time Gap`}
+                  </span>
                 </button>
               </div>
             </div>

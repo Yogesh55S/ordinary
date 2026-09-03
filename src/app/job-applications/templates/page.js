@@ -62,13 +62,13 @@ function RenameField({ template, onSave }) {
             if (e.key === 'Enter') commit();
             if (e.key === 'Escape') cancel();
           }}
-          className="min-w-0 flex-1 text-sm font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-[#0e1320] border border-indigo-400 dark:border-indigo-500 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+          className="min-w-0 flex-1 text-sm font-bold text-black dark:text-white bg-white dark:bg-black border border-[#2A72A1] rounded-xl px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#2A72A1]/30"
         />
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={commit}
-          className="p-1 rounded-md text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 shrink-0"
+          className="p-1 rounded-lg text-[#2A72A1] hover:bg-[#CBDDE9]/25 shrink-0"
           title="Save name"
         >
           <Check className="h-3.5 w-3.5" />
@@ -77,7 +77,7 @@ function RenameField({ template, onSave }) {
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={cancel}
-          className="p-1 rounded-md text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
+          className="p-1 rounded-lg text-black dark:text-white hover:bg-[#CBDDE9]/25 shrink-0"
           title="Cancel"
         >
           <X className="h-3.5 w-3.5" />
@@ -93,13 +93,13 @@ function RenameField({ template, onSave }) {
       className="group/name flex items-center gap-1.5 min-w-0 flex-1 text-left"
       title="Click to rename"
     >
-      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+      <h3 className="text-sm font-bold text-black dark:text-white truncate">
         {template.name || 'Untitled Template'}
       </h3>
       {savingRename ? (
-        <Loader2 className="h-3 w-3 shrink-0 animate-spin text-slate-400" />
+        <Loader2 className="h-3 w-3 shrink-0 animate-spin text-[#2A72A1]" />
       ) : (
-        <Pencil className="h-3 w-3 shrink-0 text-slate-300 dark:text-slate-600 opacity-0 group-hover/name:opacity-100 transition-opacity" />
+        <Pencil className="h-3 w-3 shrink-0 text-[#2A72A1] opacity-0 group-hover/name:opacity-100 transition-opacity" />
       )}
     </button>
   );
@@ -240,21 +240,21 @@ export default function TemplateLibraryPage() {
     <div className="flex-1 p-6 md:p-8 space-y-6 max-w-6xl mx-auto w-full">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
+          <div className="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#CBDDE9]/30 dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/40">
             <Mail className="h-5 w-5" />
           </div>
           <div>
             <Link
               href="/job-applications"
-              className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-2"
+              className="inline-flex items-center space-x-1.5 text-xs font-semibold text-black/70 dark:text-[#CBDDE9] hover:text-[#2A72A1] mb-2"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Job Applications</span>
             </Link>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
               Email Templates
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm max-w-lg">
+            <p className="text-black/70 dark:text-[#CBDDE9] mt-1 text-sm max-w-lg">
               Design multiple email templates and pick one each time you compose an application.
             </p>
           </div>
@@ -263,7 +263,7 @@ export default function TemplateLibraryPage() {
           type="button"
           onClick={handleCreate}
           disabled={creating}
-          className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white shadow-sm shadow-indigo-600/20 transition-all"
+          className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white shadow-sm transition-all"
         >
           {creating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
           <span>{creating ? 'Creating...' : 'New Template'}</span>
@@ -271,34 +271,24 @@ export default function TemplateLibraryPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-xl text-rose-700 dark:text-rose-400">
-          <AlertCircle className="h-5 w-5 shrink-0" />
+        <div className="flex items-center space-x-3 p-4 bg-[#CBDDE9]/30 dark:bg-black border border-black dark:border-white rounded-xl text-black dark:text-white">
+          <AlertCircle className="h-5 w-5 text-[#2A72A1] shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
       )}
 
-      {!loading && templates.length > 0 && templates.every((t) => t.is_default === undefined) && (
-        <div className="flex items-start space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
-          <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-          <span className="text-sm font-medium">
-            Template names and defaults aren't showing correctly below — the template-library migration
-            (<code className="font-mono">0003_template_library.sql</code>) hasn't been run in Supabase yet. Run it, then reload this page.
-          </span>
-        </div>
-      )}
-
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-slate-400 dark:text-slate-500">
+        <div className="flex items-center justify-center py-24 text-[#2A72A1]">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
           <span className="text-sm font-medium">Loading templates...</span>
         </div>
       ) : templates.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="h-14 w-14 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800/60 text-slate-400 dark:text-slate-500 mb-4">
+          <div className="h-14 w-14 flex items-center justify-center rounded-2xl bg-[#CBDDE9]/30 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 text-[#2A72A1] mb-4">
             <LayoutGrid className="h-6 w-6" />
           </div>
-          <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">No templates yet</p>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-xs">
+          <p className="text-sm font-semibold text-black dark:text-white">No templates yet</p>
+          <p className="text-xs text-black/60 dark:text-[#CBDDE9]/70 mt-1 max-w-xs">
             Click "New Template" to start from the shipped default design.
           </p>
         </div>
@@ -307,13 +297,13 @@ export default function TemplateLibraryPage() {
           {templates.map((t) => (
             <div
               key={t.id}
-              className={`group bg-white dark:bg-[#111625] rounded-2xl border shadow-xs hover:shadow-md overflow-hidden flex flex-col transition-all duration-200 ${
+              className={`group bg-white dark:bg-black rounded-2xl border shadow-xs hover:shadow-md overflow-hidden flex flex-col transition-all duration-200 ${
                 t.is_default
-                  ? 'border-indigo-300 dark:border-indigo-700/60 ring-1 ring-indigo-100 dark:ring-indigo-900/30'
-                  : 'border-slate-200 dark:border-slate-800/60 hover:border-slate-300 dark:hover:border-slate-700'
+                  ? 'border-[#2A72A1] ring-1 ring-[#2A72A1]'
+                  : 'border-[#CBDDE9] dark:border-[#2A72A1]/40 hover:border-[#2A72A1]'
               }`}
             >
-              <div className="h-36 bg-slate-100 dark:bg-[#0a0e17] overflow-hidden relative">
+              <div className="h-36 bg-[#CBDDE9]/15 dark:bg-black overflow-hidden relative border-b border-[#CBDDE9] dark:border-[#2A72A1]/30">
                 <iframe
                   title={`${t.name || 'Untitled Template'} preview`}
                   srcDoc={t.html_content}
@@ -322,9 +312,9 @@ export default function TemplateLibraryPage() {
                   sandbox=""
                   tabIndex={-1}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 {t.is_default && (
-                  <span className="absolute top-2.5 left-2.5 inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-600 text-white shadow-sm">
+                  <span className="absolute top-2.5 left-2.5 inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#2A72A1] text-white shadow-sm">
                     <Star className="h-2.5 w-2.5 fill-current" />
                     <span>Default</span>
                   </span>
@@ -334,13 +324,13 @@ export default function TemplateLibraryPage() {
                 <div className="flex items-center gap-2 mb-1">
                   <RenameField template={t} onSave={handleRename} />
                 </div>
-                <p className="text-[11px] text-slate-400 dark:text-slate-500 mb-3.5">
+                <p className="text-[11px] text-black/60 dark:text-[#CBDDE9]/70 mb-3.5">
                   Updated {new Date(t.updated_at).toLocaleDateString()}
                 </p>
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <Link
                     href={`/job-applications/templates/${t.id}`}
-                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-950/70 transition-all"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-[11px] font-bold rounded-xl bg-[#CBDDE9]/30 dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/40 hover:bg-[#CBDDE9]/50 transition-all"
                   >
                     <Pencil className="h-3 w-3" />
                     <span>Edit content</span>
@@ -351,7 +341,7 @@ export default function TemplateLibraryPage() {
                         onClick={() => handleSetDefault(t)}
                         disabled={busyId === t.id}
                         title="Set as default"
-                        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-all disabled:opacity-50"
+                        className="p-1.5 rounded-lg text-black dark:text-[#CBDDE9] hover:text-[#2A72A1] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
                       >
                         <Star className="h-3.5 w-3.5" />
                       </button>
@@ -360,7 +350,7 @@ export default function TemplateLibraryPage() {
                       onClick={() => handleDuplicate(t)}
                       disabled={busyId === t.id}
                       title="Duplicate"
-                      className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all disabled:opacity-50"
+                      className="p-1.5 rounded-lg text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
                     >
                       {busyId === t.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Copy className="h-3.5 w-3.5" />}
                     </button>
@@ -368,7 +358,7 @@ export default function TemplateLibraryPage() {
                       onClick={() => handleDelete(t)}
                       disabled={busyId === t.id}
                       title="Delete"
-                      className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all disabled:opacity-50"
+                      className="p-1.5 rounded-lg text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>

@@ -50,32 +50,32 @@ export default function RateLimitSettings({ settings, pendingCount, onSave, onSe
   };
 
   return (
-    <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs p-6 space-y-4">
-      <div className="flex items-center space-x-2.5">
-        <div className="h-9 w-9 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center shrink-0">
-          <Timer className="h-4.5 w-4.5" />
+    <div className="bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs p-5 space-y-4 transition-colors">
+      <div className="flex items-center space-x-2.5 border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30 pb-3">
+        <div className="h-8 w-8 bg-[#CBDDE9]/30 dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md flex items-center justify-center shrink-0">
+          <Timer className="h-4 w-4" />
         </div>
         <div>
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Sending Loop</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Rate-limit outreach to avoid spam filters</p>
+          <h2 className="text-sm font-bold text-black dark:text-white">Outreach Rate Limiting</h2>
+          <p className="text-xs text-black/60 dark:text-[#CBDDE9]">Interval throttle to protect sender reputation</p>
         </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-3">
         {error && (
-          <div className="p-2.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-lg text-rose-700 dark:text-rose-400 text-xs font-medium">
+          <div className="p-2 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
             {error}
           </div>
         )}
 
-        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+        <div className="flex flex-wrap items-center gap-1.5 text-xs text-black dark:text-white">
           <span>Send</span>
           <input
             type="number"
             min={1}
             value={form.batch_size}
             onChange={(e) => setForm((f) => ({ ...f, batch_size: parseInt(e.target.value, 10) || 1 }))}
-            className="w-16 px-2 py-1.5 text-sm text-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
+            className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] transition-colors"
           />
           <span>emails every</span>
           <input
@@ -83,69 +83,69 @@ export default function RateLimitSettings({ settings, pendingCount, onSave, onSe
             min={1}
             value={form.interval_value}
             onChange={(e) => setForm((f) => ({ ...f, interval_value: parseInt(e.target.value, 10) || 1 }))}
-            className="w-16 px-2 py-1.5 text-sm text-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
+            className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] transition-colors"
           />
           <select
             value={form.interval_unit}
             onChange={(e) => setForm((f) => ({ ...f, interval_unit: e.target.value }))}
-            className="px-2.5 py-1.5 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
+            className="px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] transition-colors"
           >
-            <option value="minutes">Minutes</option>
-            <option value="hours">Hours</option>
+            <option value="minutes" className="bg-white dark:bg-black text-black dark:text-white">Minutes</option>
+            <option value="hours" className="bg-white dark:bg-black text-black dark:text-white">Hours</option>
           </select>
         </div>
 
-        <label className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer">
-          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Loop active (background worker will send automatically)</span>
+        <label className="flex items-center justify-between px-3 py-2 bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md cursor-pointer">
+          <span className="text-xs font-semibold text-black dark:text-white">Automated background worker loop</span>
           <button
             type="button"
             onClick={() => setForm((f) => ({ ...f, is_active: !f.is_active }))}
-            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors shrink-0 ${form.is_active ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+            className={`relative inline-flex h-4.5 w-8 items-center rounded-full transition-colors shrink-0 ${form.is_active ? 'bg-[#2A72A1]' : 'bg-[#CBDDE9] dark:bg-[#2A72A1]/40'}`}
             aria-pressed={form.is_active}
           >
-            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${form.is_active ? 'translate-x-4.5' : 'translate-x-1'}`} />
+            <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0.5'}`} />
           </button>
         </label>
 
-        <div className="grid grid-cols-2 gap-3 text-xs text-slate-500 dark:text-slate-400">
-          <div className="p-2.5 bg-slate-50 dark:bg-[#0e1320] rounded-lg border border-slate-100 dark:border-slate-800/60">
-            <p className="font-semibold text-slate-700 dark:text-slate-300">{pendingCount}</p>
-            <p>Pending in queue</p>
+        <div className="grid grid-cols-2 gap-2 text-xs text-black/70 dark:text-[#CBDDE9]">
+          <div className="p-2 bg-[#CBDDE9]/15 dark:bg-black rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/30">
+            <p className="text-base font-bold text-black dark:text-white">{pendingCount}</p>
+            <p className="text-[11px]">Pending in queue</p>
           </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-[#0e1320] rounded-lg border border-slate-100 dark:border-slate-800/60">
-            <p className="font-semibold text-slate-700 dark:text-slate-300 truncate">{formatTimestamp(settings?.last_run_at)}</p>
-            <p>Last batch run</p>
+          <div className="p-2 bg-[#CBDDE9]/15 dark:bg-black rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/30">
+            <p className="text-xs font-bold text-black dark:text-white truncate mt-1">{formatTimestamp(settings?.last_run_at)}</p>
+            <p className="text-[11px]">Last batch run</p>
           </div>
         </div>
 
-        {savedMsg && <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">{savedMsg}</p>}
+        {savedMsg && <p className="text-xs font-bold text-[#2A72A1] dark:text-[#CBDDE9]">{savedMsg}</p>}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pt-1">
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-xl text-sm shadow-sm transition-all"
+            className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
           >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            <span>{saving ? 'Saving...' : 'Save Loop Settings'}</span>
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+            <span>{saving ? 'Saving...' : 'Save Settings'}</span>
           </button>
           <button
             type="button"
             onClick={onSendNow}
             disabled={sendingNow || pendingCount === 0}
-            className="flex-1 inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-white dark:bg-[#0e1320] border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 disabled:opacity-50 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm shadow-sm transition-all"
+            className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 hover:bg-[#CBDDE9]/25 disabled:opacity-50 text-black dark:text-white font-semibold rounded-md text-xs shadow-xs transition-all"
           >
-            {sendingNow ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            <span>{sendingNow ? 'Sending...' : 'Send Batch Now'}</span>
+            {sendingNow ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5 text-[#2A72A1]" />}
+            <span>{sendingNow ? 'Sending...' : 'Send Batch'}</span>
           </button>
         </div>
       </form>
 
       {lastSendResult && (
-        <div className={`flex items-start space-x-2 p-3 rounded-xl text-xs font-medium ${lastSendResult.error ? 'bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 text-rose-700 dark:text-rose-400' : 'bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 text-emerald-700 dark:text-emerald-400'}`}>
+        <div className={`flex items-start space-x-2 p-2.5 rounded-md text-xs font-medium ${lastSendResult.error ? 'bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white text-black dark:text-white' : 'bg-[#CBDDE9]/40 dark:bg-black border border-[#2A72A1] text-black dark:text-white'}`}>
           {lastSendResult.error
-            ? <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
-            : <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+            ? <XCircle className="h-4 w-4 text-[#2A72A1] shrink-0 mt-0.5" />
+            : <CheckCircle2 className="h-4 w-4 text-[#2A72A1] shrink-0 mt-0.5" />
           }
           <span>
             {lastSendResult.error
@@ -154,12 +154,6 @@ export default function RateLimitSettings({ settings, pendingCount, onSave, onSe
           </span>
         </div>
       )}
-
-      <p className="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed">
-        This only saves the schedule. To actually send in the background on this interval, run{' '}
-        <code className="px-1 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">npm run job-application-worker</code>{' '}
-        as a persistent process — see the setup notes below.
-      </p>
     </div>
   );
 }
