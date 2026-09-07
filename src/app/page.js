@@ -96,24 +96,24 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
+    <div className="flex-1 p-5 sm:p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Dashboard</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">Real-time overview of your WhatsApp outreach activities.</p>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap gap-3">
           <Link 
             href="/schedules" 
-            className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all space-x-2"
+            className="inline-flex flex-1 sm:flex-none items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all space-x-2"
           >
             <Calendar className="h-4 w-4" />
             <span>Create Schedule</span>
           </Link>
           <Link 
             href="/clients" 
-            className="inline-flex items-center justify-center px-4 py-2.5 bg-white dark:bg-[#111625] hover:bg-slate-50 dark:hover:bg-[#1a2133] text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-all space-x-2"
+            className="inline-flex flex-1 sm:flex-none items-center justify-center px-4 py-2.5 bg-white dark:bg-[#111625] hover:bg-slate-50 dark:hover:bg-[#1a2133] text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-all space-x-2"
           >
             <UserPlus className="h-4 w-4" />
             <span>Add Client</span>

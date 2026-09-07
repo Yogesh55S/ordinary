@@ -41,6 +41,8 @@
   --color-indigo-800: #000000;
   --color-indigo-900: #000000;
   --color-indigo-950: #000000;
+  --color-indigo-305: #5C9CC5;
+  --color-indigo-650: #1B5F8E;
 
   --color-slate-50: #FFFFFF;
   --color-slate-100: #CBDDE9;
@@ -53,6 +55,20 @@
   --color-slate-800: #000000;
   --color-slate-900: #000000;
   --color-slate-950: #000000;
+  /* Intermediate shades used by existing components. Without these Tailwind
+     silently omits the generated utility, which caused inconsistent contrast. */
+  --color-slate-205: #B8D0E0;
+  --color-slate-305: #7EA8C2;
+  --color-slate-350: #5E91B1;
+  --color-slate-405: #477D9F;
+  --color-slate-450: #3B779B;
+  --color-slate-455: #367397;
+  --color-slate-550: #205D87;
+  --color-slate-650: #0C4A6E;
+  --color-slate-705: #09344C;
+  --color-slate-750: #062B40;
+  --color-slate-805: #031D2C;
+  --color-slate-850: #021520;
 
   --color-emerald-50: #CBDDE9;
   --color-emerald-100: #CBDDE9;
@@ -64,6 +80,8 @@
   --color-emerald-800: #000000;
   --color-emerald-900: #000000;
   --color-emerald-950: #000000;
+  --color-emerald-250: #9AC6AD;
+  --color-emerald-450: #438B68;
 
   --color-rose-50: #CBDDE9;
   --color-rose-100: #CBDDE9;
@@ -74,6 +92,7 @@
   --color-rose-700: #000000;
   --color-rose-900: #000000;
   --color-rose-950: #000000;
+  --color-rose-450: #9B5770;
 
   --color-amber-50: #CBDDE9;
   --color-amber-100: #CBDDE9;
@@ -85,12 +104,31 @@
   --color-amber-800: #000000;
   --color-amber-900: #000000;
   --color-amber-950: #000000;
+  --color-amber-850: #47320C;
+  --color-amber-905: #2E2208;
+  --color-amber-955: #191303;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+button:not(:disabled),
+a[href],
+select:not(:disabled),
+label[for] {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #2A72A1;
+  outline-offset: 2px;
 }
 
 /* Custom scrollbar matching the 4 colors */

@@ -7,7 +7,7 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div>
           <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Upcoming Queue</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Next 5 scheduled WhatsApp outreach tasks</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">The next 5 scheduled outreach tasks</p>
         </div>
         <Link 
           href="/schedules" 
@@ -38,7 +38,25 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">Create scheduled items or templates to begin automated client outreach cycles.</p>
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
+          <>
+          <div className="divide-y divide-slate-100 dark:divide-slate-800 md:hidden">
+            {upcomingSchedules.map((item) => (
+              <div key={item.id} className="space-y-2 px-5 py-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-slate-800 dark:text-slate-200">{item.clients?.business_name || 'Unknown Business'}</p>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{item.clients?.phone_number || 'No phone number'}</p>
+                  </div>
+                  <div className="shrink-0 text-right text-xs">
+                    <p className="font-medium text-slate-700 dark:text-slate-300">{item.schedule_date || 'Date not set'}</p>
+                    <p className="mt-0.5 text-slate-400">{item.schedule_time ? `at ${item.schedule_time.slice(0, 5)}` : 'Time not set'}</p>
+                  </div>
+                </div>
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">{item.templates?.template_name || item.custom_message || 'Custom message'}</p>
+              </div>
+            ))}
+          </div>
+          <table className="hidden min-w-full divide-y divide-slate-100 dark:divide-slate-800 md:table">
             <thead className="bg-slate-50/70 dark:bg-slate-900/40 text-left text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               <tr>
                 <th className="px-5 py-3.5">Client & Target</th>
@@ -78,13 +96,14 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
                       {item.schedule_date}
                     </div>
                     <div className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">
-                      at {item.schedule_time.substring(0, 5)}
+                      {item.schedule_time ? `at ${item.schedule_time.slice(0, 5)}` : 'Time not set'}
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </>
         )}
       </div>
     </div>

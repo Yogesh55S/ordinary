@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -24,6 +24,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState('light');
+  const closeButtonRef = useRef(null);
 
   useEffect(() => {
     // Safely verify theme state on client mount
@@ -31,6 +32,27 @@ export default function Sidebar() {
     const isDark = storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
     setTheme(isDark ? 'dark' : 'light');
   }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    closeButtonRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -110,6 +132,7 @@ export default function Sidebar() {
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
+                ref={closeButtonRef}
                 className="text-black dark:text-white hover:bg-[#CBDDE9]/25 rounded-lg p-1.5 focus:outline-none transition-colors"
                 aria-label="Close menu"
               >
@@ -120,7 +143,7 @@ export default function Sidebar() {
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
               {links.map((link) => {
                 const IconComponent = link.icon;
-                const isActive = pathname === link.href;
+                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
                 return (
                   <Link
                     key={link.href}
@@ -179,7 +202,7 @@ export default function Sidebar() {
         <nav className="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
           {links.map((link) => {
             const IconComponent = link.icon;
-            const isActive = pathname === link.href;
+            const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
             return (
               <Link
                 key={link.href}

@@ -35,10 +35,10 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col md:flex-row font-sans transition-colors duration-200">
+      <body className="min-h-full flex flex-col md:flex-row font-sans bg-[#F7FAFC] text-black dark:bg-[#070B12] dark:text-white transition-colors duration-200">
         <SplashLoader />
         <Sidebar />
-        <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
+        <main className="flex-1 flex min-w-0 flex-col min-h-screen overflow-x-hidden">
           {children}
         </main>
       </body>
