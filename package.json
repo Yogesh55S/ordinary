@@ -19,6 +19,7 @@
     "audio-decode": "^2.2.3",
     "dotenv": "^17.4.2",
     "jimp": "^1.6.1",
+    "leaflet": "^1.9.4",
     "link-preview-js": "^3.2.0",
     "lucide-react": "^1.17.0",
     "next": "16.2.7",

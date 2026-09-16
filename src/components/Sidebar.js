@@ -17,7 +17,8 @@ import {
   Moon,
   History,
   MapPin,
-  Briefcase
+  Briefcase,
+  Truck,
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -72,6 +73,7 @@ export default function Sidebar() {
     { name: 'Templates', href: '/templates', icon: FileText },
     { name: 'Schedules', href: '/schedules', icon: Calendar },
     { name: 'Job Applications', href: '/job-applications', icon: Briefcase },
+    { name: 'Delivery Estimator', href: '/delivery', icon: Truck },
     { name: 'History', href: '/history', icon: History },
     { name: 'WhatsApp Link', href: '/settings', icon: Settings },
   ];
