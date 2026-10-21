@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { X, Paperclip, RefreshCw, Search, Users, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { X, Paperclip, RefreshCw, Search, Users, CheckCircle2, AlertTriangle, Check } from 'lucide-react';
 
 export default function ScheduleModal({
   isOpen,
@@ -138,7 +138,7 @@ export default function ScheduleModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div 
         onClick={onClose}
@@ -146,7 +146,7 @@ export default function ScheduleModal({
       ></div>
       
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all border border-slate-200 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[90vh] overflow-hidden transition-all border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
@@ -182,7 +182,7 @@ export default function ScheduleModal({
                   placeholder="Search name / phone..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-7 pr-3 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                  className="w-full pl-7 pr-3 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300"
                 />
                 {searchQuery && (
                   <button
@@ -200,7 +200,7 @@ export default function ScheduleModal({
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                  className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300"
                 >
                   <option value="All">All Categories</option>
                   {uniqueCategories.map(cat => (
@@ -214,19 +214,19 @@ export default function ScheduleModal({
                 <select
                   value={scheduleStateFilter}
                   onChange={(e) => setScheduleStateFilter(e.target.value)}
-                  className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                  className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300"
                 >
                   <option value="All">All Clients</option>
-                  <option value="no_pending">📭 No Pending Schedule ({filterCounts.no_pending})</option>
-                  <option value="has_pending">📬 Already in Queue ({filterCounts.has_pending})</option>
-                  <option value="never_sent">🆕 Never Contacted ({filterCounts.never_sent})</option>
-                  <option value="already_sent">✔️ Previously Sent ({filterCounts.already_sent})</option>
+                  <option value="no_pending">No Pending Schedule ({filterCounts.no_pending})</option>
+                  <option value="has_pending">Already in Queue ({filterCounts.has_pending})</option>
+                  <option value="never_sent">Never Contacted ({filterCounts.never_sent})</option>
+                  <option value="already_sent">Previously Sent ({filterCounts.already_sent})</option>
                 </select>
               </div>
             </div>
 
             {/* Target Client Selection List */}
-            <div className={`border rounded-xl overflow-hidden bg-white dark:bg-[#0e1320] ${
+            <div className={`border rounded-xl overflow-hidden bg-white dark:bg-ink-900 ${
               formErrors.client_id 
                 ? 'border-rose-300 dark:border-rose-900/50' 
                 : 'border-slate-200 dark:border-slate-800/80'
@@ -288,8 +288,8 @@ export default function ScheduleModal({
                             {statusLabel}
                           </span>
                           {isSelected && (
-                            <span className="h-4 w-4 rounded-full bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shrink-0 font-bold text-[10px]">
-                              ✓
+                            <span className="h-4 w-4 rounded-full bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shrink-0">
+                              <Check className="h-3 w-3" strokeWidth={3} aria-hidden="true" />
                             </span>
                           )}
                         </div>
@@ -323,7 +323,7 @@ export default function ScheduleModal({
                   </span>
                   {selectedClientState?.hasPending && !editingSchedule && (
                     <span className="block mt-1 font-semibold text-amber-700 dark:text-amber-400">
-                      ⚠ This client already has a pending schedule in the queue
+                      This client already has a pending schedule in the queue
                     </span>
                   )}
                 </div>
@@ -338,11 +338,11 @@ export default function ScheduleModal({
               <select
                 value={formData.template_id}
                 onChange={onTemplateChange}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300"
               >
-                <option value="" className="dark:bg-[#111625]">-- Custom Message (No Template) --</option>
+                <option value="" className="dark:bg-ink-800">-- Custom Message (No Template) --</option>
                 {templates.map((tpl) => (
-                  <option key={tpl.id} value={tpl.id} className="dark:bg-[#111625]">
+                  <option key={tpl.id} value={tpl.id} className="dark:bg-ink-800">
                     {tpl.template_name}
                   </option>
                 ))}
@@ -355,10 +355,10 @@ export default function ScheduleModal({
               <select
                 value={formData.channel}
                 onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-300"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300"
               >
-                <option value="whatsapp" className="dark:bg-[#111625]">WhatsApp Business Link</option>
-                <option value="email" className="dark:bg-[#111625]">Email (SMTP Server)</option>
+                <option value="whatsapp" className="dark:bg-ink-800">WhatsApp Business Link</option>
+                <option value="email" className="dark:bg-ink-800">Email (SMTP Server)</option>
               </select>
             </div>
 
@@ -370,7 +370,7 @@ export default function ScheduleModal({
                   type="text"
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320] ${
+                  className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-ink-900 ${
                     formErrors.subject 
                       ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                       : 'border-slate-200 dark:border-slate-800'
@@ -390,7 +390,7 @@ export default function ScheduleModal({
                 type="date"
                 value={formData.schedule_date}
                 onChange={(e) => setFormData({ ...formData, schedule_date: e.target.value })}
-                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320] ${
+                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-ink-900 ${
                   formErrors.schedule_date 
                     ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
@@ -408,7 +408,7 @@ export default function ScheduleModal({
                 type="time"
                 value={formData.schedule_time}
                 onChange={(e) => setFormData({ ...formData, schedule_time: e.target.value })}
-                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320] ${
+                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-ink-900 ${
                   formErrors.schedule_time 
                     ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
@@ -427,7 +427,7 @@ export default function ScheduleModal({
               value={formData.custom_message}
               onChange={(e) => setFormData({ ...formData, custom_message: e.target.value })}
               rows={5}
-              className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-[#0e1320] font-mono ${
+              className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-850 dark:text-slate-100 dark:bg-ink-900 font-mono ${
                 formErrors.custom_message 
                   ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                   : 'border-slate-200 dark:border-slate-800'
@@ -443,7 +443,7 @@ export default function ScheduleModal({
           <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4">
             <label className="text-xs font-bold text-slate-650 dark:text-slate-400 uppercase block font-bold">Outreach Attachments</label>
             <div className="flex items-center space-x-3">
-              <label className="cursor-pointer inline-flex items-center space-x-1.5 px-3.5 py-2 bg-slate-50 dark:bg-[#0e1320] hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-350 transition-colors">
+              <label className="cursor-pointer inline-flex items-center space-x-1.5 px-3.5 py-2 bg-slate-50 dark:bg-ink-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-350 transition-colors">
                 <Paperclip className="h-3.5 w-3.5" />
                 <span>Add Files</span>
                 <input
@@ -471,7 +471,7 @@ export default function ScheduleModal({
                 {formData.attachments.map((file) => (
                   <div 
                     key={file.id} 
-                    className="flex items-center justify-between bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800/80 rounded-xl px-3 py-2 text-xs text-slate-705 dark:text-slate-350"
+                    className="flex items-center justify-between bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800/80 rounded-xl px-3 py-2 text-xs text-slate-705 dark:text-slate-350"
                   >
                     <div className="flex items-center space-x-2 truncate">
                       <Paperclip className="h-3.5 w-3.5 text-slate-400 shrink-0" />
@@ -491,7 +491,7 @@ export default function ScheduleModal({
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-[#111625]">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-ink-800">
             <button
               type="button"
               onClick={onClose}

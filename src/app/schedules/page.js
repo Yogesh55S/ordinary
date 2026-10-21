@@ -6,6 +6,7 @@ import { Plus, AlertCircle, Calendar, RefreshCw, Search, X, Filter } from 'lucid
 import { uploadAttachment } from '@/lib/media';
 
 // Import modular schedules subcomponents
+import PageHeader from '@/components/PageHeader';
 import ScheduleTable from '@/components/schedules/ScheduleTable';
 import ScheduleModal from '@/components/schedules/ScheduleModal';
 import ViewMessageModal from '@/components/schedules/ViewMessageModal';
@@ -463,21 +464,20 @@ export default function SchedulesPage() {
   const hasActiveFilters = queueSearch.trim() || queueDateFilter;
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full relative">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Outreach Queue</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Schedule message broadcasts, manage delivery dates, and execute outreach queues.</p>
-        </div>
-        <button
-          onClick={handleAddClick}
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
-        >
-          <Plus className="h-4.5 w-4.5" />
-          <span>New Schedule</span>
-        </button>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full relative">
+      <PageHeader
+        title="Outreach Queue"
+        description="Schedule message broadcasts, manage delivery dates, and execute outreach queues."
+        actions={
+          <button
+            onClick={handleAddClick}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            <span>New Schedule</span>
+          </button>
+        }
+      />
 
       {error && (
         <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
@@ -487,15 +487,16 @@ export default function SchedulesPage() {
       )}
 
       {/* Filters and Stats Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
-        <div className="flex flex-wrap items-center gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-3 sm:p-4 bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-4">
           {/* Category Filter */}
-          <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Client Category Filter</span>
+          <div className="flex-1 sm:flex-none min-w-0">
+            <label htmlFor="schedule-category-filter" className="sr-only">Client category</label>
             <select
+              id="schedule-category-filter"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300 min-w-[180px]"
+              className="px-3.5 py-2.5 sm:py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-300 w-full sm:w-auto sm:min-w-[200px]"
             >
               {uniqueCategories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -506,10 +507,10 @@ export default function SchedulesPage() {
           </div>
 
           {/* Stats Chips */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="px-3.5 py-2.5 bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/20 rounded-xl flex items-center space-x-2 text-xs">
+          <div className="flex shrink-0 items-center gap-3">
+            <div className="px-3 py-2.5 sm:py-2 bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/20 rounded-xl flex items-center gap-2 text-xs whitespace-nowrap">
               <span className="h-2 w-2 rounded-full bg-amber-500"></span>
-              <span className="text-slate-500 dark:text-slate-400">Pending / Scheduled:</span>
+              <span className="text-slate-500 dark:text-slate-400">Pending<span className="hidden sm:inline"> / Scheduled</span>:</span>
               <span className="font-bold text-amber-700 dark:text-amber-400">{counts.Pending}</span>
             </div>
           </div>
@@ -521,10 +522,10 @@ export default function SchedulesPage() {
       </div>
 
       {/* Active Queue Table Component (Full Width) */}
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 bg-slate-50/50 dark:bg-slate-900/40">
+      <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
+        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 bg-slate-50/50 dark:bg-slate-900/40">
           {/* Title row */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-wrap justify-between items-start sm:items-center gap-3">
             <div>
               <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">Active Outreach Queue</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pending and scheduled messages waiting for automatic dispatch</p>
@@ -555,7 +556,7 @@ export default function SchedulesPage() {
                 placeholder="Search by client name, phone, email, template..."
                 value={queueSearch}
                 onChange={(e) => setQueueSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                className="w-full pl-9 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
               />
               {queueSearch && (
                 <button
@@ -574,7 +575,7 @@ export default function SchedulesPage() {
                 type="date"
                 value={queueDateFilter}
                 onChange={(e) => setQueueDateFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-300"
+                className="px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-300"
               />
               {queueDateFilter && (
                 <button

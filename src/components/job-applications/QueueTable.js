@@ -30,15 +30,15 @@ function StatusBadge({ status }) {
   const map = {
     Pending: {
       icon: Clock,
-      cls: 'bg-[#CBDDE9]/25 dark:bg-black text-black dark:text-[#CBDDE9] border-[#CBDDE9] dark:border-[#2A72A1]/40',
+      cls: 'bg-mist/25 dark:bg-black text-black dark:text-mist border-mist dark:border-line',
     },
     Sent: {
       icon: CheckCircle2,
-      cls: 'bg-[#CBDDE9]/40 dark:bg-black text-[#2A72A1] dark:text-[#CBDDE9] border-[#2A72A1]',
+      cls: 'bg-brand/10 dark:bg-brand/15 text-brand border-brand/30',
     },
     Failed: {
       icon: XCircle,
-      cls: 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white',
+      cls: 'bg-brand text-white border-brand',
     },
   };
   const { icon: Icon, cls } = map[status] || map.Pending;
@@ -143,22 +143,22 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
   };
 
   return (
-    <div className="bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs overflow-hidden transition-colors w-full">
+    <div className="bg-white dark:bg-black rounded-lg border border-mist dark:border-line shadow-xs overflow-hidden transition-colors w-full">
       {/* Header & Controls */}
-      <div className="p-3.5 sm:p-4 border-b border-[#CBDDE9] dark:border-[#2A72A1]/30 space-y-3">
+      <div className="p-3.5 sm:p-4 border-b border-mist dark:border-line space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h2 className="text-sm font-bold text-black dark:text-white">Recent Outreach History</h2>
-            <p className="text-xs text-black/60 dark:text-[#CBDDE9]">
+            <p className="text-xs text-black/60 dark:text-mist">
               Showing {displayed.length} of {filtered.length} applications ({contacts.length} total)
             </p>
           </div>
 
           {/* Rows per page selector */}
           <div className="flex items-center space-x-1.5 text-xs text-black dark:text-white">
-            <SlidersHorizontal className="h-3 w-3 text-[#2A72A1]" />
+            <SlidersHorizontal className="h-3 w-3 text-brand" />
             <span className="hidden sm:inline">Rows:</span>
-            <div className="flex items-center bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-0.5">
+            <div className="flex items-center bg-mist/25 dark:bg-black border border-mist dark:border-line rounded-md p-0.5">
               {PAGE_SIZE_OPTIONS.map((opt) => (
                 <button
                   key={opt}
@@ -169,8 +169,8 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                   }}
                   className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all ${
                     pageSize === opt
-                      ? 'bg-[#2A72A1] text-white shadow-xs'
-                      : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+                      ? 'bg-brand text-white shadow-xs'
+                      : 'text-black dark:text-mist hover:bg-mist/25'
                   }`}
                 >
                   {opt}
@@ -183,7 +183,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
         {/* Search & Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div className="relative flex-1 w-full sm:max-w-xs">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#2A72A1] pointer-events-none" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand pointer-events-none" />
             <input
               type="text"
               value={search}
@@ -192,11 +192,11 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                 setCurrentPage(1);
               }}
               placeholder="Search email, company..."
-              className="w-full pl-8 pr-2.5 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1] transition-colors"
+              className="w-full pl-8 pr-2.5 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-brand transition-colors"
             />
           </div>
 
-          <div className="flex items-center space-x-1 overflow-x-auto pb-0.5 sm:pb-0">
+          <div className="flex items-center space-x-1 overflow-x-auto no-scrollbar">
             {STATUS_FILTERS.map((f) => (
               <button
                 key={f.key}
@@ -207,8 +207,8 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                 }}
                 className={`px-2.5 py-1 text-xs font-semibold rounded-md border shrink-0 transition-all ${
                   statusFilter === f.key
-                    ? 'bg-[#2A72A1] text-white border-[#2A72A1]'
-                    : 'text-black dark:text-[#CBDDE9] border-[#CBDDE9] dark:border-[#2A72A1]/40 hover:bg-[#CBDDE9]/25 bg-white dark:bg-black'
+                    ? 'bg-brand text-white border-brand'
+                    : 'text-black dark:text-mist border-mist dark:border-line hover:bg-mist/25 bg-white dark:bg-black'
                 }`}
               >
                 {f.label}
@@ -219,14 +219,14 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
       </div>
 
       {loading && (
-        <div className="p-8 text-center text-xs text-[#2A72A1] font-semibold flex items-center justify-center space-x-2">
+        <div className="p-8 text-center text-xs text-brand font-semibold flex items-center justify-center space-x-2">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>Loading outreach history...</span>
         </div>
       )}
 
       {!loading && displayed.length === 0 && (
-        <div className="p-8 text-center text-xs text-black/60 dark:text-[#CBDDE9]/70">
+        <div className="p-8 text-center text-xs text-black/60 dark:text-mist/70">
           {contacts.length === 0 ? 'No HR contacts queued yet.' : 'No contacts match your current filter.'}
         </div>
       )}
@@ -237,7 +237,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
           <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[#CBDDE9] dark:border-[#2A72A1]/30 bg-[#CBDDE9]/15 dark:bg-black text-left text-[11px] font-bold uppercase tracking-wider text-black dark:text-white">
+                <tr className="border-b border-mist dark:border-line bg-mist/15 dark:bg-black text-left text-[11px] font-bold uppercase tracking-wider text-black dark:text-white">
                   <th className="px-4 py-2.5">HR Contact</th>
                   <th className="px-4 py-2.5">Company</th>
                   <th className="px-4 py-2.5">Job Profile</th>
@@ -245,11 +245,11 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                   <th className="px-4 py-2.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#CBDDE9] dark:divide-[#2A72A1]/20">
+              <tbody className="divide-y divide-mist dark:divide-line">
                 {displayed.map((c) => {
                   const isEditing = editingId === c.id;
                   return (
-                    <tr key={c.id} className="hover:bg-[#CBDDE9]/15 dark:hover:bg-[#2A72A1]/10 transition-colors">
+                    <tr key={c.id} className="hover:bg-mist/15 dark:hover:bg-brand/10 transition-colors">
                       {isEditing ? (
                         <>
                           <td className="px-4 py-2.5">
@@ -258,14 +258,14 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               value={editForm.hr_name}
                               onChange={(e) => setEditForm((f) => ({ ...f, hr_name: e.target.value }))}
                               placeholder="HR name"
-                              className="w-full mb-1 px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                              className="w-full mb-1 px-2 py-1 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                             />
                             <input
                               type="email"
                               value={editForm.hr_email}
                               onChange={(e) => setEditForm((f) => ({ ...f, hr_email: e.target.value }))}
                               placeholder="HR email"
-                              className="w-full px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                              className="w-full px-2 py-1 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                             />
                           </td>
                           <td className="px-4 py-2.5">
@@ -274,7 +274,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               value={editForm.company_name}
                               onChange={(e) => setEditForm((f) => ({ ...f, company_name: e.target.value }))}
                               placeholder="Company"
-                              className="w-full px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                              className="w-full px-2 py-1 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                             />
                           </td>
                           <td className="px-4 py-2.5 text-black dark:text-white">{c.job_profiles?.title || '—'}</td>
@@ -287,7 +287,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               <button
                                 onClick={() => saveEdit(c)}
                                 disabled={busyId === c.id}
-                                className="p-1.5 rounded-md text-[#2A72A1] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                                className="p-1.5 rounded-md text-brand hover:bg-mist/25 transition-all disabled:opacity-50"
                                 aria-label={`Save changes for ${c.hr_email}`}
                               >
                                 {busyId === c.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
@@ -295,7 +295,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               <button
                                 onClick={cancelEdit}
                                 disabled={busyId === c.id}
-                                className="p-1.5 rounded-md text-black dark:text-white hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                                className="p-1.5 rounded-md text-black dark:text-white hover:bg-mist/25 transition-all disabled:opacity-50"
                                 aria-label="Cancel editing"
                               >
                                 <X className="h-3.5 w-3.5" />
@@ -307,7 +307,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                         <>
                           <td className="px-4 py-2.5">
                             <p className="font-semibold text-black dark:text-white">{c.hr_name || '—'}</p>
-                            <p className="text-[11px] text-black/70 dark:text-[#CBDDE9] truncate max-w-[180px]" title={c.hr_email}>
+                            <p className="text-[11px] text-black/70 dark:text-mist truncate max-w-[180px]" title={c.hr_email}>
                               {c.hr_email}
                             </p>
                           </td>
@@ -330,7 +330,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               <button
                                 onClick={() => startEdit(c)}
                                 disabled={busyId === c.id}
-                                className="p-1.5 rounded-md text-[#2A72A1] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                                className="p-1.5 rounded-md text-brand hover:bg-mist/25 transition-all disabled:opacity-50"
                                 aria-label={`Edit ${c.hr_email}`}
                               >
                                 <Pencil className="h-3.5 w-3.5" />
@@ -339,7 +339,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                                 <button
                                   onClick={() => handleRetry(c)}
                                   disabled={busyId === c.id}
-                                  className="p-1.5 rounded-md text-[#2A72A1] hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                                  className="p-1.5 rounded-md text-brand hover:bg-mist/25 transition-all disabled:opacity-50"
                                   aria-label={`Retry ${c.hr_email}`}
                                 >
                                   {busyId === c.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
@@ -348,7 +348,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                               <button
                                 onClick={() => handleDelete(c)}
                                 disabled={busyId === c.id}
-                                className="p-1.5 rounded-md text-black dark:text-white hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                                className="p-1.5 rounded-md text-black dark:text-white hover:bg-mist/25 transition-all disabled:opacity-50"
                                 aria-label={`Remove ${c.hr_email}`}
                               >
                                 {busyId === c.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
@@ -365,11 +365,11 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
           </div>
 
           {/* Mobile Card List View (Visible ONLY on mobile screens < 640px) */}
-          <div className="block sm:hidden divide-y divide-[#CBDDE9] dark:divide-[#2A72A1]/20">
+          <div className="block sm:hidden divide-y divide-mist dark:divide-line">
             {displayed.map((c) => {
               const isEditing = editingId === c.id;
               return (
-                <div key={c.id} className="p-3 space-y-2 hover:bg-[#CBDDE9]/15 dark:hover:bg-[#2A72A1]/10 transition-colors">
+                <div key={c.id} className="p-3 space-y-2 hover:bg-mist/15 dark:hover:bg-brand/10 transition-colors">
                   {isEditing ? (
                     <div className="space-y-2">
                       <input
@@ -377,33 +377,33 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                         value={editForm.hr_name}
                         onChange={(e) => setEditForm((f) => ({ ...f, hr_name: e.target.value }))}
                         placeholder="HR name"
-                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                       />
                       <input
                         type="email"
                         value={editForm.hr_email}
                         onChange={(e) => setEditForm((f) => ({ ...f, hr_email: e.target.value }))}
                         placeholder="HR email"
-                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                       />
                       <input
                         type="text"
                         value={editForm.company_name}
                         onChange={(e) => setEditForm((f) => ({ ...f, company_name: e.target.value }))}
                         placeholder="Company"
-                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                       />
                       <div className="flex items-center justify-end space-x-2 pt-1">
                         <button
                           onClick={cancelEdit}
-                          className="px-3 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 text-black dark:text-white"
+                          className="px-3 py-1 text-xs rounded-md border border-mist dark:border-line text-black dark:text-white"
                         >
                           Cancel
                         </button>
                         <button
                           onClick={() => saveEdit(c)}
                           disabled={busyId === c.id}
-                          className="px-3 py-1 text-xs rounded-md bg-[#2A72A1] text-white font-semibold"
+                          className="px-3 py-1 text-xs rounded-md bg-brand text-white font-semibold"
                         >
                           {busyId === c.id ? 'Saving...' : 'Save'}
                         </button>
@@ -414,22 +414,22 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="font-bold text-xs text-black dark:text-white truncate">{c.hr_name || c.hr_email}</p>
-                          <p className="text-[11px] text-black/70 dark:text-[#CBDDE9] truncate">{c.hr_email}</p>
+                          <p className="text-[11px] text-black/70 dark:text-mist truncate">{c.hr_email}</p>
                         </div>
                         <StatusBadge status={c.status} />
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] text-black/80 dark:text-[#CBDDE9] pt-1">
+                      <div className="flex items-center justify-between text-[11px] text-black/80 dark:text-mist pt-1">
                         <div>
                           <span className="font-semibold">{c.company_name || 'No Company'}</span>
                           {c.job_profiles?.title && (
-                            <span className="ml-1.5 text-[#2A72A1]">({c.job_profiles.title})</span>
+                            <span className="ml-1.5 text-brand">({c.job_profiles.title})</span>
                           )}
                         </div>
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => startEdit(c)}
-                            className="p-1 rounded text-[#2A72A1] hover:bg-[#CBDDE9]/25"
+                            className="p-1 rounded text-brand hover:bg-mist/25"
                             aria-label="Edit contact"
                           >
                             <Pencil className="h-3.5 w-3.5" />
@@ -437,7 +437,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                           {c.status === 'Failed' && (
                             <button
                               onClick={() => handleRetry(c)}
-                              className="p-1 rounded text-[#2A72A1] hover:bg-[#CBDDE9]/25"
+                              className="p-1 rounded text-brand hover:bg-mist/25"
                               aria-label="Retry contact"
                             >
                               <RotateCcw className="h-3.5 w-3.5" />
@@ -445,7 +445,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                           )}
                           <button
                             onClick={() => handleDelete(c)}
-                            className="p-1 rounded text-black dark:text-white hover:bg-[#CBDDE9]/25"
+                            className="p-1 rounded text-black dark:text-white hover:bg-mist/25"
                             aria-label="Delete contact"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -461,8 +461,8 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
 
           {/* Pagination Controls */}
           {pageSize !== 'All' && totalPages > 1 && (
-            <div className="flex items-center justify-between px-3.5 py-2.5 border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 bg-[#CBDDE9]/10 dark:bg-black text-xs">
-              <span className="text-black/70 dark:text-[#CBDDE9]">
+            <div className="flex items-center justify-between px-3.5 py-2.5 border-t border-mist dark:border-line bg-mist/10 dark:bg-black text-xs">
+              <span className="text-black/70 dark:text-mist">
                 Page <span className="font-bold text-black dark:text-white">{safeCurrentPage}</span> of {totalPages}
               </span>
               <div className="flex items-center space-x-1.5">
@@ -470,7 +470,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                   type="button"
                   disabled={safeCurrentPage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white disabled:opacity-40 hover:bg-[#CBDDE9]/25 transition-all"
+                  className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white disabled:opacity-40 hover:bg-mist/25 transition-all"
                 >
                   <ChevronLeft className="h-3 w-3" />
                   <span className="hidden sm:inline">Previous</span>
@@ -479,7 +479,7 @@ export default function QueueTable({ contacts, loading, onDelete, onRetry, onUpd
                   type="button"
                   disabled={safeCurrentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white disabled:opacity-40 hover:bg-[#CBDDE9]/25 transition-all"
+                  className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white disabled:opacity-40 hover:bg-mist/25 transition-all"
                 >
                   <span className="hidden sm:inline">Next</span>
                   <ChevronRight className="h-3 w-3" />

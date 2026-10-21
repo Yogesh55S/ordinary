@@ -52,8 +52,8 @@ export default function SendProgressModal({ items, onClose }) {
   const allDone = doneCount === total;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-md max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 shrink-0">
           <div>
@@ -110,7 +110,7 @@ export default function SendProgressModal({ items, onClose }) {
             }
 
             return (
-              <div key={item.scheduleId} className="flex items-center justify-between gap-3 px-3.5 py-2.5 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800/80 rounded-xl">
+              <div key={item.scheduleId} className="flex items-center justify-between gap-3 px-3.5 py-2.5 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800/80 rounded-xl">
                 <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">{item.businessName}</span>
                 {pill}
               </div>

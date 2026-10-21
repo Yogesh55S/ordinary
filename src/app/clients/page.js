@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Plus, AlertCircle, Upload, Download, FileSpreadsheet, Users } from 'lucide-react';
 
 // Import modular clients subcomponents
+import PageHeader from '@/components/PageHeader';
 import ClientTable from '@/components/clients/ClientTable';
 import ClientModal from '@/components/clients/ClientModal';
 import ClientDrawer from '@/components/clients/ClientDrawer';
@@ -528,30 +529,29 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full relative">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Clients</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage client profiles, contact information, and CRM parameters.</p>
-        </div>
-        <div className="flex flex-wrap gap-2.5">
-          <button
-            onClick={() => setIsImportOpen(true)}
-            className="inline-flex items-center justify-center px-4 py-2.5 bg-white hover:bg-slate-50 dark:bg-[#111625] dark:hover:bg-[#1c2336] text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-all space-x-2"
-          >
-            <Upload className="h-4.5 w-4.5" />
-            <span>Bulk Import</span>
-          </button>
-          <button
-            onClick={handleAddClick}
-            className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
-          >
-            <Plus className="h-4.5 w-4.5" />
-            <span>Add Client</span>
-          </button>
-        </div>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full relative">
+      <PageHeader
+        title="Clients"
+        description="Manage client profiles, contact information, and CRM parameters."
+        actions={
+          <>
+            <button
+              onClick={() => setIsImportOpen(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 dark:bg-ink-800 dark:hover:bg-ink-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-colors"
+            >
+              <Upload className="h-4 w-4" />
+              <span>Bulk Import</span>
+            </button>
+            <button
+              onClick={handleAddClick}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add Client</span>
+            </button>
+          </>
+        }
+      />
 
       {error && (
         <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
@@ -572,7 +572,7 @@ export default function ClientsPage() {
       />
 
       {/* Main Clients Table Component */}
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
         <ClientTable
           clients={clients}
           loading={loading}
@@ -598,14 +598,14 @@ export default function ClientsPage() {
 
       {/* Floating Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex items-center justify-between space-x-6 animate-in slide-in-from-bottom duration-300 max-w-lg w-[calc(100%-2rem)]">
+        <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] md:bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex items-center justify-between gap-3 sm:gap-6 animate-in slide-in-from-bottom duration-300 max-w-lg w-[calc(100%-2rem)]">
           <div className="flex items-center space-x-2.5">
             <div className="bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 p-2 rounded-xl">
               <Users className="h-5 w-5" />
             </div>
             <div>
               <div className="font-bold text-sm text-slate-800 dark:text-slate-200">{selectedIds.length} Client{selectedIds.length > 1 ? 's' : ''} Selected</div>
-              <p className="text-[10px] text-slate-500">Perform bulk client actions</p>
+              <p className="hidden sm:block text-[10px] text-slate-500">Perform bulk client actions</p>
             </div>
           </div>
           <div className="flex items-center space-x-2 shrink-0">

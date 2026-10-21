@@ -3,17 +3,17 @@ import { Calendar, ArrowRight, FileText, MessageSquare } from 'lucide-react';
 
 export default function UpcomingQueue({ upcomingSchedules, loading }) {
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
-      <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+    <div className="bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
+      <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
         <div>
           <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Upcoming Queue</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">The next 5 scheduled outreach tasks</p>
         </div>
         <Link 
           href="/schedules" 
-          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center space-x-1 transition-colors"
+          className="shrink-0 whitespace-nowrap text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 transition-colors"
         >
-          <span>View full queue</span>
+          <span>View all</span>
           <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
@@ -39,7 +39,7 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
           </div>
         ) : (
           <>
-          <div className="divide-y divide-slate-100 dark:divide-slate-800 md:hidden">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800 lg:hidden">
             {upcomingSchedules.map((item) => (
               <div key={item.id} className="space-y-2 px-5 py-4">
                 <div className="flex items-start justify-between gap-3">
@@ -56,7 +56,7 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
               </div>
             ))}
           </div>
-          <table className="hidden min-w-full divide-y divide-slate-100 dark:divide-slate-800 md:table">
+          <table className="hidden min-w-full divide-y divide-slate-100 dark:divide-slate-800 lg:table">
             <thead className="bg-slate-50/70 dark:bg-slate-900/40 text-left text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               <tr>
                 <th className="px-5 py-3.5">Client & Target</th>

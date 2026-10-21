@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 // Import modular settings subcomponents
+import PageHeader from '@/components/PageHeader';
 import GatewayConsole from '@/components/settings/GatewayConsole';
 import SetupGuide from '@/components/settings/SetupGuide';
 
@@ -595,12 +596,11 @@ export default function SettingsPage() {
   const statusDetails = getStatusLabelDetails(gateway.status);
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Gateway Configuration</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">Configure your local WhatsApp automation node and SMTP Email relay integrations.</p>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full">
+      <PageHeader
+        title="Gateway Configuration"
+        description="Configure your local WhatsApp automation node and SMTP Email relay integrations."
+      />
 
       {error && (
         <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-800 dark:text-amber-400">
@@ -609,7 +609,7 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
         {/* Connection Status Panel Component */}
         <div className="lg:col-span-2">
           <GatewayConsole

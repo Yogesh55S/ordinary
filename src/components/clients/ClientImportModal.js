@@ -346,7 +346,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
 ]`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div 
         onClick={onClose}
@@ -354,7 +354,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
       ></div>
 
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 dark:text-slate-205">
@@ -369,7 +369,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-100 dark:border-slate-800 px-6 bg-slate-50/20 dark:bg-[#111625]">
+        <div className="flex border-b border-slate-100 dark:border-slate-800 px-6 bg-slate-50/20 dark:bg-ink-800">
           <button
             onClick={() => setActiveTab('upload')}
             className={`py-3 px-4 text-sm font-semibold border-b-2 transition-colors ${
@@ -455,7 +455,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                 value={inputText}
                 onChange={handlePasteChange}
                 rows={8}
-                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] font-mono resize-y"
+                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900 font-mono resize-y"
                 placeholder={`Business Name, Phone Number, Owner Name...\n"My Shop","+919876543201","John Smith"`}
               />
             </div>
@@ -477,7 +477,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                       <span>Copy Template</span>
                     </button>
                   </div>
-                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
+                  <pre className="p-3 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
                     {demoCSV}
                   </pre>
                   <p className="text-[11px] text-slate-400 mt-1">Headers are case-insensitive and match close aliases (e.g. Mobile number, Phone, Business).</p>
@@ -495,7 +495,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                       <span>Copy Template</span>
                     </button>
                   </div>
-                  <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
+                  <pre className="p-3 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-xs overflow-x-auto text-slate-700 dark:text-slate-300">
                     {demoJSON}
                   </pre>
                   <p className="text-[11px] text-slate-400 mt-1">Structure can be a single client object or a JSON array of client objects.</p>
@@ -517,7 +517,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
                   </button>
                   <button
                     onClick={() => loadDemoData('json')}
-                    className="px-3.5 py-1.5 bg-white border border-indigo-200 dark:bg-[#0e1320] dark:border-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold rounded-xl text-xs shadow-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all"
+                    className="px-3.5 py-1.5 bg-white border border-indigo-200 dark:bg-ink-900 dark:border-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold rounded-xl text-xs shadow-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all"
                   >
                     Load Mock JSON
                   </button>
@@ -629,7 +629,7 @@ export default function ClientImportModal({ isOpen, onClose, onImportSuccess, cl
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-[#111625] transition-colors">
+        <div className="flex justify-between items-center px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-ink-800 transition-colors">
           <button
             onClick={onClose}
             className="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all"

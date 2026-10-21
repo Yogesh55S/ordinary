@@ -6,6 +6,7 @@ import { Plus, AlertCircle } from 'lucide-react';
 import { uploadAttachment, deleteAttachment } from '@/lib/media';
 
 // Import modular templates subcomponents
+import PageHeader from '@/components/PageHeader';
 import TemplateFilters from '@/components/templates/TemplateFilters';
 import TemplateGrid from '@/components/templates/TemplateGrid';
 import TemplateModal from '@/components/templates/TemplateModal';
@@ -303,25 +304,24 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full relative">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-black dark:text-white">Message Templates</h1>
-          <p className="text-black/70 dark:text-[#CBDDE9] mt-1">Design customizable WhatsApp and Email outreach message patterns with tags.</p>
-        </div>
-        <button
-          onClick={handleAddClick}
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-[#2A72A1] hover:opacity-90 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
-        >
-          <Plus className="h-4.5 w-4.5" />
-          <span>Add Template</span>
-        </button>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full relative">
+      <PageHeader
+        title="Message Templates"
+        description="Design customizable WhatsApp and Email outreach message patterns with tags."
+        actions={
+          <button
+            onClick={handleAddClick}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand hover:bg-brand-strong text-white font-semibold rounded-xl text-sm shadow-sm transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Template</span>
+          </button>
+        }
+      />
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-[#CBDDE9]/30 dark:bg-black border border-black dark:border-white rounded-xl text-black dark:text-white">
-          <AlertCircle className="h-5 w-5 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-3 p-4 bg-brand/5 dark:bg-brand/10 border border-brand/30 dark:border-line rounded-xl text-black dark:text-white">
+          <AlertCircle className="h-5 w-5 text-brand shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
       )}

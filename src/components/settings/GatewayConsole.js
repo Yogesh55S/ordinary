@@ -91,13 +91,13 @@ export default function GatewayConsole({
   };
 
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden">
+    <div className="bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden">
       {/* Header with Tabs */}
       <div className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
-        <div className="flex border-b border-slate-100 dark:border-slate-800 overflow-x-auto">
+        <div className="flex border-b border-slate-100 dark:border-slate-800 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveTab('whatsapp')}
-            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-3.5 sm:py-4 px-4 sm:px-6 font-bold text-sm whitespace-nowrap border-b-2 transition-all shrink-0 ${
               activeTab === 'whatsapp'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
@@ -108,7 +108,7 @@ export default function GatewayConsole({
           </button>
           <button
             onClick={() => setActiveTab('email')}
-            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-3.5 sm:py-4 px-4 sm:px-6 font-bold text-sm whitespace-nowrap border-b-2 transition-all shrink-0 ${
               activeTab === 'email'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
@@ -119,7 +119,7 @@ export default function GatewayConsole({
           </button>
           <button
             onClick={() => setActiveTab('sheets')}
-            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-4 px-6 font-bold text-sm border-b-2 transition-all shrink-0 ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center space-x-2 py-3.5 sm:py-4 px-4 sm:px-6 font-bold text-sm whitespace-nowrap border-b-2 transition-all shrink-0 ${
               activeTab === 'sheets'
                 ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
@@ -153,7 +153,7 @@ export default function GatewayConsole({
             {/* Dynamic Status Card */}
             <div className={`p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ${statusDetails.panelBg} transition-all`}>
               <div className="flex items-center space-x-4">
-                <div className={`h-11 w-11 rounded-xl flex items-center justify-center bg-white dark:bg-[#0e1320] border border-slate-100 dark:border-slate-800 shadow-xs ${statusDetails.textColor}`}>
+                <div className={`h-11 w-11 rounded-xl flex items-center justify-center bg-white dark:bg-ink-900 border border-slate-100 dark:border-slate-800 shadow-xs ${statusDetails.textColor}`}>
                   <StatusIcon className="h-6 w-6" />
                 </div>
                 <div>
@@ -191,7 +191,7 @@ export default function GatewayConsole({
 
             {/* QR Code Display */}
             {gateway.status === 'qr_ready' && gateway.qr_code && (
-              <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-2xl">
+              <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800 rounded-2xl">
                 <div className="bg-white p-5 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xs">
                   <img 
                     src={gateway.qr_code} 
@@ -263,7 +263,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_host}
                   onChange={(e) => setSmtp({ ...smtp, smtp_host: e.target.value })}
                   placeholder="smtp.gmail.com / smtp.mailgun.org"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
 
@@ -276,7 +276,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_port}
                   onChange={(e) => setSmtp({ ...smtp, smtp_port: e.target.value })}
                   placeholder="587 / 465"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_user}
                   onChange={(e) => setSmtp({ ...smtp, smtp_user: e.target.value })}
                   placeholder="user@gmail.com"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
 
@@ -304,7 +304,7 @@ export default function GatewayConsole({
                   value={smtp.smtp_pass}
                   onChange={(e) => setSmtp({ ...smtp, smtp_pass: e.target.value })}
                   placeholder="••••••••••••••••"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
             </div>
@@ -318,7 +318,7 @@ export default function GatewayConsole({
                   value={smtp.sender_name}
                   onChange={(e) => setSmtp({ ...smtp, sender_name: e.target.value })}
                   placeholder="ordinary CRM"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
 
@@ -331,7 +331,7 @@ export default function GatewayConsole({
                   value={smtp.sender_email}
                   onChange={(e) => setSmtp({ ...smtp, sender_email: e.target.value })}
                   placeholder="outreach@yourdomain.com"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
             </div>
@@ -343,7 +343,7 @@ export default function GatewayConsole({
                 type="checkbox"
                 checked={smtp.smtp_secure}
                 onChange={(e) => setSmtp({ ...smtp, smtp_secure: e.target.checked })}
-                className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
+                className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:bg-ink-900 dark:border-slate-800"
               />
               <label htmlFor="smtp_secure" className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase cursor-pointer select-none">
                 Use Secure SSL/TLS (Required for Port 465, disable for Port 587 STARTTLS)
@@ -369,13 +369,13 @@ export default function GatewayConsole({
                   value={testRecipient}
                   onChange={(e) => setTestRecipient(e.target.value)}
                   disabled={smtpTesting}
-                  className="px-3 py-2 max-w-[200px] border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="px-3 py-2 max-w-[200px] border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
                 <button
                   type="button"
                   onClick={() => onTestSmtp(testRecipient)}
                   disabled={smtpSaving || smtpTesting}
-                  className="inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-ink-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{smtpTesting ? 'Testing...' : 'Test Connection'}</span>
@@ -415,7 +415,7 @@ export default function GatewayConsole({
                   value={sheetsSync.webhook_url}
                   onChange={(e) => setSheetsSync({ ...sheetsSync, webhook_url: e.target.value })}
                   placeholder="https://script.google.com/macros/s/.../exec"
-                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 />
               </div>
 
@@ -426,7 +426,7 @@ export default function GatewayConsole({
                   type="checkbox"
                   checked={sheetsSync.enabled}
                   onChange={(e) => setSheetsSync({ ...sheetsSync, enabled: e.target.checked })}
-                  className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 dark:text-indigo-600 focus:ring-indigo-500 dark:bg-[#0e1320] dark:border-slate-800"
+                  className="h-4 w-4 rounded-sm border-slate-300 text-indigo-600 dark:text-indigo-600 focus:ring-indigo-500 dark:bg-ink-900 dark:border-slate-800"
                 />
                 <label htmlFor="sheets_sync_enabled" className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase cursor-pointer select-none">
                   Enable Real-Time Excel/Sheets Sync Webhook
@@ -448,7 +448,7 @@ export default function GatewayConsole({
                   type="button"
                   onClick={onTestSheetsSync}
                   disabled={sheetsSaving || sheetsTesting}
-                  className="inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-[#0e1320] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-ink-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{sheetsTesting ? 'Testing Webhook...' : 'Test Webhook'}</span>
@@ -490,7 +490,7 @@ export default function GatewayConsole({
                     <span>{copiedScript ? 'Copied!' : 'Copy Code'}</span>
                   </button>
                 </div>
-                <pre className="p-3 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-[10px] max-h-48 overflow-y-auto text-slate-700 dark:text-slate-400 leading-normal">
+                <pre className="p-3 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800 rounded-xl font-mono text-[10px] max-h-48 overflow-y-auto text-slate-700 dark:text-slate-400 leading-normal">
                   {appsScriptCode}
                 </pre>
               </div>

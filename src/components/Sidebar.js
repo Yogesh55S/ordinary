@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -10,16 +9,80 @@ import {
   FileText,
   Calendar,
   Settings,
-  Menu,
   X,
-  MessageSquare,
   Sun,
   Moon,
   History,
   MapPin,
   Briefcase,
   Truck,
+  LayoutGrid,
 } from 'lucide-react';
+import BrandLogo from './BrandLogo';
+
+const NAV_GROUPS = [
+  {
+    label: 'Outreach',
+    links: [
+      { name: 'Dashboard', short: 'Home', href: '/', icon: LayoutDashboard },
+      { name: 'Clients', short: 'Clients', href: '/clients', icon: Users },
+      { name: 'Prospect Finder', short: 'Prospects', href: '/prospect', icon: MapPin },
+      { name: 'Templates', short: 'Templates', href: '/templates', icon: FileText },
+      { name: 'Schedules', short: 'Schedules', href: '/schedules', icon: Calendar },
+      { name: 'History', short: 'History', href: '/history', icon: History },
+    ],
+  },
+  {
+    label: 'Tools',
+    links: [
+      { name: 'Job Applications', short: 'Jobs', href: '/job-applications', icon: Briefcase },
+      { name: 'Delivery Estimator', short: 'Delivery', href: '/delivery', icon: Truck },
+    ],
+  },
+  {
+    label: 'System',
+    links: [{ name: 'WhatsApp Link', short: 'WhatsApp', href: '/settings', icon: Settings }],
+  },
+];
+
+const ALL_LINKS = NAV_GROUPS.flatMap((group) => group.links);
+
+// Most-used destinations get a permanent slot in the mobile tab bar.
+const PRIMARY_MOBILE_HREFS = ['/', '/clients', '/schedules', '/job-applications'];
+const PRIMARY_MOBILE_LINKS = PRIMARY_MOBILE_HREFS.map((href) => ALL_LINKS.find((link) => link.href === href));
+
+function isLinkActive(pathname, href) {
+  return pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+}
+
+function ThemeToggle({ theme, onToggle, compact = false }) {
+  const Icon = theme === 'dark' ? Sun : Moon;
+  if (compact) {
+    return (
+      <button
+        type="button"
+        onClick={onToggle}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 dark:text-slate-300 hover:bg-mist/50 dark:hover:bg-white/5 transition-colors"
+        aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+      >
+        <Icon className="h-5 w-5" />
+      </button>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-mist/40 dark:hover:bg-white/5 rounded-xl transition-colors border border-mist dark:border-line"
+    >
+      <span className="flex items-center gap-2">
+        <Icon className="h-4 w-4 text-brand" />
+        <span>{theme === 'dark' ? 'Light theme' : 'Dark theme'}</span>
+      </span>
+      <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Toggle</span>
+    </button>
+  );
+}
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -66,181 +129,197 @@ export default function Sidebar() {
     }
   };
 
-  const links = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Clients', href: '/clients', icon: Users },
-    { name: 'Prospect Finder', href: '/prospect', icon: MapPin },
-    { name: 'Templates', href: '/templates', icon: FileText },
-    { name: 'Schedules', href: '/schedules', icon: Calendar },
-    { name: 'Job Applications', href: '/job-applications', icon: Briefcase },
-    { name: 'Delivery Estimator', href: '/delivery', icon: Truck },
-    { name: 'History', href: '/history', icon: History },
-    { name: 'WhatsApp Link', href: '/settings', icon: Settings },
-  ];
+  const activeLink = ALL_LINKS.find((link) => isLinkActive(pathname, link.href));
+  const isSecondaryActive = activeLink && !PRIMARY_MOBILE_HREFS.includes(activeLink.href);
 
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="flex items-center justify-between bg-white dark:bg-black px-4 py-3.5 border-b border-[#CBDDE9] dark:border-[#2A72A1]/30 md:hidden transition-colors duration-200">
-        <div className="flex items-center space-x-2">
-          <Image
-            src="/icon.png"
-            alt="ordinary Logo"
-            width={32}
-            height={32}
-            className="rounded-lg object-contain shadow-sm border border-[#CBDDE9]/50"
-          />
-          <span className="font-bold text-lg text-black dark:text-white tracking-tight">ordinary</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={toggleTheme}
-            className="text-[#2A72A1] dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25 rounded-lg p-1.5 focus:outline-none transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="h-5 w-5 text-[#CBDDE9]" /> : <Moon className="h-5 w-5 text-[#2A72A1]" />}
-          </button>
-          <button 
-            onClick={() => setIsOpen(true)}
-            className="text-black dark:text-white hover:bg-[#CBDDE9]/25 rounded-lg p-1.5 focus:outline-none transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
+      <header
+        className="sticky top-0 z-40 flex items-center justify-between gap-3 px-4 py-2 md:hidden bg-canvas/85 dark:bg-ink-950/85 backdrop-blur-lg border-b border-mist/70 dark:border-line"
+        style={{ paddingTop: 'calc(0.5rem + env(safe-area-inset-top))' }}
+      >
+        <Link href="/" aria-label="ordinary home" className="flex items-center">
+          <BrandLogo width={78} priority />
+        </Link>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} compact />
+      </header>
 
-      {/* Mobile Sidebar Drawer Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
-          {/* Backdrop overlay */}
-          <div 
-            onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300"
-          ></div>
-
-          {/* Drawer content */}
-          <div className="relative flex flex-col w-72 max-w-xs bg-white dark:bg-black h-full shadow-2xl transition-transform duration-300 ease-in-out border-r border-[#CBDDE9] dark:border-[#2A72A1]/30">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#CBDDE9] dark:border-[#2A72A1]/30">
-              <div className="flex items-center space-x-2">
-                <Image
-                  src="/icon.png"
-                  alt="ordinary Logo"
-                  width={32}
-                  height={32}
-                  className="rounded-lg object-contain shadow-sm border border-[#CBDDE9]/50"
-                />
-                <span className="font-bold text-lg text-black dark:text-white tracking-tight">ordinary</span>
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                ref={closeButtonRef}
-                className="text-black dark:text-white hover:bg-[#CBDDE9]/25 rounded-lg p-1.5 focus:outline-none transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-              {links.map((link) => {
-                const IconComponent = link.icon;
-                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                      isActive 
-                        ? 'bg-[#2A72A1] text-white font-bold shadow-sm' 
-                        : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25 hover:text-[#2A72A1]'
+      {/* Mobile Bottom Tab Bar */}
+      <nav
+        aria-label="Primary"
+        className="fixed inset-x-0 bottom-0 z-40 md:hidden bg-white/92 dark:bg-ink-900/92 backdrop-blur-lg border-t border-mist dark:border-line"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <ul className="grid grid-cols-5">
+          {PRIMARY_MOBILE_LINKS.map((link) => {
+            const IconComponent = link.icon;
+            const isActive = isLinkActive(pathname, link.href);
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors ${
+                    isActive ? 'text-brand' : 'text-slate-500 dark:text-slate-400'
+                  }`}
+                >
+                  <span
+                    className={`flex h-7 w-12 items-center justify-center rounded-full transition-colors ${
+                      isActive ? 'bg-brand/12 dark:bg-brand/20' : ''
                     }`}
                   >
-                    <IconComponent className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-[#2A72A1]'}`} />
-                    <span>{link.name}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="p-4 border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 space-y-3">
-              <button
-                onClick={toggleTheme}
-                className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-black dark:text-white hover:bg-[#CBDDE9]/25 rounded-xl transition-all border border-[#CBDDE9] dark:border-[#2A72A1]/40"
+                    <IconComponent className="h-5 w-5" strokeWidth={isActive ? 2.4 : 2} />
+                  </span>
+                  <span>{link.short}</span>
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={isOpen}
+              className={`flex h-16 w-full flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors ${
+                isSecondaryActive ? 'text-brand' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <span
+                className={`flex h-7 w-12 items-center justify-center rounded-full ${
+                  isSecondaryActive ? 'bg-brand/12 dark:bg-brand/20' : ''
+                }`}
               >
-                <span className="flex items-center space-x-2">
-                  {theme === 'dark' ? <Sun className="h-4 w-4 text-[#CBDDE9]" /> : <Moon className="h-4 w-4 text-[#2A72A1]" />}
-                  <span>{theme === 'dark' ? 'Light Theme' : 'Dark Theme'}</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold text-[#2A72A1] dark:text-[#CBDDE9]">Toggle</span>
-              </button>
+                <LayoutGrid className="h-5 w-5" />
+              </span>
+              <span>More</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-              <div className="flex items-center space-x-2 px-3 py-2.5 bg-[#CBDDE9]/30 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-xl">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2A72A1] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2A72A1]"></span>
-                </span>
-                <span className="text-xs font-bold text-[#2A72A1] dark:text-[#CBDDE9] uppercase tracking-wider">Active Session</span>
+      {/* Mobile "More" Sheet */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" role="dialog" aria-modal="true" aria-label="All sections">
+          <div onClick={() => setIsOpen(false)} className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+
+          <div
+            className="relative w-full max-h-[85dvh] overflow-y-auto rounded-t-3xl bg-canvas dark:bg-ink-900 shadow-2xl border-t border-mist dark:border-line"
+            style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
+          >
+            <div className="sticky top-0 bg-canvas dark:bg-ink-900 pt-2.5 px-5 pb-3">
+              <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-300 dark:bg-slate-700" />
+              <div className="flex items-center justify-between">
+                <BrandLogo width={86} />
+                <button
+                  onClick={() => setIsOpen(false)}
+                  ref={closeButtonRef}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-600 dark:text-slate-300 hover:bg-mist/50 dark:hover:bg-white/5"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
+            </div>
+
+            <div className="px-5 space-y-5">
+              {NAV_GROUPS.map((group) => (
+                <section key={group.label}>
+                  <h2 className="mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">{group.label}</h2>
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {group.links.map((link) => {
+                      const IconComponent = link.icon;
+                      const isActive = isLinkActive(pathname, link.href);
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          aria-current={isActive ? 'page' : undefined}
+                          className={`flex flex-col items-center justify-center gap-2 rounded-2xl px-2 py-3.5 text-center text-xs font-semibold transition-colors border ${
+                            isActive
+                              ? 'bg-brand text-white border-brand'
+                              : 'bg-white dark:bg-ink-800 text-slate-700 dark:text-slate-200 border-mist dark:border-line active:bg-mist/40'
+                          }`}
+                        >
+                          <IconComponent className={`h-5 w-5 ${isActive ? 'text-white' : 'text-brand'}`} />
+                          <span className="leading-tight">{link.name}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
+              <ThemeToggle theme={theme} onToggle={toggleTheme} />
             </div>
           </div>
         </div>
       )}
 
-      {/* Desktop Persistent Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-black border-r border-[#CBDDE9] dark:border-[#2A72A1]/30 h-screen sticky top-0 transition-colors duration-200">
-        <div className="flex items-center space-x-2.5 px-6 py-5 border-b border-[#CBDDE9] dark:border-[#2A72A1]/30">
-          <Image
-            src="/icon.png"
-            alt="ordinary Logo"
-            width={36}
-            height={36}
-            className="rounded-xl object-contain shadow-sm border border-[#CBDDE9]/50"
-          />
-          <span className="font-bold text-xl text-black dark:text-white tracking-tight">ordinary</span>
-        </div>
+      {/*
+        Desktop Persistent Sidebar
+        - md → xl (tablets / small laptops): compact 76px icon rail so tables keep their width
+        - xl and up: full sidebar with labels and grouped sections
+      */}
+      <aside className="hidden md:flex flex-col w-[76px] xl:w-64 shrink-0 bg-white dark:bg-ink-900 border-r border-mist dark:border-line h-screen sticky top-0 transition-[width,colors] duration-200">
+        <Link href="/" aria-label="ordinary home" className="flex items-center justify-center xl:justify-start px-3 xl:px-6 pt-5 pb-4">
+          <BrandLogo variant="mark" width={40} priority className="xl:hidden" />
+          <span className="hidden xl:block">
+            <BrandLogo width={118} priority />
+          </span>
+        </Link>
 
-        <nav className="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
-          {links.map((link) => {
-            const IconComponent = link.icon;
-            const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive 
-                    ? 'bg-[#2A72A1] text-white font-bold shadow-sm' 
-                    : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25 hover:text-[#2A72A1]'
-                }`}
-              >
-                <IconComponent className={`h-5 w-5 transition-colors ${isActive ? 'text-white' : 'text-[#2A72A1]'}`} />
-                <span>{link.name}</span>
-              </Link>
-            );
-          })}
+        <nav aria-label="Main" className="flex-1 px-3 pb-4 space-y-3 xl:space-y-5 overflow-y-auto no-scrollbar">
+          {NAV_GROUPS.map((group, groupIndex) => (
+            <div key={group.label}>
+              <p className="hidden xl:block px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">{group.label}</p>
+              {groupIndex > 0 && <div className="xl:hidden mx-3 mb-3 border-t border-mist dark:border-line" aria-hidden="true" />}
+              <div className="space-y-1 xl:space-y-0.5">
+                {group.links.map((link) => {
+                  const IconComponent = link.icon;
+                  const isActive = isLinkActive(pathname, link.href);
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      title={link.name}
+                      aria-label={link.name}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`group relative flex items-center justify-center xl:justify-start gap-3 h-11 xl:h-auto px-0 xl:px-3 xl:py-2.5 rounded-xl text-sm transition-colors ${
+                        isActive
+                          ? 'bg-brand/10 dark:bg-brand/15 text-brand font-bold'
+                          : 'font-medium text-slate-600 dark:text-slate-300 hover:bg-mist/45 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {isActive && <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-brand" aria-hidden="true" />}
+                      <IconComponent
+                        className={`h-5 w-5 xl:h-[18px] xl:w-[18px] shrink-0 transition-colors ${
+                          isActive ? 'text-brand' : 'text-slate-400 group-hover:text-brand'
+                        }`}
+                      />
+                      <span className="hidden xl:inline truncate">{link.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className="p-4 border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 space-y-3">
-          {/* Light/Dark Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-black dark:text-white hover:bg-[#CBDDE9]/25 rounded-xl transition-all border border-[#CBDDE9] dark:border-[#2A72A1]/40"
-          >
-            <span className="flex items-center space-x-2">
-              {theme === 'dark' ? <Sun className="h-4 w-4 text-[#CBDDE9]" /> : <Moon className="h-4 w-4 text-[#2A72A1]" />}
-              <span>{theme === 'dark' ? 'Light Theme' : 'Dark Theme'}</span>
-            </span>
-            <span className="text-[10px] uppercase font-bold text-[#2A72A1] dark:text-[#CBDDE9]">Toggle</span>
-          </button>
-
-          <div className="flex items-center space-x-2.5 px-4 py-3 bg-[#CBDDE9]/30 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-xl">
+        <div className="p-3 border-t border-mist dark:border-line space-y-2.5">
+          <div className="flex justify-center xl:hidden">
+            <ThemeToggle theme={theme} onToggle={toggleTheme} compact />
+          </div>
+          <div className="hidden xl:block">
+            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          </div>
+          <div className="flex items-center justify-center xl:justify-start gap-2 px-3.5 py-2" title="Active Session">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2A72A1] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2A72A1]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
             </span>
-            <span className="text-xs font-bold text-[#2A72A1] dark:text-[#CBDDE9] uppercase tracking-wider">Active Session</span>
+            <span className="hidden xl:inline text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Active Session</span>
           </div>
         </div>
       </aside>

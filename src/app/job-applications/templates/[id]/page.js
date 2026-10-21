@@ -200,39 +200,39 @@ export default function TemplateEditorPage() {
   };
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-[1600px] mx-auto w-full">
+    <div className="flex-1 px-4 py-5 sm:p-6 md:p-8 space-y-6 max-w-[1600px] mx-auto w-full">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div className="min-w-0 flex-1">
           <Link
             href="/job-applications/templates"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-black/70 dark:text-[#CBDDE9] hover:text-[#2A72A1] mb-3"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-black/70 dark:text-mist hover:text-brand mb-3"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to Templates</span>
           </Link>
 
-          <label className="block text-[11px] font-bold uppercase tracking-wide text-black/70 dark:text-[#CBDDE9] mb-1.5">
+          <label className="block text-[11px] font-bold uppercase tracking-wide text-black/70 dark:text-mist mb-1.5">
             Template name
           </label>
           <div className="relative w-full max-w-md">
-            <Pencil className="h-4 w-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#2A72A1] pointer-events-none" />
+            <Pencil className="h-4 w-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-brand pointer-events-none" />
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Template name"
-              className="w-full text-lg font-bold tracking-tight text-black dark:text-white bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-xl pl-10 pr-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#2A72A1]/30 focus:border-[#2A72A1] transition-all"
+              className="w-full text-lg font-bold tracking-tight text-black dark:text-white bg-white dark:bg-black border border-mist dark:border-line rounded-xl pl-10 pr-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-all"
             />
           </div>
 
           <div className="flex items-center gap-2 mt-2.5">
             {isDefault && (
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#2A72A1] text-white">
+              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-brand text-white">
                 <Star className="h-2.5 w-2.5 fill-current" />
                 <span>Default</span>
               </span>
             )}
-            <p className="text-xs text-black/70 dark:text-[#CBDDE9]">
+            <p className="text-xs text-black/70 dark:text-mist">
               {isDefault ? 'Used by the bulk-queue sending loop.' : 'Edit the HTML and plain-text versions, then preview them live before saving.'}
             </p>
           </div>
@@ -243,7 +243,7 @@ export default function TemplateEditorPage() {
             type="button"
             onClick={handleResetToDefault}
             disabled={resetting || loading}
-            className="inline-flex items-center space-x-1.5 px-3.5 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-black text-black dark:text-white border border-[#CBDDE9] dark:border-[#2A72A1]/40 hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+            className="inline-flex items-center space-x-1.5 px-3.5 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-black text-black dark:text-white border border-mist dark:border-line hover:bg-mist/25 transition-all disabled:opacity-50"
           >
             {resetting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
             <span>Reset to Shipped Default</span>
@@ -252,7 +252,7 @@ export default function TemplateEditorPage() {
             type="button"
             onClick={handleSave}
             disabled={saving || loading}
-            className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white shadow-sm transition-all"
+            className="inline-flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-brand hover:opacity-90 disabled:opacity-60 text-white shadow-sm transition-all"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             <span>{saving ? 'Saving...' : 'Save Template'}</span>
@@ -261,18 +261,18 @@ export default function TemplateEditorPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-3 p-4 bg-[#CBDDE9]/30 dark:bg-black border border-black dark:border-white rounded-xl text-black dark:text-white">
-          <AlertCircle className="h-5 w-5 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-3 p-4 bg-brand/5 dark:bg-brand/10 border border-brand/30 dark:border-line rounded-xl text-black dark:text-white">
+          <AlertCircle className="h-5 w-5 text-brand shrink-0" />
           <span className="text-sm font-medium">{error}</span>
         </div>
       )}
 
       {saveMessage && (
-        <div className="flex items-center space-x-3 p-4 bg-[#CBDDE9]/40 dark:bg-black border border-[#2A72A1] rounded-xl text-black dark:text-white">
-          <CheckCircle2 className="h-5 w-5 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-3 p-4 bg-mist/40 dark:bg-black border border-brand rounded-xl text-black dark:text-white">
+          <CheckCircle2 className="h-5 w-5 text-brand shrink-0" />
           <span className="text-sm font-medium">{saveMessage}</span>
           {updatedAt && (
-            <span className="text-xs text-black/60 dark:text-[#CBDDE9]/70">
+            <span className="text-xs text-black/60 dark:text-mist/70">
               ({new Date(updatedAt).toLocaleString()})
             </span>
           )}
@@ -280,22 +280,22 @@ export default function TemplateEditorPage() {
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-[#2A72A1]">
+        <div className="flex items-center justify-center py-24 text-brand">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
           <span className="text-sm font-medium">Loading template...</span>
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
           {/* Editor */}
-          <div className="bg-white dark:bg-black rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs overflow-hidden">
-            <div className="flex items-center border-b border-[#CBDDE9] dark:border-[#2A72A1]/30">
+          <div className="bg-white dark:bg-black rounded-2xl border border-mist dark:border-line shadow-xs overflow-hidden">
+            <div className="flex items-center border-b border-mist dark:border-line">
               <button
                 type="button"
                 onClick={() => setActiveTab('html')}
                 className={`flex items-center space-x-1.5 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
                   activeTab === 'html'
-                    ? 'border-[#2A72A1] text-[#2A72A1]'
-                    : 'border-transparent text-black dark:text-[#CBDDE9] hover:text-[#2A72A1]'
+                    ? 'border-brand text-brand'
+                    : 'border-transparent text-black dark:text-mist hover:text-brand'
                 }`}
               >
                 <Code2 className="h-4 w-4" />
@@ -306,8 +306,8 @@ export default function TemplateEditorPage() {
                 onClick={() => setActiveTab('text')}
                 className={`flex items-center space-x-1.5 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
                   activeTab === 'text'
-                    ? 'border-[#2A72A1] text-[#2A72A1]'
-                    : 'border-transparent text-black dark:text-[#CBDDE9] hover:text-[#2A72A1]'
+                    ? 'border-brand text-brand'
+                    : 'border-transparent text-black dark:text-mist hover:text-brand'
                 }`}
               >
                 <FileText className="h-4 w-4" />
@@ -318,8 +318,8 @@ export default function TemplateEditorPage() {
                 onClick={() => setActiveTab('tokens')}
                 className={`flex items-center space-x-1.5 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
                   activeTab === 'tokens'
-                    ? 'border-[#2A72A1] text-[#2A72A1]'
-                    : 'border-transparent text-black dark:text-[#CBDDE9] hover:text-[#2A72A1]'
+                    ? 'border-brand text-brand'
+                    : 'border-transparent text-black dark:text-mist hover:text-brand'
                 }`}
               >
                 <Info className="h-4 w-4" />
@@ -332,7 +332,7 @@ export default function TemplateEditorPage() {
                 value={htmlContent}
                 onChange={(e) => setHtmlContent(e.target.value)}
                 spellCheck={false}
-                className="w-full h-[560px] p-4 text-xs font-mono leading-relaxed bg-[#CBDDE9]/15 dark:bg-black text-black dark:text-white focus:outline-none resize-none"
+                className="w-full h-[560px] p-4 text-xs font-mono leading-relaxed bg-mist/15 dark:bg-black text-black dark:text-white focus:outline-none resize-none"
                 placeholder="<html>...</html>"
               />
             )}
@@ -342,14 +342,14 @@ export default function TemplateEditorPage() {
                 value={plainTextContent}
                 onChange={(e) => setPlainTextContent(e.target.value)}
                 spellCheck={false}
-                className="w-full h-[560px] p-4 text-sm font-mono leading-relaxed bg-[#CBDDE9]/15 dark:bg-black text-black dark:text-white focus:outline-none resize-none"
+                className="w-full h-[560px] p-4 text-sm font-mono leading-relaxed bg-mist/15 dark:bg-black text-black dark:text-white focus:outline-none resize-none"
                 placeholder="Plain-text fallback for email clients that don't render HTML..."
               />
             )}
 
             {activeTab === 'tokens' && (
               <div className="h-[560px] overflow-y-auto p-5 space-y-3">
-                <p className="text-xs text-black/70 dark:text-[#CBDDE9]">
+                <p className="text-xs text-black/70 dark:text-mist">
                   Use these tokens anywhere in the HTML or plain text — they get replaced with real
                   values when each email is sent.
                 </p>
@@ -357,10 +357,10 @@ export default function TemplateEditorPage() {
                   {TOKEN_REFERENCE.map(({ token, desc }) => (
                     <div
                       key={token}
-                      className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 bg-[#CBDDE9]/15 dark:bg-black"
+                      className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border border-mist dark:border-line bg-mist/15 dark:bg-black"
                     >
-                      <code className="text-xs font-mono font-bold text-[#2A72A1] shrink-0">{token}</code>
-                      <span className="text-[11px] text-black/70 dark:text-[#CBDDE9] text-right">{desc}</span>
+                      <code className="text-xs font-mono font-bold text-brand shrink-0">{token}</code>
+                      <span className="text-[11px] text-black/70 dark:text-mist text-right">{desc}</span>
                     </div>
                   ))}
                 </div>
@@ -369,22 +369,22 @@ export default function TemplateEditorPage() {
           </div>
 
           {/* Live Preview */}
-          <div className="bg-white dark:bg-black rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs overflow-hidden">
-            <div className="flex items-center justify-between flex-wrap gap-2 px-4 py-3 border-b border-[#CBDDE9] dark:border-[#2A72A1]/30 bg-[#CBDDE9]/25 dark:bg-black">
+          <div className="bg-white dark:bg-black rounded-2xl border border-mist dark:border-line shadow-xs overflow-hidden">
+            <div className="flex items-center justify-between flex-wrap gap-2 px-4 py-3 border-b border-mist dark:border-line bg-mist/25 dark:bg-black">
               <div className="flex items-center space-x-1.5">
-                <Eye className="h-4 w-4 text-[#2A72A1]" />
+                <Eye className="h-4 w-4 text-brand" />
                 <span className="text-xs font-bold text-black dark:text-white">Live Preview</span>
-                <span className="text-[11px] text-black/60 dark:text-[#CBDDE9]/70 hidden sm:inline">(sample data — updates as you type)</span>
+                <span className="text-[11px] text-black/60 dark:text-mist/70 hidden sm:inline">(sample data — updates as you type)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-xl p-0.5">
+                <div className="flex items-center bg-white dark:bg-black border border-mist dark:border-line rounded-xl p-0.5">
                   <button
                     type="button"
                     onClick={() => setPreviewTheme('light')}
                     className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-[11px] font-bold transition-all ${
                       previewTheme === 'light'
-                        ? 'bg-[#2A72A1] text-white shadow-sm'
-                        : 'text-black dark:text-[#CBDDE9]'
+                        ? 'bg-brand text-white shadow-sm'
+                        : 'text-black dark:text-mist'
                     }`}
                   >
                     <Sun className="h-3.5 w-3.5" />
@@ -395,8 +395,8 @@ export default function TemplateEditorPage() {
                     onClick={() => setPreviewTheme('dark')}
                     className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-[11px] font-bold transition-all ${
                       previewTheme === 'dark'
-                        ? 'bg-[#2A72A1] text-white shadow-sm'
-                        : 'text-black dark:text-[#CBDDE9]'
+                        ? 'bg-brand text-white shadow-sm'
+                        : 'text-black dark:text-mist'
                     }`}
                   >
                     <Moon className="h-3.5 w-3.5" />
@@ -404,14 +404,14 @@ export default function TemplateEditorPage() {
                   </button>
                 </div>
 
-                <div className="flex items-center bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-xl p-0.5">
+                <div className="flex items-center bg-white dark:bg-black border border-mist dark:border-line rounded-xl p-0.5">
                   <button
                     type="button"
                     onClick={() => setPreviewDevice('desktop')}
                     className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-[11px] font-bold transition-all ${
                       previewDevice === 'desktop'
-                        ? 'bg-[#2A72A1] text-white shadow-sm'
-                        : 'text-black dark:text-[#CBDDE9]'
+                        ? 'bg-brand text-white shadow-sm'
+                        : 'text-black dark:text-mist'
                     }`}
                   >
                     <Monitor className="h-3.5 w-3.5" />
@@ -422,8 +422,8 @@ export default function TemplateEditorPage() {
                     onClick={() => setPreviewDevice('mobile')}
                     className={`flex items-center space-x-1.5 px-3 py-1 rounded-lg text-[11px] font-bold transition-all ${
                       previewDevice === 'mobile'
-                        ? 'bg-[#2A72A1] text-white shadow-sm'
-                        : 'text-black dark:text-[#CBDDE9]'
+                        ? 'bg-brand text-white shadow-sm'
+                        : 'text-black dark:text-mist'
                     }`}
                   >
                     <Smartphone className="h-3.5 w-3.5" />
@@ -432,12 +432,12 @@ export default function TemplateEditorPage() {
                 </div>
               </div>
             </div>
-            <div className={`h-[560px] ${previewTheme === 'dark' ? 'bg-black' : 'bg-[#CBDDE9]/20'} overflow-y-auto flex justify-center py-4 px-4 transition-colors`}>
+            <div className={`h-[560px] ${previewTheme === 'dark' ? 'bg-black' : 'bg-mist/20'} overflow-y-auto flex justify-center py-4 px-4 transition-colors`}>
               <iframe
                 title="Email preview"
                 srcDoc={previewHtml}
                 style={{ width: PREVIEW_WIDTHS[previewDevice] }}
-                className={`h-full shrink-0 border border-[#CBDDE9] dark:border-[#2A72A1]/40 transition-all duration-200 ${
+                className={`h-full shrink-0 border border-mist dark:border-line transition-all duration-200 ${
                   previewTheme === 'dark' ? 'bg-black' : 'bg-white'
                 } ${
                   previewDevice === 'mobile' ? 'rounded-2xl shadow-md' : 'rounded-xl shadow-sm'

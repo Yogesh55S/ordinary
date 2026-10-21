@@ -35,11 +35,11 @@ function formatCost(n) {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function StatCard({ icon: Icon, label, value, sub, accent }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 bg-white dark:bg-black p-5 shadow-sm">
+    <div className="flex flex-col gap-1 rounded-2xl border border-mist dark:border-line bg-white dark:bg-black p-5 shadow-sm">
       <div className={`h-9 w-9 rounded-xl flex items-center justify-center mb-1 ${accent}`}>
         <Icon className="h-5 w-5 text-white" />
       </div>
-      <span className="text-xs font-semibold text-[#2A72A1] dark:text-[#CBDDE9] uppercase tracking-wider">{label}</span>
+      <span className="text-xs font-semibold text-brand dark:text-mist uppercase tracking-wider">{label}</span>
       <span className="text-2xl font-extrabold text-black dark:text-white leading-tight">{value}</span>
       {sub && <span className="text-xs text-black/50 dark:text-white/50">{sub}</span>}
     </div>
@@ -50,26 +50,27 @@ function TimelineStep({ label, minutes, isLast }) {
   return (
     <div className="flex items-start gap-3">
       <div className="flex flex-col items-center shrink-0">
-        <div className="h-3 w-3 rounded-full bg-[#2A72A1] border-2 border-[#CBDDE9] dark:border-[#2A72A1]/50 mt-0.5" />
-        {!isLast && <div className="w-0.5 flex-1 bg-[#CBDDE9] dark:bg-[#2A72A1]/30 min-h-[24px]" />}
+        <div className="h-3 w-3 rounded-full bg-brand border-2 border-mist dark:border-line mt-0.5" />
+        {!isLast && <div className="w-0.5 flex-1 bg-mist dark:bg-brand/30 min-h-[24px]" />}
       </div>
       <div className="pb-5">
         <p className="text-sm font-semibold text-black dark:text-white leading-snug">{label}</p>
-        <p className="text-xs text-[#2A72A1] dark:text-[#CBDDE9] font-bold mt-0.5">{formatMinutes(minutes)}</p>
+        <p className="text-xs text-brand dark:text-mist font-bold mt-0.5">{formatMinutes(minutes)}</p>
       </div>
     </div>
   );
 }
 
 import dynamic from 'next/dynamic';
+import PageHeader from '@/components/PageHeader';
 
 const InteractiveRouteMap = dynamic(
   () => import('@/components/delivery/InteractiveRouteMap'),
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-80 sm:h-96 rounded-2xl bg-[#CBDDE9]/20 dark:bg-[#2A72A1]/10 flex flex-col items-center justify-center gap-2 border border-[#CBDDE9] dark:border-[#2A72A1]/30">
-        <Loader2 className="h-6 w-6 animate-spin text-[#2A72A1]" />
+      <div className="w-full h-80 sm:h-96 rounded-2xl bg-mist/20 dark:bg-brand/10 flex flex-col items-center justify-center gap-2 border border-mist dark:border-line">
+        <Loader2 className="h-6 w-6 animate-spin text-brand" />
         <span className="text-xs font-semibold text-black/50 dark:text-white/50">Loading live road map…</span>
       </div>
     ),
@@ -122,43 +123,37 @@ export default function DeliveryEstimatorPage() {
   };
 
   return (
-    <div className="flex-1 p-5 sm:p-6 md:p-8 space-y-8 max-w-5xl mx-auto w-full">
-
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-black dark:text-white">
-            Delivery Estimator
-          </h1>
-          <p className="text-black/50 dark:text-white/50 mt-1 text-sm">
-            Get real road distance, drive time &amp; delivery cost from the hub to your customer.
-          </p>
-        </div>
-        {result && (
-          <button
-            onClick={handleReset}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 text-[#2A72A1] dark:text-[#CBDDE9] text-sm font-semibold hover:bg-[#CBDDE9]/20 transition-all"
-          >
-            <RotateCcw className="h-4 w-4" />
-            New Estimate
-          </button>
-        )}
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-5xl mx-auto w-full">
+      <PageHeader
+        title="Delivery Estimator"
+        description="Get real road distance, drive time & delivery cost from the hub to your customer."
+        actions={
+          result && (
+            <button
+              onClick={handleReset}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-ink-800 border border-mist dark:border-line text-brand text-sm font-semibold hover:bg-mist/25 dark:hover:bg-ink-700 transition-colors"
+            >
+              <RotateCcw className="h-4 w-4" />
+              <span>New Estimate</span>
+            </button>
+          )
+        }
+      />
 
       {/* Hub pill */}
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#CBDDE9]/40 dark:bg-[#2A72A1]/10 border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-sm">
-        <MapPin className="h-4 w-4 text-[#2A72A1] shrink-0" />
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-mist/40 dark:bg-brand/10 border border-mist dark:border-line text-sm">
+        <MapPin className="h-4 w-4 text-brand shrink-0" />
         <span className="font-semibold text-black dark:text-white">Hub:</span>
         <span className="text-black/60 dark:text-white/60">Vijaynagar Industrial Area, Jaipur</span>
       </div>
 
       {/* Form */}
       {!result && (
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-black rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 p-6 shadow-sm space-y-5">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-black rounded-2xl border border-mist dark:border-line p-6 shadow-sm space-y-5">
           {/* Delivery address */}
           <div className="space-y-1.5">
             <label htmlFor="delivery-address" className="text-sm font-semibold text-black dark:text-white flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-[#2A72A1]" />
+              <MapPin className="h-4 w-4 text-brand" />
               Customer Delivery Address
             </label>
             <input
@@ -168,7 +163,7 @@ export default function DeliveryEstimatorPage() {
               onChange={(e) => setAddress(e.target.value)}
               placeholder="e.g. Vaishali Nagar, Jaipur, Rajasthan"
               required
-              className="w-full px-4 py-3 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#2A72A1]/30 focus:border-[#2A72A1] transition-colors"
+              className="w-full px-4 py-3 rounded-xl border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-colors"
             />
           </div>
 
@@ -177,7 +172,7 @@ export default function DeliveryEstimatorPage() {
             {/* Material dropdown */}
             <div className="space-y-1.5">
               <label htmlFor="material-select" className="text-sm font-semibold text-black dark:text-white flex items-center gap-1.5">
-                <Package className="h-4 w-4 text-[#2A72A1]" />
+                <Package className="h-4 w-4 text-brand" />
                 Material
               </label>
               <div className="relative">
@@ -185,20 +180,20 @@ export default function DeliveryEstimatorPage() {
                   id="material-select"
                   value={materialId}
                   onChange={(e) => setMaterialId(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2A72A1]/30 focus:border-[#2A72A1] transition-colors"
+                  className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-colors"
                 >
                   {MATERIALS.map((m) => (
                     <option key={m.id} value={m.id}>{m.name}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#2A72A1] pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand pointer-events-none" />
               </div>
             </div>
 
             {/* Quantity */}
             <div className="space-y-1.5">
               <label htmlFor="quantity-input" className="text-sm font-semibold text-black dark:text-white flex items-center gap-1.5">
-                <Weight className="h-4 w-4 text-[#2A72A1]" />
+                <Weight className="h-4 w-4 text-brand" />
                 Quantity
                 {selectedMaterial && (
                   <span className="ml-1 text-xs font-normal text-black/40 dark:text-white/40">
@@ -215,7 +210,7 @@ export default function DeliveryEstimatorPage() {
                 onChange={(e) => setQuantity(e.target.value)}
                 placeholder="e.g. 10"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#2A72A1]/30 focus:border-[#2A72A1] transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-colors"
               />
             </div>
           </div>
@@ -223,14 +218,14 @@ export default function DeliveryEstimatorPage() {
           {/* Restrict heavy vehicle */}
           <label
             htmlFor="restrict-heavy"
-            className="flex items-start gap-3 cursor-pointer p-3.5 rounded-xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 hover:bg-[#CBDDE9]/10 transition-colors"
+            className="flex items-start gap-3 cursor-pointer p-3.5 rounded-xl border border-mist dark:border-line hover:bg-mist/10 transition-colors"
           >
             <input
               id="restrict-heavy"
               type="checkbox"
               checked={restrictHeavy}
               onChange={(e) => setRestrictHeavy(e.target.checked)}
-              className="mt-0.5 h-4 w-4 accent-[#2A72A1]"
+              className="mt-0.5 h-4 w-4 accent-brand"
             />
             <div>
               <p className="text-sm font-semibold text-black dark:text-white leading-snug">
@@ -244,8 +239,8 @@ export default function DeliveryEstimatorPage() {
 
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-[#CBDDE9]/20 dark:bg-[#2A72A1]/10 border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-black dark:text-white">
-              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-[#2A72A1]" />
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-mist/20 dark:bg-brand/10 border border-mist dark:border-line text-black dark:text-white">
+              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-brand" />
               <span className="text-sm font-medium">{error}</span>
             </div>
           )}
@@ -254,7 +249,7 @@ export default function DeliveryEstimatorPage() {
           <button
             type="submit"
             disabled={loading || !address.trim() || !quantity}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-[#2A72A1] hover:bg-[#1B5F8E] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-sm transition-all"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-brand hover:bg-brand-strong disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-sm transition-all"
           >
             {loading ? (
               <>
@@ -291,10 +286,10 @@ export default function DeliveryEstimatorPage() {
           {/* Address + route summary */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
             <div className="flex items-center gap-1.5 font-semibold text-black dark:text-white">
-              <MapPin className="h-4 w-4 text-[#2A72A1] shrink-0" />
+              <MapPin className="h-4 w-4 text-brand shrink-0" />
               <span className="text-black/50 dark:text-white/50">Vijaynagar Hub</span>
             </div>
-            <ArrowRight className="h-4 w-4 text-[#2A72A1] hidden sm:block shrink-0" />
+            <ArrowRight className="h-4 w-4 text-brand hidden sm:block shrink-0" />
             <div className="flex items-center gap-1.5 sm:ml-0 ml-6 text-black dark:text-white font-medium truncate">
               <span>{result.address}</span>
             </div>
@@ -307,28 +302,28 @@ export default function DeliveryEstimatorPage() {
               label="Distance"
               value={`${result.distanceKm} km`}
               sub="Real road distance"
-              accent="bg-[#2A72A1]"
+              accent="bg-brand"
             />
             <StatCard
               icon={Clock}
               label="Total Time"
               value={formatMinutes(result.totalMinutes)}
               sub={`${result.trips > 1 ? result.trips + ' trips' : '1 trip'}`}
-              accent="bg-[#2A72A1]"
+              accent="bg-brand"
             />
             <StatCard
               icon={Truck}
               label="Vehicle"
               value={result.trips > 1 ? `×${result.trips}` : '1 trip'}
               sub={result.vehicle}
-              accent="bg-[#2A72A1]"
+              accent="bg-brand"
             />
             <StatCard
               icon={IndianRupee}
               label="Total Cost"
               value={formatCost(result.totalCost)}
               sub="All trips incl."
-              accent="bg-[#2A72A1]"
+              accent="bg-brand"
             />
           </div>
 
@@ -336,9 +331,9 @@ export default function DeliveryEstimatorPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             {/* Timeline breakdown */}
-            <div className="bg-white dark:bg-black rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 p-6 shadow-sm">
+            <div className="bg-white dark:bg-black rounded-2xl border border-mist dark:border-line p-6 shadow-sm">
               <h2 className="text-sm font-bold text-black dark:text-white mb-4 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-[#2A72A1]" />
+                <Clock className="h-4 w-4 text-brand" />
                 Time Breakdown
               </h2>
               <TimelineStep label="Hub processing &amp; order prep" minutes={result.hubProcessingMin} />
@@ -354,16 +349,16 @@ export default function DeliveryEstimatorPage() {
                   minutes={(result.loadMin + result.driveMinutes) * (result.trips - 1)}
                 />
               )}
-              <div className="mt-2 pt-3 border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 flex items-center justify-between">
+              <div className="mt-2 pt-3 border-t border-mist dark:border-line flex items-center justify-between">
                 <span className="text-xs font-bold text-black/50 dark:text-white/40 uppercase tracking-wider">Total estimated time</span>
-                <span className="text-sm font-extrabold text-[#2A72A1]">{formatMinutes(result.totalMinutes)}</span>
+                <span className="text-sm font-extrabold text-brand">{formatMinutes(result.totalMinutes)}</span>
               </div>
             </div>
 
             {/* Cost breakdown */}
-            <div className="bg-white dark:bg-black rounded-2xl border border-[#CBDDE9] dark:border-[#2A72A1]/30 p-6 shadow-sm">
+            <div className="bg-white dark:bg-black rounded-2xl border border-mist dark:border-line p-6 shadow-sm">
               <h2 className="text-sm font-bold text-black dark:text-white mb-4 flex items-center gap-2">
-                <IndianRupee className="h-4 w-4 text-[#2A72A1]" />
+                <IndianRupee className="h-4 w-4 text-brand" />
                 Cost Breakdown
               </h2>
 
@@ -385,7 +380,7 @@ export default function DeliveryEstimatorPage() {
                   <span className="font-semibold text-black dark:text-white">{result.trips}</span>
                 </div>
 
-                <div className="border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 pt-3 space-y-2">
+                <div className="border-t border-mist dark:border-line pt-3 space-y-2">
                   <div className="flex justify-between text-xs text-black/50 dark:text-white/40">
                     <span>Distance charge ({result.distanceKm} km / trip)</span>
                     <span>per trip</span>
@@ -396,17 +391,17 @@ export default function DeliveryEstimatorPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-[#CBDDE9] dark:border-[#2A72A1]/30 pt-3 flex items-center justify-between">
+                <div className="border-t border-mist dark:border-line pt-3 flex items-center justify-between">
                   <span className="font-bold text-black dark:text-white">Total charge</span>
-                  <span className="text-xl font-extrabold text-[#2A72A1]">{formatCost(result.totalCost)}</span>
+                  <span className="text-xl font-extrabold text-brand">{formatCost(result.totalCost)}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Info note */}
-          <div className="flex items-start gap-2.5 p-4 rounded-xl bg-[#CBDDE9]/20 dark:bg-[#2A72A1]/10 border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-xs text-black/60 dark:text-white/50">
-            <Info className="h-4 w-4 text-[#2A72A1] shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-4 rounded-xl bg-mist/20 dark:bg-brand/10 border border-mist dark:border-line text-xs text-black/60 dark:text-white/50">
+            <Info className="h-4 w-4 text-brand shrink-0 mt-0.5" />
             <span>
               Drive time uses real road distance via Google Maps (traffic-aware). Heavy trucks are slower than car routing —
               a speed multiplier is applied per vehicle class. All charges are estimates; actual billing may vary.

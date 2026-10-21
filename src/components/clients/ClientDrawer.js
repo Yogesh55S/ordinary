@@ -18,7 +18,7 @@ export default function ClientDrawer({
       ></div>
 
       {/* Panel Container */}
-      <div className="relative w-screen max-w-md bg-white dark:bg-[#0e1320] shadow-2xl flex flex-col h-full border-l border-slate-200 dark:border-slate-800 animate-slide-in">
+      <div className="relative w-screen max-w-md bg-white dark:bg-ink-900 shadow-2xl flex flex-col h-full border-l border-slate-200 dark:border-slate-800 animate-slide-in">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <div className="flex items-center space-x-2">

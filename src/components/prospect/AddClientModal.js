@@ -46,7 +46,7 @@ const inputClass = (hasIcon, hasError) =>
     hasError
       ? 'border-rose-400 dark:border-rose-500'
       : 'border-slate-200 dark:border-slate-700'
-  } bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors`;
+  } bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors`;
 
 export default function AddClientModal({ place, onClose, onSuccess }) {
   const [form, setForm] = useState(null);
@@ -112,10 +112,10 @@ export default function AddClientModal({ place, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-lg max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-[#111625] z-10">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-ink-800 z-10">
           <div className="flex items-center space-x-3">
             <div className="h-9 w-9 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center">
               <UserPlus className="h-4.5 w-4.5" />
@@ -183,7 +183,7 @@ export default function AddClientModal({ place, onClose, onSuccess }) {
             />
           </InputField>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <InputField label="City" icon={MapPin}>
               <input
                 type="text"
@@ -221,7 +221,7 @@ export default function AddClientModal({ place, onClose, onSuccess }) {
               value={form.notes}
               onChange={set('notes')}
               rows={3}
-              className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 resize-none transition-colors"
+              className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 resize-none transition-colors"
             />
           </div>
 

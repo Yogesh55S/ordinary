@@ -13,7 +13,7 @@ export default function ClientModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div 
         onClick={onClose}
@@ -21,7 +21,7 @@ export default function ClientModal({
       ></div>
       
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[90vh] overflow-hidden transition-all scale-100 border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 dark:text-slate-200">
@@ -45,7 +45,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.business_name}
                 onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] ${
+                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900 ${
                   formErrors.business_name 
                     ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
@@ -64,7 +64,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.owner_name}
                 onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 placeholder="John Doe"
               />
             </div>
@@ -76,7 +76,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.phone_number}
                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] ${
+                className={`w-full px-3.5 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900 ${
                   formErrors.phone_number 
                     ? 'border-rose-300 bg-rose-50/30 dark:border-rose-900/50 dark:bg-rose-950/10' 
                     : 'border-slate-200 dark:border-slate-800'
@@ -95,7 +95,7 @@ export default function ClientModal({
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 placeholder="john@acme.com"
               />
             </div>
@@ -107,7 +107,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.website}
                 onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 placeholder="https://acme.com"
               />
             </div>
@@ -119,7 +119,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 placeholder="Mumbai"
               />
             </div>
@@ -131,7 +131,7 @@ export default function ClientModal({
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-805 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-805 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
                 placeholder="Retail / Tech / Agency"
                 list="categories-datalist"
               />
@@ -146,13 +146,13 @@ export default function ClientModal({
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-805 dark:text-slate-300"
+                className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-805 dark:text-slate-300"
               >
-                <option value="New" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">New</option>
-                <option value="Lead" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Lead</option>
-                <option value="Active" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Active</option>
-                <option value="Inactive" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Inactive</option>
-                <option value="Archived" className="dark:bg-[#111625] text-slate-800 dark:text-slate-200">Archived</option>
+                <option value="New" className="dark:bg-ink-800 text-slate-800 dark:text-slate-200">New</option>
+                <option value="Lead" className="dark:bg-ink-800 text-slate-800 dark:text-slate-200">Lead</option>
+                <option value="Active" className="dark:bg-ink-800 text-slate-800 dark:text-slate-200">Active</option>
+                <option value="Inactive" className="dark:bg-ink-800 text-slate-800 dark:text-slate-200">Inactive</option>
+                <option value="Archived" className="dark:bg-ink-800 text-slate-800 dark:text-slate-200">Archived</option>
               </select>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function ClientModal({
               type="text"
               value={formData.tagsString}
               onChange={(e) => setFormData({ ...formData, tagsString: e.target.value })}
-              className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320]"
+              className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900"
               placeholder="VIP, Retail, Local, June Out"
             />
           </div>
@@ -176,13 +176,13 @@ export default function ClientModal({
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={3}
-              className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-[#0e1320] resize-y"
+              className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 dark:bg-ink-900 resize-y"
               placeholder="Details regarding pricing conversation, dynamic message tags, specific scheduler requests..."
             />
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-[#111625] transition-colors">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-ink-800 transition-colors">
             <button
               type="button"
               onClick={onClose}

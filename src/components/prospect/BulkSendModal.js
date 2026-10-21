@@ -123,8 +123,8 @@ export default function BulkSendModal({ prospects, clientStatusMap, onClose, onQ
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-2xl w-full max-w-lg max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 shrink-0">
           <div className="flex items-center space-x-3">
@@ -192,7 +192,7 @@ export default function BulkSendModal({ prospects, clientStatusMap, onClose, onQ
               value={templateId}
               onChange={(e) => setTemplateId(e.target.value)}
               disabled={loadingTemplates}
-              className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0e1320] text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
+              className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-ink-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
             >
               <option value="">{loadingTemplates ? 'Loading templates...' : '-- Select a template --'}</option>
               {templates.map((tpl) => (
@@ -205,7 +205,7 @@ export default function BulkSendModal({ prospects, clientStatusMap, onClose, onQ
           </div>
 
           {selectedTemplate && (
-            <div className="p-3.5 bg-slate-50 dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl">
+            <div className="p-3.5 bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-slate-800 rounded-xl">
               <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1.5">Preview</p>
               <p className="text-xs text-slate-700 dark:text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">{selectedTemplate.message_content}</p>
             </div>

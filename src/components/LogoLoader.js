@@ -1,58 +1,42 @@
 'use client';
 
-import Image from 'next/image';
+import BrandLogo from './BrandLogo';
 
-export default function LogoLoader({ 
-  fullScreen = false, 
-  size = 'md', 
-  text = 'Loading...' 
+export default function LogoLoader({
+  fullScreen = false,
+  size = 'md',
+  text = 'Loading...'
 }) {
   const sizeClasses = {
-    sm: { container: 'h-16 w-16', logo: 32, ring: 'border-2' },
-    md: { container: 'h-24 w-24', logo: 48, ring: 'border-3' },
-    lg: { container: 'h-32 w-32', logo: 64, ring: 'border-4' },
-  }[size] || { container: 'h-24 w-24', logo: 48, ring: 'border-3' };
+    sm: { container: 'h-14 w-14', logo: 40, ring: 'border-2' },
+    md: { container: 'h-20 w-20', logo: 56, ring: 'border-[3px]' },
+    lg: { container: 'h-28 w-28', logo: 80, ring: 'border-4' },
+  }[size] || { container: 'h-20 w-20', logo: 56, ring: 'border-[3px]' };
 
   const loaderContent = (
-    <div className="flex flex-col items-center justify-center space-y-4">
+    <div className="flex flex-col items-center justify-center gap-5" role="status" aria-live="polite">
       {/* Animated Logo Container */}
-      <div className="relative flex items-center justify-center">
-        {/* Animated outer spinning rings */}
-        <div 
-          className={`absolute inset-0 rounded-full border-t-indigo-600 border-r-transparent border-b-slate-200 dark:border-b-slate-800 border-l-transparent animate-spin ${sizeClasses.ring}`}
-          style={{ animationDuration: '0.8s' }}
+      <div className={`relative flex items-center justify-center ${sizeClasses.container}`}>
+        {/* Spinning brand ring */}
+        <div
+          className={`absolute -inset-2 rounded-[30%] border-brand/15 border-t-brand animate-spin ${sizeClasses.ring}`}
+          style={{ animationDuration: '0.9s' }}
         ></div>
-        <div 
-          className={`absolute -inset-2 rounded-full border-t-transparent border-r-indigo-400 border-b-transparent border-l-transparent animate-spin ${sizeClasses.ring}`}
-          style={{ animationDuration: '1.2s', animationDirection: 'reverse' }}
-        ></div>
-        
-        {/* Subtle pulsing background glow */}
-        <div className={`absolute inset-1 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-md animate-pulse`}></div>
 
-        {/* The Logo Image */}
-        <div className={`relative flex items-center justify-center bg-white dark:bg-[#0e1320] rounded-full p-3 shadow-md animate-pulse border border-slate-100 dark:border-slate-800 ${sizeClasses.container}`}>
-          <Image
-            src="/logo.png"
-            alt="ordinary Logo"
-            width={sizeClasses.logo}
-            height={sizeClasses.logo}
-            priority
-            className="object-contain hover:scale-105 transition-transform duration-300"
-          />
-        </div>
+        {/* The brand mark */}
+        <BrandLogo variant="mark" width={sizeClasses.logo} priority className="shadow-lg shadow-brand/20" />
       </div>
 
       {/* Loading Text */}
       {text && (
-        <div className="flex items-center space-x-1.5">
-          <span className="text-sm font-semibold tracking-wide text-slate-600 dark:text-slate-350">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm font-semibold tracking-wide text-slate-600 dark:text-slate-300">
             {text}
           </span>
-          <span className="flex space-x-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-bounce" style={{ animationDelay: '0ms' }}></span>
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }}></span>
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }}></span>
+          <span className="flex gap-1" aria-hidden="true">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand animate-bounce" style={{ animationDelay: '0ms' }}></span>
+            <span className="h-1.5 w-1.5 rounded-full bg-brand animate-bounce" style={{ animationDelay: '150ms' }}></span>
+            <span className="h-1.5 w-1.5 rounded-full bg-brand animate-bounce" style={{ animationDelay: '300ms' }}></span>
           </span>
         </div>
       )}
@@ -61,7 +45,7 @@ export default function LogoLoader({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/80 dark:bg-[#090d16]/80 backdrop-blur-md transition-all duration-300">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-canvas/85 dark:bg-ink-950/85 backdrop-blur-md transition-all duration-300">
         {loaderContent}
       </div>
     );

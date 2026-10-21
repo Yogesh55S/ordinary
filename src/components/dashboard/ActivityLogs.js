@@ -32,7 +32,7 @@ export default function ActivityLogs({ activityLogs, loading }) {
   };
 
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
+    <div className="bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
       <div className="p-5 border-b border-slate-100 dark:border-slate-800">
         <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Activity History</h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Outreach log chronological history</p>

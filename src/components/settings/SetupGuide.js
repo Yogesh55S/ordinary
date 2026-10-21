@@ -2,7 +2,7 @@ import { Terminal, Copy, Check } from 'lucide-react';
 
 export default function SetupGuide({ copiedCmd, onCopyCmd }) {
   return (
-    <div className="bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden flex flex-col">
+    <div className="bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs overflow-hidden flex flex-col">
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 flex items-center space-x-2 text-slate-800 dark:text-slate-200">
         <Terminal className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         <h3 className="font-bold text-sm uppercase tracking-wider">Local Setup Guide</h3>
@@ -20,7 +20,7 @@ export default function SetupGuide({ copiedCmd, onCopyCmd }) {
           </li>
           <li>
             <span className="font-normal text-slate-600 dark:text-slate-350">Launch the local worker process command:</span>
-            <div className="relative mt-2 p-3 bg-slate-900 dark:bg-[#0e1320] border border-slate-800 dark:border-slate-800 rounded-xl text-slate-200 dark:text-slate-100 font-mono text-[10px] flex items-center justify-between shadow-xs">
+            <div className="relative mt-2 p-3 bg-slate-900 dark:bg-ink-900 border border-slate-800 dark:border-slate-800 rounded-xl text-slate-200 dark:text-slate-100 font-mono text-[10px] flex items-center justify-between shadow-xs">
               <span>npm run whatsapp-worker</span>
               <button
                 onClick={onCopyCmd}

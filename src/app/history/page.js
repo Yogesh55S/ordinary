@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { AlertCircle, History, RefreshCw } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 import ScheduleTable from '@/components/schedules/ScheduleTable';
 import ViewMessageModal from '@/components/schedules/ViewMessageModal';
 
@@ -210,28 +211,25 @@ export default function HistoryPage() {
   const uniqueCategories = ['All', ...new Set(clients.map((c) => c.category).filter(Boolean))];
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full relative">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 flex items-center space-x-2.5">
-            <History className="h-7 w-7 text-indigo-600 dark:text-indigo-400" />
-            <span>Outreach History</span>
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Archived log of sent and failed outreach notifications with optimized infinite scroll.</p>
-        </div>
-        <button
-          onClick={() => {
-            setPage(0);
-            setHasMore(true);
-            fetchHistoryData(0, true);
-          }}
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-all space-x-2"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refresh List</span>
-        </button>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full relative">
+      <PageHeader
+        title="Outreach History"
+        icon={History}
+        description="Archived log of sent and failed outreach notifications."
+        actions={
+          <button
+            onClick={() => {
+              setPage(0);
+              setHasMore(true);
+              fetchHistoryData(0, true);
+            }}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 dark:bg-ink-800 dark:hover:bg-ink-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-colors"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh List</span>
+          </button>
+        }
+      />
 
       {error && (
         <div className="flex items-center space-x-3 p-4 bg-amber-50 dark:bg-amber-905/20 border border-amber-200 dark:border-amber-900/30 rounded-xl text-amber-850 dark:text-amber-400">
@@ -241,14 +239,15 @@ export default function HistoryPage() {
       )}
 
       {/* Filter and Stats Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider block">Client Category Filter</span>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-4">
+          <div className="flex-1 sm:flex-none min-w-0">
+            <label htmlFor="history-category-filter" className="sr-only">Client category</label>
             <select
+              id="history-category-filter"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3.5 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0e1320] text-slate-850 dark:text-slate-350 min-w-[200px]"
+              className="px-3.5 py-2.5 sm:py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-ink-900 text-slate-850 dark:text-slate-300 w-full sm:w-auto sm:min-w-[200px]"
             >
               {uniqueCategories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -258,18 +257,18 @@ export default function HistoryPage() {
             </select>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-semibold text-slate-450 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/30 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-            <span>Showing {schedules.length} loaded records</span>
+          <div className="shrink-0 whitespace-nowrap text-xs font-semibold text-slate-450 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/30 px-3 py-2.5 sm:py-2 rounded-xl border border-slate-100 dark:border-slate-800">
+            <span>{schedules.length}<span className="hidden sm:inline"> loaded</span> records</span>
           </div>
         </div>
 
-        <div className="text-xs font-semibold text-slate-400 dark:text-slate-500">
+        <div className="hidden sm:block text-xs font-semibold text-slate-400 dark:text-slate-500">
           Scroll down to auto-load older outreach logs.
         </div>
       </div>
 
       {/* Outreach History Records Table */}
-      <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
         <ScheduleTable
           schedules={schedules}
           loading={loading}
@@ -296,7 +295,7 @@ export default function HistoryPage() {
       {/* End of logs status */}
       {!hasMore && schedules.length > 0 && (
         <div className="text-center py-6 text-xs text-slate-405 dark:text-slate-500 font-semibold border-t border-dashed border-slate-100 dark:border-slate-850">
-          ✓ All outreach logs have been loaded.
+          All outreach logs have been loaded.
         </div>
       )}
 

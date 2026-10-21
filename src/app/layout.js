@@ -9,8 +9,28 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "ordinary - Freelance WhatsApp Scheduler",
+  title: {
+    default: "ordinary · Lancer",
+    template: "%s · ordinary",
+  },
   description: "Manage clients, create templates, schedule outreach, and link WhatsApp",
+  applicationName: "ordinary",
+  appleWebApp: {
+    capable: true,
+    title: "ordinary",
+    statusBarStyle: "default",
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F0EFED" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F0C0A" },
+  ],
 };
 
 export default function RootLayout({ children }) {
@@ -35,15 +55,13 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col md:flex-row font-sans bg-[#F7FAFC] text-black dark:bg-[#070B12] dark:text-white transition-colors duration-200">
+      <body className="min-h-full flex flex-col md:flex-row font-sans bg-canvas text-slate-900 dark:bg-ink-950 dark:text-slate-100 transition-colors duration-200">
         <SplashLoader />
         <Sidebar />
-        <main className="flex-1 flex min-w-0 flex-col min-h-screen overflow-x-hidden">
+        <main className="flex-1 flex min-w-0 flex-col min-h-[100dvh] overflow-x-hidden pb-safe-nav">
           {children}
         </main>
       </body>
     </html>
   );
 }
-
-

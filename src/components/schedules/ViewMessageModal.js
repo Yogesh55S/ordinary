@@ -23,7 +23,7 @@ export default function ViewMessageModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div 
         onClick={onClose}
@@ -31,7 +31,7 @@ export default function ViewMessageModal({
       ></div>
       
       {/* Modal Container */}
-      <div className="relative bg-white dark:bg-[#111625] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col overflow-hidden transition-all border border-slate-200 dark:border-slate-800">
+      <div className="relative bg-white dark:bg-ink-800 rounded-t-3xl sm:rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto transition-all border border-slate-200 dark:border-slate-800">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <div className="flex items-center space-x-2">
@@ -48,7 +48,7 @@ export default function ViewMessageModal({
 
         {/* Content */}
         <div className="p-6 space-y-4 text-sm flex-1 overflow-y-auto max-h-[70vh]">
-          <div className="grid grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div>
               <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Recipient</span>
               <span className="font-bold text-slate-800 dark:text-slate-100">{schedule.clients?.business_name || 'System Client'}</span>
@@ -92,7 +92,7 @@ export default function ViewMessageModal({
           {/* Message content */}
           <div>
             <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">Message Body (Unsubstituted template content)</span>
-            <pre className="p-4 bg-slate-50 dark:bg-[#0e1320] border border-slate-100 dark:border-slate-800/80 rounded-xl text-xs font-mono text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
+            <pre className="p-4 bg-slate-50 dark:bg-ink-900 border border-slate-100 dark:border-slate-800/80 rounded-xl text-xs font-mono text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
               {body}
             </pre>
           </div>
@@ -108,7 +108,7 @@ export default function ViewMessageModal({
                     href={file.file_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-[#0e1320] hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-colors group"
+                    className="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-ink-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs transition-colors group"
                   >
                     <div className="flex items-center space-x-2 truncate">
                       <Paperclip className="h-4 w-4 text-slate-405 group-hover:text-indigo-600 shrink-0" />

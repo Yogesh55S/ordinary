@@ -284,24 +284,24 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
   }, [recipientType, bulkText]);
 
   return (
-    <div className="bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs p-5 space-y-4 transition-colors">
+    <div className="bg-white dark:bg-black rounded-lg border border-mist dark:border-line shadow-xs p-5 space-y-4 transition-colors">
       {/* Header & Flow Mode Selector */}
-      <div className="border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30 pb-3 space-y-3">
+      <div className="border-b border-mist/60 dark:border-line pb-3 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h2 className="text-sm font-bold text-black dark:text-white">Compose Application</h2>
-            <p className="text-xs text-black/60 dark:text-[#CBDDE9]">Configure target company and choose delivery throttle</p>
+            <p className="text-xs text-black/60 dark:text-mist">Configure target company and choose delivery throttle</p>
           </div>
 
           {/* Delivery Mode Tabs */}
-          <div className="flex items-center bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-0.5">
+          <div className="flex items-center bg-mist/25 dark:bg-black border border-mist dark:border-line rounded-md p-0.5">
             <button
               type="button"
               onClick={() => setDeliveryMode('immediate')}
               className={`flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 deliveryMode === 'immediate'
-                  ? 'bg-[#2A72A1] text-white shadow-xs'
-                  : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-black dark:text-mist hover:bg-mist/25'
               }`}
             >
               <Zap className="h-3 w-3" />
@@ -312,8 +312,8 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
               onClick={() => setDeliveryMode('rate_limited')}
               className={`flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-bold transition-all ${
                 deliveryMode === 'rate_limited'
-                  ? 'bg-[#2A72A1] text-white shadow-xs'
-                  : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-black dark:text-mist hover:bg-mist/25'
               }`}
             >
               <Timer className="h-3 w-3" />
@@ -325,14 +325,14 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
         {/* Real-time Mode Description Badge */}
         <div className={`p-2.5 rounded-md border text-xs flex items-center justify-between flex-wrap gap-2 ${
           deliveryMode === 'immediate'
-            ? 'bg-[#CBDDE9]/20 dark:bg-black border-[#CBDDE9] dark:border-[#2A72A1]/30 text-black dark:text-white'
-            : 'bg-[#CBDDE9]/35 dark:bg-black border-[#2A72A1] text-black dark:text-white'
+            ? 'bg-mist/20 dark:bg-black border-mist dark:border-line text-black dark:text-white'
+            : 'bg-mist/35 dark:bg-black border-brand text-black dark:text-white'
         }`}>
           <div className="flex items-center space-x-2">
             {deliveryMode === 'immediate' ? (
-              <Zap className="h-3.5 w-3.5 text-[#2A72A1]" />
+              <Zap className="h-3.5 w-3.5 text-brand" />
             ) : (
-              <Clock className="h-3.5 w-3.5 text-[#2A72A1]" />
+              <Clock className="h-3.5 w-3.5 text-brand" />
             )}
             <span>
               {deliveryMode === 'immediate'
@@ -342,7 +342,7 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
           </div>
 
           {deliveryMode === 'rate_limited' && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#2A72A1] text-white shrink-0">
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-brand text-white shrink-0">
               Auto-Throttle Protected
             </span>
           )}
@@ -350,20 +350,20 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
       </div>
 
       {result?.success && (
-        <div className="flex items-center space-x-2 p-2.5 bg-[#CBDDE9]/40 dark:bg-black border border-[#2A72A1] rounded-md text-black dark:text-white text-xs font-medium">
-          <CheckCircle2 className="h-4 w-4 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-2 p-2.5 bg-mist/40 dark:bg-black border border-brand rounded-md text-black dark:text-white text-xs font-medium">
+          <CheckCircle2 className="h-4 w-4 text-brand shrink-0" />
           <span>{result.message}</span>
         </div>
       )}
       {result?.error && (
-        <div className="flex items-center space-x-2 p-2.5 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
-          <AlertCircle className="h-4 w-4 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-2 p-2.5 bg-brand/5 dark:bg-brand/10 border border-brand/30 dark:border-line rounded-md text-black dark:text-white text-xs font-medium">
+          <AlertCircle className="h-4 w-4 text-brand shrink-0" />
           <span>{result.error}</span>
         </div>
       )}
 
       {templates.length === 0 ? (
-        <p className="text-xs text-black dark:text-white bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-3">
+        <p className="text-xs text-black dark:text-white bg-mist/25 dark:bg-black border border-mist dark:border-line rounded-md p-3">
           No email templates found — please create or export a template first.
         </p>
       ) : (
@@ -380,9 +380,9 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     name="recipientType"
                     checked={recipientType === 'single'}
                     onChange={() => setRecipientType('single')}
-                    className="accent-[#2A72A1]"
+                    className="accent-brand"
                   />
-                  <Building2 className="h-3 w-3 text-[#2A72A1]" />
+                  <Building2 className="h-3 w-3 text-brand" />
                   <span className="text-black dark:text-white">Single Company</span>
                 </label>
                 <label className="flex items-center space-x-1.5 cursor-pointer">
@@ -391,9 +391,9 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     name="recipientType"
                     checked={recipientType === 'bulk'}
                     onChange={() => setRecipientType('bulk')}
-                    className="accent-[#2A72A1]"
+                    className="accent-brand"
                   />
-                  <Users className="h-3 w-3 text-[#2A72A1]" />
+                  <Users className="h-3 w-3 text-brand" />
                   <span className="text-black dark:text-white">Multiple Companies (Bulk List)</span>
                 </label>
               </div>
@@ -404,14 +404,14 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div className="sm:col-span-3">
                   <label className="block text-xs font-semibold text-black dark:text-white mb-1">
-                    HR Email <span className="text-[#2A72A1]">*</span>
+                    HR Email <span className="text-brand">*</span>
                   </label>
                   <input
                     type="email"
                     value={hrEmail}
                     onChange={(e) => setHrEmail(e.target.value)}
                     placeholder="hr@company.com"
-                    className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                    className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-brand"
                   />
                 </div>
                 <input
@@ -419,19 +419,19 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                   value={hrName}
                   onChange={(e) => setHrName(e.target.value)}
                   placeholder="HR Contact Name"
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-brand"
                 />
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="Company Name"
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-brand"
                 />
                 <select
                   value={jobProfileId}
                   onChange={(e) => handleProfileChange(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                 >
                   <option value="" className="bg-white dark:bg-black text-black dark:text-white">-- Select Profile --</option>
                   {profiles.map((p) => (
@@ -444,10 +444,10 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="block text-xs font-semibold text-black dark:text-white">
-                    HR Emails (1 per line) <span className="text-[#2A72A1]">*</span>
+                    HR Emails (1 per line) <span className="text-brand">*</span>
                   </label>
                   {parsedBulkCount > 0 && (
-                    <span className="text-[11px] font-bold text-[#2A72A1]">
+                    <span className="text-[11px] font-bold text-brand">
                       {parsedBulkCount} valid contact{parsedBulkCount > 1 ? 's' : ''} detected
                     </span>
                   )}
@@ -456,14 +456,14 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                   <select
                     value={jobProfileId}
                     onChange={(e) => handleProfileChange(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                    className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                   >
                     <option value="" className="bg-white dark:bg-black text-black dark:text-white">-- Attach Job Profile to Batch --</option>
                     {profiles.map((p) => (
                       <option key={p.id} value={p.id} className="bg-white dark:bg-black text-black dark:text-white">{p.title}</option>
                     ))}
                   </select>
-                  <div className="px-2.5 py-1 rounded-md bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 text-[11px] font-mono text-black/70 dark:text-[#CBDDE9] flex items-center">
+                  <div className="px-2.5 py-1 rounded-md bg-mist/15 dark:bg-black border border-mist dark:border-line text-[11px] font-mono text-black/70 dark:text-mist flex items-center">
                     <span>Format: email, name, company</span>
                   </div>
                 </div>
@@ -472,20 +472,20 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                   onChange={(e) => setBulkText(e.target.value)}
                   rows={4}
                   placeholder={'hr@acme.com, Priya Sharma, Acme Inc\nrecruiter@meta.com, John, Meta\njobs@stripe.com'}
-                  className="w-full px-3 py-2 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-[#2A72A1] transition-colors resize-none font-mono"
+                  className="w-full px-3 py-2 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:border-brand transition-colors resize-none font-mono"
                 />
               </div>
             )}
 
             {/* Embedded Time Gap & Rate Limiting Controls when in Rate Limited Mode */}
             {deliveryMode === 'rate_limited' && (
-              <div className="p-3.5 bg-[#CBDDE9]/15 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-md space-y-2.5">
+              <div className="p-3.5 bg-mist/15 dark:bg-black border border-mist dark:border-line rounded-md space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-black dark:text-white flex items-center space-x-1.5">
-                    <Timer className="h-3.5 w-3.5 text-[#2A72A1]" />
+                    <Timer className="h-3.5 w-3.5 text-brand" />
                     <span>Time Gap Throttle Settings</span>
                   </span>
-                  <span className="text-[10px] text-black/60 dark:text-[#CBDDE9]">Controls dispatch delay</span>
+                  <span className="text-[10px] text-black/60 dark:text-mist">Controls dispatch delay</span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-1.5 text-xs text-black dark:text-white">
@@ -495,7 +495,7 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     min={1}
                     value={batchSize}
                     onChange={(e) => setBatchSize(parseInt(e.target.value, 10) || 1)}
-                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                   />
                   <span>email(s) every</span>
                   <input
@@ -503,12 +503,12 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     min={1}
                     value={intervalValue}
                     onChange={(e) => setIntervalValue(parseInt(e.target.value, 10) || 1)}
-                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                    className="w-14 px-2 py-1 text-xs text-center rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                   />
                   <select
                     value={intervalUnit}
                     onChange={(e) => setIntervalUnit(e.target.value)}
-                    className="px-2 py-1 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                    className="px-2 py-1 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                   >
                     <option value="minutes" className="bg-white dark:bg-black text-black dark:text-white">Minutes</option>
                     <option value="hours" className="bg-white dark:bg-black text-black dark:text-white">Hours</option>
@@ -520,10 +520,10 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     type="checkbox"
                     checked={sendFirstImmediately}
                     onChange={(e) => setSendFirstImmediately(e.target.checked)}
-                    className="accent-[#2A72A1] h-3.5 w-3.5 rounded"
+                    className="accent-brand h-3.5 w-3.5 rounded"
                   />
                   <span className="font-semibold">Send 1st application immediately</span>
-                  <span className="text-black/60 dark:text-[#CBDDE9] text-[11px]">(space out remainder by {intervalValue} {intervalUnit})</span>
+                  <span className="text-black/60 dark:text-mist text-[11px]">(space out remainder by {intervalValue} {intervalUnit})</span>
                 </label>
               </div>
             )}
@@ -535,7 +535,7 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                 <select
                   value={templateId}
                   onChange={(e) => setTemplateId(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                 >
                   {templates.map((t) => (
                     <option key={t.id} value={t.id} className="bg-white dark:bg-black text-black dark:text-white">
@@ -557,7 +557,7 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
 
             {/* Pitch Text Customization */}
             <details className="group pt-1">
-              <summary className="text-xs font-semibold text-[#2A72A1] dark:text-[#CBDDE9] cursor-pointer select-none list-none flex items-center space-x-1">
+              <summary className="text-xs font-semibold text-brand dark:text-mist cursor-pointer select-none list-none flex items-center space-x-1">
                 <span className="group-open:hidden">+ Customize intro & pitch text</span>
                 <span className="hidden group-open:inline">- Collapse pitch text</span>
               </summary>
@@ -567,29 +567,29 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="Job Title"
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                 />
                 <textarea
                   value={whyCompany}
                   onChange={(e) => setWhyCompany(e.target.value)}
                   rows={2}
                   placeholder="Why this company..."
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] resize-none"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand resize-none"
                 />
                 <input
                   type="text"
                   value={relevantSkills}
                   onChange={(e) => setRelevantSkills(e.target.value)}
                   placeholder="Relevant Skills intro phrase"
-                  className="w-full px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1]"
+                  className="w-full px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand"
                 />
               </div>
             </details>
           </fieldset>
 
           {reviewError && (
-            <div className="flex items-center space-x-2 p-2 bg-[#CBDDE9]/25 dark:bg-black border border-black dark:border-white rounded-md text-black dark:text-white text-xs font-medium">
-              <AlertCircle className="h-3.5 w-3.5 text-[#2A72A1] shrink-0" />
+            <div className="flex items-center space-x-2 p-2 bg-brand/5 dark:bg-brand/10 border border-brand/30 dark:border-line rounded-md text-black dark:text-white text-xs font-medium">
+              <AlertCircle className="h-3.5 w-3.5 text-brand shrink-0" />
               <span>{reviewError}</span>
             </div>
           )}
@@ -598,7 +598,7 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
             <button
               type="button"
               onClick={handleReview}
-              className="w-full inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-[#2A72A1] hover:opacity-90 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
+              className="w-full inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-brand hover:opacity-90 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
             >
               <Eye className="h-3.5 w-3.5" />
               <span>
@@ -609,26 +609,26 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
             </button>
           ) : (
             <div className="space-y-3 pt-2">
-              <div className="border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg overflow-hidden">
-                <div className="flex items-center justify-between px-3 py-2 border-b border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-[#CBDDE9]/25 dark:bg-black">
+              <div className="border border-mist dark:border-line rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between px-3 py-2 border-b border-mist dark:border-line bg-mist/25 dark:bg-black">
                   <div className="flex items-center space-x-2">
                     <span className="text-[11px] font-bold text-black dark:text-white">
                       Preview for {previewRecipient.hr_email}
                     </span>
                     {deliveryMode === 'rate_limited' && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#2A72A1] text-white font-bold">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand text-white font-bold">
                         {recipientType === 'bulk' ? `1 of ${parsedBulkCount} queued` : 'Queued with delay'}
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/30 rounded-md p-0.5">
+                  <div className="flex items-center bg-white dark:bg-black border border-mist dark:border-line rounded-md p-0.5">
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('desktop')}
                       className={`flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
                         previewDevice === 'desktop'
-                          ? 'bg-[#2A72A1] text-white shadow-xs'
-                          : 'text-black dark:text-[#CBDDE9]'
+                          ? 'bg-brand text-white shadow-xs'
+                          : 'text-black dark:text-mist'
                       }`}
                     >
                       <Monitor className="h-3 w-3" />
@@ -639,8 +639,8 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                       onClick={() => setPreviewDevice('mobile')}
                       className={`flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
                         previewDevice === 'mobile'
-                          ? 'bg-[#2A72A1] text-white shadow-xs'
-                          : 'text-black dark:text-[#CBDDE9]'
+                          ? 'bg-brand text-white shadow-xs'
+                          : 'text-black dark:text-mist'
                       }`}
                     >
                       <Smartphone className="h-3 w-3" />
@@ -648,12 +648,12 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                     </button>
                   </div>
                 </div>
-                <div className="h-[460px] bg-[#CBDDE9]/20 dark:bg-black overflow-y-auto flex justify-center py-3 px-2">
+                <div className="h-[460px] bg-mist/20 dark:bg-black overflow-y-auto flex justify-center py-3 px-2">
                   <iframe
                     title="Application preview"
                     srcDoc={previewHtml}
                     style={{ width: PREVIEW_WIDTHS[previewDevice], maxWidth: '100%' }}
-                    className="h-full bg-white shrink-0 border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md shadow-xs transition-all"
+                    className="h-full bg-white shrink-0 border border-mist dark:border-line rounded-md shadow-xs transition-all"
                     sandbox=""
                   />
                 </div>
@@ -664,16 +664,16 @@ export default function ComposeCard({ profiles, templates, settings, onSend }) {
                   type="button"
                   onClick={() => setReviewing(false)}
                   disabled={sending}
-                  className="inline-flex items-center justify-center space-x-1 px-3.5 py-2 bg-white dark:bg-black text-black dark:text-white border border-[#CBDDE9] dark:border-[#2A72A1]/40 font-semibold rounded-md text-xs hover:bg-[#CBDDE9]/25 transition-all disabled:opacity-50"
+                  className="inline-flex items-center justify-center space-x-1 px-3.5 py-2 bg-white dark:bg-black text-black dark:text-white border border-mist dark:border-line font-semibold rounded-md text-xs hover:bg-mist/25 transition-all disabled:opacity-50"
                 >
-                  <Pencil className="h-3.5 w-3.5 text-[#2A72A1]" />
+                  <Pencil className="h-3.5 w-3.5 text-brand" />
                   <span>Edit</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleSend}
                   disabled={sending}
-                  className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-[#2A72A1] hover:opacity-90 disabled:opacity-60 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
+                  className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-brand hover:opacity-90 disabled:opacity-60 text-white font-semibold rounded-md text-xs shadow-xs transition-all"
                 >
                   {sending ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />

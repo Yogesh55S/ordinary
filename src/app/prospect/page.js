@@ -6,6 +6,7 @@ import {
   X, ChevronRight, Loader2, AlertCircle, CheckCircle, Send,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import PageHeader from '@/components/PageHeader';
 import ProspectTable from '@/components/prospect/ProspectTable';
 import AddClientModal from '@/components/prospect/AddClientModal';
 import BulkSendModal from '@/components/prospect/BulkSendModal';
@@ -199,14 +200,11 @@ export default function ProspectPage() {
   const noWebsiteCount = results.filter((r) => !r.website).length;
 
   return (
-    <div className="flex-1 p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Prospect Finder</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Search Google Maps for local businesses and convert them into clients.
-        </p>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full">
+      <PageHeader
+        title="Prospect Finder"
+        description="Search Google Maps for local businesses and convert them into clients."
+      />
 
       {/* Search Bar */}
       <form onSubmit={handleSearch} className="flex items-center space-x-3">
@@ -218,7 +216,7 @@ export default function ProspectPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Try "dental clinic in karnal" or "restaurant in delhi"'
-            className="w-full pl-11 pr-10 py-3.5 text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111625] text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm transition-colors"
+            className="w-full pl-11 pr-10 py-3.5 text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-ink-800 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm transition-colors"
           />
           {query && (
             <button
@@ -234,7 +232,7 @@ export default function ProspectPage() {
         <button
           type="submit"
           disabled={!query.trim() || loading}
-          className="inline-flex items-center space-x-2 px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-2xl text-sm shadow-sm transition-all shrink-0"
+          className="inline-flex items-center space-x-2 px-4 sm:px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-2xl text-sm shadow-sm transition-all shrink-0"
         >
           {loading
             ? <Loader2 className="h-4.5 w-4.5 animate-spin" />
@@ -277,15 +275,15 @@ export default function ProspectPage() {
               </span>
             </div>
 
-            <div className="flex items-center space-x-1.5">
+            <div className="flex items-center gap-1.5 scroll-x-touch no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               {FILTER_OPTIONS.map((f) => (
                 <button
                   key={f.key}
                   onClick={() => handleFilterChange(f.key)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
+                  className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
                     filter === f.key
                       ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-[#111625]'
+                      : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-ink-800'
                   }`}
                 >
                   {f.label}
@@ -295,7 +293,7 @@ export default function ProspectPage() {
           </div>
 
           {/* Results Table */}
-          <div className="bg-white dark:bg-[#111625] rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
+          <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-200 dark:border-slate-800/60 shadow-xs overflow-hidden">
             <ProspectTable
               results={filteredResults}
               selectedIds={selectedIds}
@@ -312,7 +310,7 @@ export default function ProspectPage() {
               <button
                 onClick={() => fetchPlaces(null, nextPageToken)}
                 disabled={loadingMore}
-                className="inline-flex items-center space-x-2 px-6 py-2.5 bg-white dark:bg-[#111625] border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all shadow-sm"
+                className="inline-flex items-center space-x-2 px-6 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-sm transition-all shadow-sm"
               >
                 {loadingMore
                   ? <Loader2 className="h-4 w-4 animate-spin" />
@@ -327,7 +325,7 @@ export default function ProspectPage() {
 
       {/* Empty State (before first search) */}
       {!hasSearched && !loading && (
-        <div className="flex flex-col items-center justify-center py-28 text-center">
+        <div className="flex flex-col items-center justify-center py-14 sm:py-28 text-center">
           <div className="h-16 w-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center mb-5 shadow-sm">
             <MapPin className="h-8 w-8 text-indigo-500 dark:text-indigo-400" />
           </div>
@@ -351,7 +349,7 @@ export default function ProspectPage() {
 
       {/* Floating Bulk Action Bar */}
       {selectedIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-5 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6 max-w-xl w-[calc(100%-2rem)]">
+        <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] md:bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-5 py-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 shadow-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6 max-w-xl w-[calc(100%-2rem)]">
           <div className="flex items-center space-x-2.5">
             <div className="bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 p-2 rounded-xl shrink-0">
               <Users className="h-5 w-5" />
@@ -360,7 +358,7 @@ export default function ProspectPage() {
               <div className="font-bold text-sm text-slate-800 dark:text-slate-200">
                 {selectedIds.length} Prospect{selectedIds.length > 1 ? 's' : ''} Selected
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">Add to Clients &amp; queue a WhatsApp message, or export as CSV</p>
+              <p className="hidden sm:block text-[10px] text-slate-500 dark:text-slate-400">Add to Clients &amp; queue a WhatsApp message, or export as CSV</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 shrink-0">

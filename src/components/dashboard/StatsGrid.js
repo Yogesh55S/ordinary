@@ -50,26 +50,26 @@ export default function StatsGrid({ stats, loading }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
       {cards.map((card, idx) => {
         const IconComponent = card.icon;
         return (
-          <div 
-            key={idx} 
-            className="bg-white dark:bg-[#111625] rounded-2xl p-5 border border-slate-150 dark:border-slate-800/60 shadow-xs hover:shadow-sm transition-all flex items-start justify-between"
+          <div
+            key={idx}
+            className="bg-white dark:bg-ink-800 rounded-2xl p-4 sm:p-5 border border-slate-150 dark:border-slate-800/60 shadow-xs hover:shadow-sm transition-shadow flex flex-col gap-3"
           >
-            <div className="space-y-2.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{card.title}</span>
-              {loading ? (
-                <div className="h-8 w-16 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg"></div>
-              ) : (
-                <h2 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 leading-none">{card.value}</h2>
-              )}
-              {card.description}
+            <div className="flex items-start justify-between gap-2">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 leading-snug">{card.title}</span>
+              <div className={`p-2 sm:p-2.5 rounded-xl shrink-0 ${card.colorClass}`}>
+                <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
             </div>
-            <div className={`p-3 rounded-xl shrink-0 ${card.colorClass}`}>
-              <IconComponent className="h-6 w-6" />
-            </div>
+            {loading ? (
+              <div className="h-8 w-16 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-lg"></div>
+            ) : (
+              <h2 className="text-[26px] sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 leading-none tabular-nums">{card.value}</h2>
+            )}
+            <div className="hidden sm:block">{card.description}</div>
           </div>
         );
       })}

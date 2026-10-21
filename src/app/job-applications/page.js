@@ -15,6 +15,7 @@ import {
   Timer
 } from 'lucide-react';
 
+import PageHeader from '@/components/PageHeader';
 import JobProfilesPanel from '@/components/job-applications/JobProfilesPanel';
 import AddHrContactsForm from '@/components/job-applications/AddHrContactsForm';
 import ComposeCard from '@/components/job-applications/ComposeCard';
@@ -291,56 +292,53 @@ export default function JobApplicationsPage() {
   };
 
   return (
-    <div className="flex-1 p-5 md:p-7 space-y-5 max-w-7xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-[#CBDDE9]/60 dark:border-[#2A72A1]/30">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-black dark:text-white">Job Applications</h1>
-          <p className="text-black/60 dark:text-[#CBDDE9] mt-0.5 text-xs">
-            Direct dispatch and rate-limited loop automation for HR application outreach
-          </p>
-        </div>
-        <Link
-          href="/job-applications/templates"
-          className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-black text-[#2A72A1] border border-[#CBDDE9] dark:border-[#2A72A1]/50 hover:bg-[#CBDDE9]/25 shadow-xs transition-all shrink-0"
-        >
-          <Palette className="h-3.5 w-3.5" />
-          <span>Email Templates</span>
-        </Link>
-      </div>
+    <div className="flex-1 px-4 py-5 sm:p-6 lg:p-8 space-y-5 lg:space-y-6 max-w-7xl mx-auto w-full">
+      <PageHeader
+        title="Job Applications"
+        description="Direct dispatch and rate-limited loop automation for HR application outreach."
+        actions={
+          <Link
+            href="/job-applications/templates"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-white dark:bg-ink-800 text-brand border border-mist dark:border-line hover:bg-mist/25 dark:hover:bg-ink-700 shadow-sm transition-colors"
+          >
+            <Palette className="h-4 w-4" />
+            <span>Email Templates</span>
+          </Link>
+        }
+      />
 
       {/* KPI Stats Bar with Live Rate Limit Status */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
-          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
-            <span>Delivered</span>
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#2A72A1]" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="p-3 bg-white dark:bg-black border border-mist dark:border-line rounded-lg shadow-xs">
+          <div className="flex items-center justify-between gap-2 text-black/60 dark:text-mist text-xs">
+            <span className="truncate">Delivered</span>
+            <CheckCircle2 className="h-3.5 w-3.5 text-brand" />
           </div>
           <p className="text-xl font-bold text-black dark:text-white mt-1">{sentCount}</p>
         </div>
-        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
-          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
-            <span>Pending in Queue</span>
-            <Clock className="h-3.5 w-3.5 text-[#2A72A1]" />
+        <div className="p-3 bg-white dark:bg-black border border-mist dark:border-line rounded-lg shadow-xs">
+          <div className="flex items-center justify-between gap-2 text-black/60 dark:text-mist text-xs">
+            <span className="truncate">Pending in Queue</span>
+            <Clock className="h-3.5 w-3.5 text-brand" />
           </div>
           <p className="text-xl font-bold text-black dark:text-white mt-1">{pendingCount}</p>
         </div>
-        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
-          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
-            <span>Rate Limit Throttle</span>
-            <Timer className="h-3.5 w-3.5 text-[#2A72A1]" />
+        <div className="p-3 bg-white dark:bg-black border border-mist dark:border-line rounded-lg shadow-xs">
+          <div className="flex items-center justify-between gap-2 text-black/60 dark:text-mist text-xs">
+            <span className="truncate">Rate Limit Throttle</span>
+            <Timer className="h-3.5 w-3.5 text-brand" />
           </div>
           <div className="mt-1 flex items-center space-x-1.5">
-            <span className={`h-2 w-2 rounded-full ${settings?.is_active && pendingCount > 0 ? 'bg-[#2A72A1] animate-pulse' : 'bg-[#CBDDE9]'}`} />
+            <span className={`h-2 w-2 rounded-full ${settings?.is_active && pendingCount > 0 ? 'bg-brand animate-pulse' : 'bg-mist'}`} />
             <p className="text-xs font-bold text-black dark:text-white">
               {pendingCount > 0 ? formatCountdown(nextDueSeconds) : 'Queue Empty'}
             </p>
           </div>
         </div>
-        <div className="p-3 bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-lg shadow-xs">
-          <div className="flex items-center justify-between text-black/60 dark:text-[#CBDDE9] text-xs">
-            <span>Default Template</span>
-            <LayoutGrid className="h-3.5 w-3.5 text-[#2A72A1]" />
+        <div className="p-3 bg-white dark:bg-black border border-mist dark:border-line rounded-lg shadow-xs">
+          <div className="flex items-center justify-between gap-2 text-black/60 dark:text-mist text-xs">
+            <span className="truncate">Default Template</span>
+            <LayoutGrid className="h-3.5 w-3.5 text-brand" />
           </div>
           <p className="text-xs font-bold text-black dark:text-white truncate mt-1.5" title={defaultTemplate?.name || 'Default'}>
             {defaultTemplate?.name || 'Default Template'}
@@ -349,21 +347,21 @@ export default function JobApplicationsPage() {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-2.5 p-3 bg-[#CBDDE9]/25 dark:bg-black border border-[#2A72A1] rounded-lg text-black dark:text-white text-xs font-medium">
-          <AlertCircle className="h-4 w-4 text-[#2A72A1] shrink-0" />
+        <div className="flex items-center space-x-2.5 p-3 bg-mist/25 dark:bg-black border border-brand rounded-lg text-black dark:text-white text-xs font-medium">
+          <AlertCircle className="h-4 w-4 text-brand shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Structured View Switcher */}
-      <div className="flex items-center bg-[#CBDDE9]/25 dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md p-1 w-full sm:w-fit overflow-x-auto">
+      <div className="flex items-center bg-mist/25 dark:bg-black border border-mist dark:border-line rounded-md p-1 w-full sm:w-fit overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => setActiveTab('compose')}
           className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
             activeTab === 'compose'
-              ? 'bg-[#2A72A1] text-white shadow-xs'
-              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+              ? 'bg-brand text-white shadow-xs'
+              : 'text-black dark:text-mist hover:bg-mist/25'
           }`}
         >
           <SendHorizonal className="h-3.5 w-3.5" />
@@ -374,8 +372,8 @@ export default function JobApplicationsPage() {
           onClick={() => setActiveTab('bulk')}
           className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
             activeTab === 'bulk'
-              ? 'bg-[#2A72A1] text-white shadow-xs'
-              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+              ? 'bg-brand text-white shadow-xs'
+              : 'text-black dark:text-mist hover:bg-mist/25'
           }`}
         >
           <ListPlus className="h-3.5 w-3.5" />
@@ -386,8 +384,8 @@ export default function JobApplicationsPage() {
           onClick={() => setActiveTab('profiles')}
           className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold shrink-0 transition-all ${
             activeTab === 'profiles'
-              ? 'bg-[#2A72A1] text-white shadow-xs'
-              : 'text-black dark:text-[#CBDDE9] hover:bg-[#CBDDE9]/25'
+              ? 'bg-brand text-white shadow-xs'
+              : 'text-black dark:text-mist hover:bg-mist/25'
           }`}
         >
           <Briefcase className="h-3.5 w-3.5" />
@@ -446,9 +444,9 @@ export default function JobApplicationsPage() {
             />
           </div>
           <div className="lg:col-span-5 space-y-4">
-            <div className="p-4 bg-white dark:bg-black rounded-lg border border-[#CBDDE9] dark:border-[#2A72A1]/40 shadow-xs space-y-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#2A72A1] dark:text-[#CBDDE9]">How Profiles Work</h3>
-              <p className="text-xs text-black/70 dark:text-[#CBDDE9] leading-relaxed">
+            <div className="p-4 bg-white dark:bg-black rounded-lg border border-mist dark:border-line shadow-xs space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-brand dark:text-mist">How Profiles Work</h3>
+              <p className="text-xs text-black/70 dark:text-mist leading-relaxed">
                 Profiles allow you to configure distinct job titles, relevant skills, and tailored &quot;Why This Company&quot; pitch lines. When composing applications, attaching a profile automatically fills in the personalized email tokens.
               </p>
             </div>

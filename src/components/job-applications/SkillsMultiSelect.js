@@ -23,25 +23,25 @@ export default function SkillsMultiSelect({ categories, checkedSkills, onToggleS
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-3 py-1.5 text-xs rounded-md border border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-[#2A72A1] transition-colors"
+        className="w-full flex items-center justify-between px-3 py-1.5 text-xs rounded-md border border-mist dark:border-line bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:border-brand transition-colors"
       >
         <span>{totalChecked} of {totalItems} skills selected</span>
-        <ChevronDown className={`h-3.5 w-3.5 text-[#2A72A1] transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-brand transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white dark:bg-black border border-[#CBDDE9] dark:border-[#2A72A1]/40 rounded-md shadow-md p-2.5 space-y-2.5">
+        <div className="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white dark:bg-black border border-mist dark:border-line rounded-md shadow-md p-2.5 space-y-2.5">
           {categories.map((group) => {
             const checked = checkedSkills[group.category] || new Set();
             const allChecked = checked.size === group.items.length;
             return (
               <div key={group.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#2A72A1] dark:text-[#CBDDE9]">{group.category}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-brand dark:text-mist">{group.category}</span>
                   <button
                     type="button"
                     onClick={() => onToggleCategory(group.category, !allChecked)}
-                    className="text-[10px] font-semibold text-[#2A72A1] dark:text-[#CBDDE9] hover:underline"
+                    className="text-[10px] font-semibold text-brand dark:text-mist hover:underline"
                   >
                     {allChecked ? 'Clear' : 'All'}
                   </button>
@@ -52,13 +52,13 @@ export default function SkillsMultiSelect({ categories, checkedSkills, onToggleS
                     return (
                       <label
                         key={item}
-                        className="flex items-center space-x-2 px-2 py-1 rounded hover:bg-[#CBDDE9]/20 cursor-pointer text-xs text-black dark:text-white"
+                        className="flex items-center space-x-2 px-2 py-1 rounded hover:bg-mist/20 cursor-pointer text-xs text-black dark:text-white"
                       >
                         <span
                           className={`flex items-center justify-center h-3.5 w-3.5 rounded-sm border shrink-0 transition-colors ${
                             isChecked
-                              ? 'bg-[#2A72A1] border-[#2A72A1]'
-                              : 'border-[#CBDDE9] dark:border-[#2A72A1]/40 bg-white dark:bg-black'
+                              ? 'bg-brand border-brand'
+                              : 'border-mist dark:border-line bg-white dark:bg-black'
                           }`}
                         >
                           {isChecked && <Check className="h-2.5 w-2.5 text-white" />}
