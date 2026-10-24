@@ -1,7 +1,8 @@
 import Icon from './Icon';
 import ContactForm from './ContactForm';
 import { Reveal } from './Reveal';
-import { contact, site } from '@/data/portfolio';
+import { externalProps } from './links';
+import { contact } from '@/data/portfolio';
 
 export default function Contact() {
   return (
@@ -23,18 +24,14 @@ export default function Contact() {
           </svg>
           <p className="ol-contact__intro">{contact.intro}</p>
           <div className="ol-contact__links">
-            <a className="ol-contact__link" href={`mailto:${site.email}`}>
-              <span className="ol-contact__link-icon">
-                <Icon name="mail" size={20} color="var(--ol-red)" />
-              </span>
-              {site.email}
-            </a>
-            <a className="ol-contact__link" href={site.linkedin} target="_blank" rel="noopener noreferrer">
-              <span className="ol-contact__link-icon">
-                <Icon name="linkedin" size={20} color="var(--ol-red)" />
-              </span>
-              {site.linkedinLabel}
-            </a>
+            {contact.links.map((link) => (
+              <a key={link.href} className="ol-contact__link" href={link.href} {...externalProps(link.href)}>
+                <span className="ol-contact__link-icon">
+                  <Icon name={link.icon} size={20} color="var(--ol-red)" />
+                </span>
+                {link.label}
+              </a>
+            ))}
           </div>
         </Reveal>
 

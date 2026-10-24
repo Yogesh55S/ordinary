@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Icon from './Icon';
+import { sectionHref } from './links';
 import { nav, site } from '@/data/portfolio';
 
-export default function Navbar() {
+/** `base` is '' on the home page and '/' on other pages so section links point home. */
+export default function Navbar({ base = '' }) {
   const [open, setOpen] = useState(false);
   const toggleRef = useRef(null);
 
@@ -33,7 +35,7 @@ export default function Navbar() {
   return (
     <header className="ol-header">
       <nav aria-label="Main" className="ol-nav">
-        <a href="#top" aria-label={`${site.name} home`} className="ol-nav__logo">
+        <a href={base || '#top'} aria-label={`${site.name} home`} className="ol-nav__logo">
           <Image
             src={site.logo.onLight.src}
             width={site.logo.onLight.width}
@@ -46,17 +48,17 @@ export default function Navbar() {
 
         <div className="ol-nav__links">
           {nav.links.map((link) => (
-            <a key={link.href} className="ol-nav__link" href={link.href}>
+            <a key={link.href} className="ol-nav__link" href={sectionHref(base, link.href)}>
               {link.label}
             </a>
           ))}
-          <a className="ol-btn ol-btn--red ol-btn--sm" href={nav.cta.href}>
+          <a className="ol-btn ol-btn--red ol-btn--sm" href={sectionHref(base, nav.cta.href)}>
             {nav.cta.label} <Icon name="arrowUpRight" size={16} strokeWidth={2.4} />
           </a>
         </div>
 
         <div className="ol-nav__mobile-actions">
-          <a className="ol-btn ol-btn--red ol-btn--sm" href={nav.cta.href}>
+          <a className="ol-btn ol-btn--red ol-btn--sm" href={sectionHref(base, nav.cta.href)}>
             {nav.cta.label}
           </a>
           <button
@@ -76,7 +78,7 @@ export default function Navbar() {
       {open && (
         <div id="ol-mobile-menu" className="ol-menu">
           {nav.links.map((link) => (
-            <a key={link.href} href={link.href} onClick={close}>
+            <a key={link.href} href={sectionHref(base, link.href)} onClick={close}>
               {link.label}
             </a>
           ))}

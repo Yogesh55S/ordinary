@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Icon from './Icon';
+import { externalProps, sectionHref } from './links';
 import { footer, site } from '@/data/portfolio';
 
-export default function Footer() {
+export default function Footer({ base = '' }) {
   return (
     <footer className="ol-section ol-footer ol-on-dark">
       <div className="ol-container ol-footer__inner">
@@ -24,16 +25,13 @@ export default function Footer() {
               <div key={column.title}>
                 <p className="ol-footer__col-title">{column.title}</p>
                 <ul className="ol-footer__col">
-                  {column.links.map((link) => {
-                    const external = link.href.startsWith('http');
-                    return (
-                      <li key={link.label}>
-                        <a href={link.href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                          {link.label}
-                        </a>
-                      </li>
-                    );
-                  })}
+                  {column.links.map((link) => (
+                    <li key={link.label}>
+                      <a href={link.section ? sectionHref(base, link.href) : link.href} {...externalProps(link.href)}>
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}

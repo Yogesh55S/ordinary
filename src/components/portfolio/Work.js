@@ -1,53 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
+import Link from 'next/link';
 import Icon from './Icon';
+import ProjectMedia from './ProjectMedia';
 import { Reveal } from './Reveal';
-import { work } from '@/data/portfolio';
+import { projectHref, projects, work } from '@/data/portfolio';
 
-function ProjectCard({ project }) {
-  const { links } = project;
-  return (
-    <article className="ol-project ol-lift ol-fill">
-      <div className="ol-project__thumb">
-        <div className="ol-project__zoom">
-          {project.image ? (
-            <Image src={project.image} alt={`Screenshot of ${project.name}`} fill sizes="(min-width: 1024px) 600px, 100vw" />
-          ) : (
-            <>
-              <Icon name="image" size={44} color="#8A847E" strokeWidth={1.5} />
-              <p className="ol-project__placeholder">{work.screenshotPlaceholder}</p>
-            </>
-          )}
-        </div>
-        <p className="ol-project__cat">{project.category}</p>
-      </div>
-      <div className="ol-project__body">
-        <h3 className="ol-project__name">{project.name}</h3>
-        <p className="ol-project__desc">{project.description}</p>
-        <p className="ol-project__stack">{project.stack}</p>
-        <div className="ol-project__links">
-          <a href={links.caseStudy}>
-            View case study <Icon name="arrowUpRight" size={14} strokeWidth={2.4} />
-          </a>
-          <a href={links.live} target={links.live.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
-            Live site
-          </a>
-          <a href={links.github} target={links.github.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
-            GitHub
-          </a>
-        </div>
-      </div>
-    </article>
-  );
-}
+const pad = (n) => String(n).padStart(2, '0');
 
+/**
+ * Project list + sticky preview. Hover or keyboard focus on a row previews it
+ * (desktop); every row is a real link to the case study, so touch users tap
+ * straight through and see a thumbnail inline instead of the preview panel.
+ */
 export default function Work() {
   const [filter, setFilter] = useState('all');
-  const reduce = useReducedMotion();
-  const projects = filter === 'all' ? work.projects : work.projects.filter((project) => project.kind === filter);
+  const [activeSlug, setActiveSlug] = useState(null);
+
+  const shown = filter === 'all' ? projects : projects.filter((project) => project.kind === filter);
+  const active = shown.find((project) => project.slug === activeSlug) ?? shown[0];
+  const activeIndex = shown.indexOf(active);
+  const countFor = (id) => (id === 'all' ? projects.length : projects.filter((project) => project.kind === id).length);
 
   return (
     <section id="work" className="ol-section ol-work ol-on-dark" aria-labelledby="ol-work-title">
@@ -61,6 +35,7 @@ export default function Work() {
             <h2 id="ol-work-title" className="ol-h2">
               {work.heading}
             </h2>
+            <p className="ol-work__intro">{work.intro}</p>
           </div>
           <div role="group" aria-label="Filter projects" className="ol-tabs">
             {work.filters.map((tab) => (
@@ -71,33 +46,89 @@ export default function Work() {
                 aria-pressed={tab.id === filter}
                 onClick={() => setFilter(tab.id)}
               >
-                {tab.label}
+                {tab.label} <span className="ol-tab__count">{countFor(tab.id)}</span>
               </button>
             ))}
           </div>
         </Reveal>
 
         <p className="ol-sr-only" aria-live="polite">
-          {`Showing ${projects.length} project${projects.length === 1 ? '' : 's'}`}
+          {`Showing ${shown.length} project${shown.length === 1 ? '' : 's'}`}
         </p>
 
-        <m.div layout={!reduce} className="ol-projects">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {projects.map((project, index) => (
-              <m.div
-                key={`${project.category}-${work.projects.indexOf(project)}`}
-                layout={!reduce}
-                initial={reduce ? false : { opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                exit={reduce ? undefined : { opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1], delay: reduce ? 0 : (index % 2) * 0.08 }}
-              >
-                <ProjectCard project={project} />
-              </m.div>
-            ))}
-          </AnimatePresence>
-        </m.div>
+        <div className="ol-showcase">
+          <ol aria-label="Projects" className="ol-rows">
+            {shown.map((project, index) => {
+              const isActive = project === active;
+              return (
+                <li key={project.slug}>
+                  <Link
+                    href={projectHref(project.slug)}
+                    className={`ol-row${isActive ? ' ol-row--active' : ''}`}
+                    aria-current={isActive ? 'true' : undefined}
+                    onMouseEnter={() => setActiveSlug(project.slug)}
+                    onFocus={() => setActiveSlug(project.slug)}
+                  >
+                    <span className="ol-row__num">{pad(index + 1)}</span>
+                    <ProjectMedia project={project} alt="" sizes="72px" className="ol-row__thumb" />
+                    <span className="ol-row__body">
+                      <span className="ol-row__name">{project.name}</span>
+                      <span className="ol-row__cat">{project.category}</span>
+                    </span>
+                    <span aria-hidden="true" className="ol-row__arrow">
+                      <Icon name="arrowUpRight" size={20} strokeWidth={2.6} />
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+
+          {active && (
+            <div className="ol-preview">
+              {/* key remounts the panel so each new project pops in */}
+              <div key={active.slug} className="ol-preview__panel">
+                <div className="ol-preview__frame-wrap">
+                  <div aria-hidden="true" className="ol-preview__shadow" />
+                  <div className="ol-browser ol-browser--dark">
+                    <div className="ol-browser__bar">
+                      <span aria-hidden="true" className="ol-browser__dots">
+                        <span />
+                        <span />
+                        <span />
+                      </span>
+                      <p className="ol-browser__url">{active.domain}</p>
+                    </div>
+                    <div className="ol-preview__screen">
+                      <ProjectMedia project={active} sizes="(min-width: 1024px) 600px, 1px" />
+                    </div>
+                  </div>
+                  <p className="ol-status-pill">
+                    <span aria-hidden="true" className="ol-dot" />
+                    {active.status}
+                  </p>
+                </div>
+                <div className="ol-preview__info">
+                  <p className="ol-preview__count">
+                    PROJECT {pad(activeIndex + 1)} / {pad(shown.length)}
+                  </p>
+                  <p className="ol-preview__blurb">{active.blurb}</p>
+                  <p className="ol-preview__stack">{active.stackLine}</p>
+                  <div className="ol-preview__actions">
+                    <Link className="ol-btn ol-btn--red ol-btn--md ol-btn--paper-border" href={projectHref(active.slug)}>
+                      View case study <Icon name="arrowRight" size={16} strokeWidth={2.6} />
+                    </Link>
+                    {active.live && (
+                      <a className="ol-btn-ghost" href={active.live} target="_blank" rel="noopener noreferrer">
+                        Visit live <Icon name="arrowUpRight" size={14} strokeWidth={2.6} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         <Reveal className="ol-next">
           <p className="ol-next__text">{work.nextCta.text}</p>
