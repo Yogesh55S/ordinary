@@ -1,972 +1,221 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
-  <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta name="x-apple-disable-message-reformatting">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="telephone=no" name="format-detection">
-    <title></title>
-    <!--[if (mso 16)]>
-    <style type="text/css">
-    a {text-decoration: none;}
-    </style>
-    <![endif]-->
-    <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
-    <!--[if gte mso 9]>
-<noscript>
-         <xml>
-           <o:OfficeDocumentSettings>
-           <o:AllowPNG></o:AllowPNG>
-           <o:PixelsPerInch>96</o:PixelsPerInch>
-           </o:OfficeDocumentSettings>
-         </xml>
-      </noscript>
-<![endif]-->
-    <!--[if mso]><xml>
-    <w:WordDocument xmlns:w="urn:schemas-microsoft-com:office:word">
-      <w:DontUseAdvancedTypographyReadingMail/>
-    </w:WordDocument>
-    </xml><![endif]-->
-  </head>
-  <body class="body">
-    <div dir="ltr" class="es-wrapper-color">
-      <!--[if gte mso 9]>
-			<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-				<v:fill type="tile" color="#f6f6f6"></v:fill>
-			</v:background>
-		<![endif]-->
-      <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper">
-        <tbody>
-          <tr>
-            <td valign="top" class="esd-email-paddings">
-              <table cellpadding="0" cellspacing="0" align="center" class="es-content esd-header-popover">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-content-body" style="background-color: transparent">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p15t es-p15b es-p20r es-p20l">
-                              <!--[if mso]><table width="560" cellpadding="0" cellspacing="0"><tr><td width="270" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="270" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-infoblock">
-                                              <p>
-                                                Put your preheader text here
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="20"></td><td width="270" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="270" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="right" class="esd-block-text es-infoblock">
-                                              <p>
-                                                <a href="https://viewstripo.email" target="_blank" class="view">View in browser</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-header">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" class="es-header-body">
-                        <tbody>
-                          <tr>
-                            <td esd-general-paddings-checked="false" align="left" class="esd-structure">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="600" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image es-m-txt-c es-p10t" style="font-size: 0">
-                                              <a href="https://viewstripo.email" target="_blank">
-                                                <img src="https://tlr.stripocdn.email/content/guids/CABINET_acccc08babb032a7b8ce0be0755c65a0/images/54951501250627327.png" alt="Camellia logo" title="Camellia logo" width="189">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td class="esd-block-menu">
-                                              <table width="100%" cellspacing="0" cellpadding="0" class="es-menu">
-                                                <tbody>
-                                                  <tr>
-                                                    <td width="25.00%" bgcolor="transparent" align="center" class="es-p10t es-p10b es-p5r es-p5l esd-block-menu-item" style="padding-bottom: 11px; padding-top: 15px">
-                                                      <div>
-                                                        <a href="https://viewstripo.email/" style="color: #333333; font-size: 16px">
-                                                          Makeup
-                                                        </a>
-                                                      </div>
-                                                    </td>
-                                                    <td width="25.00%" bgcolor="transparent" align="center" class="es-p10t es-p10b es-p5r es-p5l es-hidden esd-block-menu-item" style="padding-bottom: 11px; padding-top: 15px">
-                                                      <div>
-                                                        <a href="https://viewstripo.email/" style="color: #333333; font-size: 16px">
-                                                          Fragrance
-                                                        </a>
-                                                      </div>
-                                                    </td>
-                                                    <td width="25.00%" bgcolor="transparent" align="center" class="es-p10t es-p10b es-p5r es-p5l esd-block-menu-item" style="padding-bottom: 11px; padding-top: 15px">
-                                                      <div>
-                                                        <a href="https://viewstripo.email/" style="color: #333333; font-size: 16px">
-                                                          Solutions
-                                                        </a>
-                                                      </div>
-                                                    </td>
-                                                    <td width="25.00%" bgcolor="transparent" align="center" class="es-p10t es-p10b es-p5r es-p5l esd-block-menu-item" style="padding-bottom: 11px; padding-top: 15px">
-                                                      <div>
-                                                        <a href="https://viewstripo.email/" style="color: #333333; font-size: 16px">
-                                                          Sale
-                                                        </a>
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" class="es-content-body" style="background-color: #ffffff">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="600" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-banner" style="position: relative">
-                                              <a target="_blank" href="https://viewstripo.email/">
-                                                <banner src="https://tlr.stripocdn.email/content/guids/bannerImgGuid/images/image16995252248504103.png" alt="Back to School Sale. Extra 40% off, use the code: “school18”" title="Back to School Sale. Extra 40% off, use the code: “school18”" width="600" height="600" class="adapt-img" style="display: block"/>
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-color: #fcfcfe">
-                        <tbody>
-                          <tr>
-                            <td esd-general-paddings-checked="false" bgcolor="#333333" align="left" class="esd-structure es-p20" style="background-color: #333333">
-                              <!--[if mso]><table width="560" cellpadding="0" cellspacing="0"><tr><td width="194"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="174" align="center" class="es-m-p0r es-m-p20b esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <p style="color: #efefef; font-size: 15px">
-                                                <strong>Worldwide delivery</strong>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <p style="color: #efefef">
-                                                On order over $150.00
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                    <td width="20" class="es-hidden"></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="173"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="173" align="center" class="es-m-p20b esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <p style="color: #efefef; font-size: 15px">
-                                                <strong>Money back guarantee</strong>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <p style="color: #efefef">
-                                                Within 15 days
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="20"></td><td width="173"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="173" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <p style="color: #efefef; font-size: 15px">
-                                                <strong>24/7 customer service</strong>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td esd-links-color="#ffffff" align="center" class="esd-block-text">
-                                              <p style="color: #ffffff">
-                                                Call Us <a target="_blank" href="tel:180012345678" style="color: #ffffff">180012345678</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                          <tr>
-                            <td align="left" class="esd-structure es-p30t es-p10b es-p20r es-p20l">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="560" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-text">
-                                              <h1>
-                                                The most popular items<br>
-                                              </h1>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe esd-checked" style="background-position: center bottom">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-image: url(https://tlr.stripocdn.email/content/guids/CABINET_5b18c39c6223ef8eb65f005d4dfa7c8a/images/2651534861271063.png); background-color: #fcfcfe; background-position: center bottom; background-repeat: no-repeat">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20t es-p20r es-p20l" style="background-position: center bottom; background-repeat: no-repeat">
-                              <!--[if mso]><table dir="rtl" width="560" cellpadding="0" 
-                        cellspacing="0"><tr><td dir="ltr" width="300" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="240" align="left" class="esd-container-frame es-m-p20b">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image" style="font-size: 0">
-                                              <a target="_blank">
-                                                <img src="https://tlr.stripocdn.email/content/guids/CABINET_607759159e18219d6dcb5dfeda428654/images/49091516714848799.png" alt="A high-volume curling mascara" title="A high-volume curling mascara" height="193" style="display: block">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td dir="ltr" width="20"></td><td dir="ltr" width="240" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="300" align="left" class="esd-container-frame es-m-p20b">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p5b">
-                                              <h3 style="color: #333333">
-                                                <span class="product-name">A high-volume curling mascara</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p10t es-p10b">
-                                              <p class="es-m-txt-c">
-                                                <span class="product-description">Lorem ipsum dolor sit amet, cons ect etur adipiscing elit.</span>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <h3 style="color: #c60c3e; line-height: 150%">
-                                                $<span class="price">11.99</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-button es-p15t">
-                                              <!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                style="height:39px; v-text-anchor:middle; width:138px" arcsize="0%" strokecolor="#cccccc" strokeweight="2px" fillcolor="#fcfcfe">
-		<w:anchorlock></w:anchorlock>
-		<center style='color:#333333; font-family:"lucida sans unicode", "lucida grande", sans-serif; font-size:14px; font-weight:400; line-height:14px;  mso-text-raise:1px'>Shop now</center>
-	</v:roundrect></a>
-<![endif]-->
-                                              <!--[if !mso]><!-- -->
-                                              <span class="es-button-border" style="border-radius: 0px; border-style: solid; border-color: #cccccc; border-width: 2px; background: #fcfcfe none repeat scroll 0% 0%">
-                                                <a href="https://viewstripo.email/" target="_blank" class="es-button" style="border-radius: 0px; font-family: lucida sans unicode,lucida grande,sans-serif; padding: 10px 20px; font-weight: normal; background: #fcfcfe none repeat scroll 0% 0%; mso-border-alt: 10px solid  #fcfcfe">
-                                                  Shop now
-                                                </a>
-                                              </span>
-                                              <!--<![endif]-->
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe esd-checked">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-image: url(https://tlr.stripocdn.email/content/guids/CABINET_5b18c39c6223ef8eb65f005d4dfa7c8a/images/31931534861503015.png); background-color: #fcfcfe; background-position: right bottom; background-repeat: no-repeat">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20t es-p20r es-p20l" style="background-position: right bottom; background-repeat: no-repeat">
-                              <!--[if mso]><table   width="560" cellpadding="0" 
-                        cellspacing="0"><tr><td width="240" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="240" align="left" class="esd-container-frame es-m-p20b">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image es-p15l" style="font-size: 0">
-                                              <a target="_blank">
-                                                <img src="https://tlr.stripocdn.email/content/guids/CABINET_607759159e18219d6dcb5dfeda428654/images/72381516711494243.png" alt="Eye shadow" title="Eye shadow" width="205" class="product-image">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="20"></td><td width="300" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="300" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <h3 style="color: #333333">
-                                                <span class="product-name">Eye shadow</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p10t es-p10b">
-                                              <p class="es-m-txt-c">
-                                                <span class="product-description">Lorem ipsum dolor sit amet, cons ect etur adipiscing elit.</span>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <h3 style="color: #c60c3e; line-height: 150%">
-                                                $<span class="price">11.99</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-button es-p15t">
-                                              <!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                style="height:39px; v-text-anchor:middle; width:138px" arcsize="0%" strokecolor="#cccccc" strokeweight="2px" fillcolor="#fcfcfe">
-		<w:anchorlock></w:anchorlock>
-		<center style='color:#333333; font-family:"lucida sans unicode", "lucida grande", sans-serif; font-size:14px; font-weight:400; line-height:14px;  mso-text-raise:1px'>Shop now</center>
-	</v:roundrect></a>
-<![endif]-->
-                                              <!--[if !mso]><!-- -->
-                                              <span class="es-button-border" style="border-radius: 0px; border-style: solid; border-color: #cccccc; border-width: 2px; background: #fcfcfe none repeat scroll 0% 0%">
-                                                <a href="https://viewstripo.email/" target="_blank" class="es-button" style="border-radius: 0px; font-family: lucida sans unicode,lucida grande,sans-serif; padding: 10px 20px; font-weight: normal; background: #fcfcfe none repeat scroll 0% 0%; mso-border-alt: 10px solid  #fcfcfe">
-                                                  Shop now
-                                                </a>
-                                              </span>
-                                              <!--<![endif]-->
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe esd-checked">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-image: url(https://tlr.stripocdn.email/content/guids/CABINET_5b18c39c6223ef8eb65f005d4dfa7c8a/images/40761534861803435.jpg); background-color: #fcfcfe; background-position: center bottom; background-repeat: no-repeat">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p25t es-p20r es-p20l" style="background-position: center bottom; background-repeat: no-repeat">
-                              <!--[if mso]><table dir="rtl" width="560" cellpadding="0" 
-                        cellspacing="0"><tr><td dir="ltr" width="300" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="240" align="left" class="esd-container-frame es-m-p20b">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image es-p15t es-p15r es-p15l" style="font-size: 0">
-                                              <a target="_blank">
-                                                <img src="https://tlr.stripocdn.email/content/guids/CABINET_607759159e18219d6dcb5dfeda428654/images/92541516710771849.png" alt="Wonder Lipstick" title="Wonder Lipstick" width="210" class="product-image">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td dir="ltr" width="20"></td><td dir="ltr" width="240" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="300" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p5b">
-                                              <h3 style="color: #333333">
-                                                <span class="product-name">An ultra-slim lipstick</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p5t es-p5b">
-                                              <p class="es-m-txt-c">
-                                                <span class="product-description">An ultra-slim lipstick with a long-wearing, petal-soft matte finish, created in a rainbow of weightless, color-intense shades.</span>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <h3 style="color: #c60c3e; line-height: 150%">
-                                                $<span class="price">11.99</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-button es-p15t">
-                                              <!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                style="height:39px; v-text-anchor:middle; width:138px" arcsize="0%" strokecolor="#cccccc" strokeweight="2px" fillcolor="#fcfcfe">
-		<w:anchorlock></w:anchorlock>
-		<center style='color:#333333; font-family:"lucida sans unicode", "lucida grande", sans-serif; font-size:14px; font-weight:400; line-height:14px;  mso-text-raise:1px'>Shop now</center>
-	</v:roundrect></a>
-<![endif]-->
-                                              <!--[if !mso]><!-- -->
-                                              <span class="es-button-border" style="border-radius: 0px; border-style: solid; border-color: #cccccc; border-width: 2px; background: #fcfcfe none repeat scroll 0% 0%">
-                                                <a href="https://viewstripo.email/" target="_blank" class="es-button" style="border-radius: 0px; font-family: lucida sans unicode,lucida grande,sans-serif; padding: 10px 20px; font-weight: normal; background: #fcfcfe none repeat scroll 0% 0%; mso-border-alt: 10px solid  #fcfcfe">
-                                                  Shop now
-                                                </a>
-                                              </span>
-                                              <!--<![endif]-->
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-image: url(https://tlr.stripocdn.email/content/guids/CABINET_5b18c39c6223ef8eb65f005d4dfa7c8a/images/75031534862226251.jpg); background-color: #fcfcfe; background-position: left bottom; background-repeat: no-repeat">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20t es-p20b es-p20r es-p20l" style="background-position: left bottom; background-repeat: no-repeat">
-                              <!--[if mso]><table  width="560" cellpadding="0" 
-                        cellspacing="0"><tr><td width="240" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="240" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image es-p5t" style="font-size: 0">
-                                              <a target="_blank">
-                                                <img src="https://tlr.stripocdn.email/content/guids/CABINET_607759159e18219d6dcb5dfeda428654/images/20921519654927687.png" alt="Wonder Powder" title="Wonder Powder" width="125" style="display: block">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="20"></td><td width="300" valign="top"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="300" align="left" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p10t">
-                                              <h3 style="color: #333333">
-                                                <span class="product-name">Eye shadow</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text es-p10t es-p10b">
-                                              <p class="es-m-txt-c">
-                                                <span class="product-description">An ultra-slim lipstick with a long-wearing, petal-soft matte finish, created in a rainbow of weightless, color-intense shades.</span>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <h3 style="color: #c60c3e; line-height: 150%">
-                                                $<span class="price">11.99</span>
-                                              </h3>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-button es-p15t">
-                                              <!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                style="height:39px; v-text-anchor:middle; width:138px" arcsize="0%" strokecolor="#cccccc" strokeweight="2px" fillcolor="#fcfcfe">
-		<w:anchorlock></w:anchorlock>
-		<center style='color:#333333; font-family:"lucida sans unicode", "lucida grande", sans-serif; font-size:14px; font-weight:400; line-height:14px;  mso-text-raise:1px'>Shop now</center>
-	</v:roundrect></a>
-<![endif]-->
-                                              <!--[if !mso]><!-- -->
-                                              <span class="es-button-border" style="border-radius: 0px; border-style: solid; border-color: #cccccc; border-width: 2px; background: #fcfcfe none repeat scroll 0% 0%">
-                                                <a href="https://viewstripo.email/" target="_blank" class="es-button" style="border-radius: 0px; font-family: lucida sans unicode,lucida grande,sans-serif; padding: 10px 20px; font-weight: normal; background: #fcfcfe none repeat scroll 0% 0%; mso-border-alt: 10px solid  #fcfcfe">
-                                                  Shop now
-                                                </a>
-                                              </span>
-                                              <!--<![endif]-->
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" bgcolor="#fcfcfe" align="center" class="es-content-body" style="background-color: #fcfcfe">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20t es-p20r es-p20l">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="560" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-spacer es-p20b" style="font-size: 0">
-                                              <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
-                                                <tbody>
-                                                  <tr>
-                                                    <td style="border-bottom: 2px solid #cccccc; background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%; height: 0px; width: 100%; margin: 0px"></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="center" class="esd-block-button es-p5t es-p30b">
-                                              <!--[if mso]><a href="https://viewstripo.email/" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://viewstripo.email/" 
-                style="height:39px; v-text-anchor:middle; width:149px" arcsize="0%" strokecolor="#000000" strokeweight="2px" fillcolor="#333333">
-		<w:anchorlock></w:anchorlock>
-		<center style='color:#ffffff; font-family:"lucida sans unicode", "lucida grande", sans-serif; font-size:14px; font-weight:400; line-height:14px;  mso-text-raise:1px'>More items</center>
-	</v:roundrect></a>
-<![endif]-->
-                                              <!--[if !mso]><!-- -->
-                                              <span class="es-button-border" style="border-radius: 0px; border-style: solid; border-width: 2px; background: #333333 none repeat scroll 0% 0%; border-color: #000000">
-                                                <a href="https://viewstripo.email/" target="_blank" class="es-button" style="border-radius: 0px; font-family: lucida sans unicode,lucida grande,sans-serif; padding: 10px 20px; font-weight: normal; color: #ffffff; background: #333333 none repeat scroll 0% 0%; mso-border-alt: 10px solid  #333333">
-                                                  More items
-                                                </a>
-                                              </span>
-                                              <!--<![endif]-->
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellpadding="0" cellspacing="0" align="center" class="es-footer">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-footer-body">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20t es-p20b es-p20r es-p20l">
-                              <!--[if mso]><table width="560" cellpadding="0" cellspacing="0"><tr><td width="194"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="174" align="center" class="es-m-p0r es-m-p20b esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p style="color: #ffffff">
-                                                <span style="font-family: lucida sans unicode,lucida grande,sans-serif"><strong style="line-height: 150%">Menu</strong></span>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p style="color: #ffffff">
-                                                <a target="_blank"></a><a target="_blank" href="https://viewstripo.email">Makeup</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Fragrance</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Solutions</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Sale</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                    <td width="20" class="es-hidden"></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="173"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="left" class="es-left">
-                                <tbody>
-                                  <tr>
-                                    <td width="173" align="center" class="es-m-p20b esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p style="color: #ffffff">
-                                                <span style="font-family: lucida sans unicode,lucida grande,sans-serif"><strong style="line-height: 150%">Services</strong></span><br>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Privacy Policy</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Terms &amp; Conditions</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="https://viewstripo.email">Payment</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td><td width="20"></td><td width="173"><![endif]-->
-                              <table cellspacing="0" cellpadding="0" align="right" class="es-right">
-                                <tbody>
-                                  <tr>
-                                    <td width="173" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p style="color: #ffffff">
-                                                <span style="font-family: lucida sans unicode,lucida grande,sans-serif"><strong style="line-height: 150%">Get in Touch</strong></span><br>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p>
-                                                <a target="_blank" href="tel:123456789">123456789</a>
-                                              </p>
-                                              <p>
-                                                <a target="_blank" href="mailto:contact@shop.com">your@mail.com</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-social es-p15t" style="font-size: 0">
-                                              <table cellspacing="0" cellpadding="0" class="es-table-not-adapt es-social">
-                                                <tbody>
-                                                  <tr>
-                                                    <td valign="top" align="center" class="es-p10r">
-                                                      <a href="">
-                                                        <img title="X" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-black/x-circle-black.png" alt="Tw" width="24" height="24">
-                                                      </a>
-                                                    </td>
-                                                    <td valign="top" align="center" class="es-p10r">
-                                                      <a href="">
-                                                        <img title="Facebook" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-black/facebook-circle-black.png" alt="Fb" width="24" height="24">
-                                                      </a>
-                                                    </td>
-                                                    <td valign="top" align="center" class="es-p10r">
-                                                      <a href="">
-                                                        <img title="Youtube" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-black/youtube-circle-black.png" alt="Yt" width="24" height="24">
-                                                      </a>
-                                                    </td>
-                                                    <td valign="top" align="center">
-                                                      <a href="">
-                                                        <img title="Vkontakte" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-black/vk-circle-black.png" alt="Vk" width="24" height="24">
-                                                      </a>
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <!--[if mso]></td></tr></table><![endif]-->
-                            </td>
-                          </tr>
-                          <tr>
-                            <td align="left" class="esd-structure es-p20b es-p20r es-p20l">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="560" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-spacer es-p20b" style="font-size: 0">
-                                              <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
-                                                <tbody>
-                                                  <tr>
-                                                    <td style="border-bottom: 1px solid #bc846f; background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%; height: 0px; width: 100%; margin: 0px"></td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" class="esd-block-text">
-                                              <p style="font-size: 12px; font-family: arial,helvetica,sans-serif">
-                                                You are receiving this email because you have visited our site or asked us about regular newsletter.
-                                              </p>
-                                              <p style="font-size: 12px">
-                                                <a target="_blank" class="unsubscribe" style="line-height: 150%; font-size: 12px">Unsubscribe</a>&nbsp; | <a target="_blank" href="https://viewstripo.email" style="line-height: 150%; font-size: 12px">Update Preferences</a> | <a target="_blank" href="https://viewstripo.email" style="line-height: 150%; font-size: 12px">Customer Support</a>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table cellspacing="0" cellpadding="0" align="center" class="esd-footer-popover es-content">
-                <tbody>
-                  <tr>
-                    <td align="center" class="esd-stripe">
-                      <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-content-body" style="background-color: transparent">
-                        <tbody>
-                          <tr>
-                            <td align="left" class="esd-structure es-p30t es-p30b es-p20r es-p20l">
-                              <table width="100%" cellspacing="0" cellpadding="0">
-                                <tbody>
-                                  <tr>
-                                    <td width="560" valign="top" align="center" class="esd-container-frame">
-                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" class="esd-block-image es-infoblock made_with" style="font-size: 0">
-                                              <a target="_blank" href="https://viewstripo.email/?utm_source=templates&amp;utm_medium=email&amp;utm_campaign=cosmetics&amp;utm_content=back2school">
-                                                <img src="https://tlr.stripocdn.email/content/guids/cab_pub_7cbbc409ec990f19c78c75bd1e06f215/images/78411525331495932.png" alt="" width="125" style="display: block">
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </body>
-</html>
+# Ordinary Lancer
+
+One Next.js project with two faces:
+
+- **`/` — public portfolio.** The site clients see: services, work, process, pricing, FAQ and a working contact form.
+- **`/workspace` — private workspace.** The owner's tools for finding clients, WhatsApp/email outreach, job applications and delivery estimates. It sits behind a login that only the owner can use.
+
+There is no public sign-up. The only way to reach the login page (`/lancer-login`) is the small lock icon in the portfolio footer.
+
+---
+
+## Tech stack
+
+| Area | Tools |
+|---|---|
+| Framework | Next.js 16 (App Router), React 19 |
+| Styling | Tailwind CSS 4, custom CSS (`src/styles/portfolio.css`), Montserrat + Caveat fonts |
+| Animation | Framer Motion (turned off when the visitor has `prefers-reduced-motion` set) |
+| Database & storage | Supabase (Postgres + the `outreach-media` storage bucket) |
+| Auth | bcrypt password hash, JWT (`jose`) in an httpOnly cookie |
+| Email | Nodemailer over SMTP, React Email for the job-application template |
+| WhatsApp | Baileys (`@whiskeysockets/baileys`) |
+| Maps | Google Places API (Prospect Finder), LocationIQ + Leaflet (Delivery Estimator) |
+| Background processes | Node scripts, managed with pm2 |
+
+---
+
+## Features
+
+### Public portfolio (`/`)
+- Sticky navbar, animated hero, skills marquee, services bento, work grid with filter tabs, process steps, about, pricing, an accessible FAQ accordion, contact section and footer.
+- **All copy lives in one file:** `src/data/portfolio.js`. Edit text, projects, pricing and FAQ there without touching any component.
+- **Contact form** sends mail through `/api/contact`. Spam protection:
+  - a hidden honeypot field
+  - a minimum fill time
+  - a limit of 3 messages per IP every 10 minutes
+  - server-side validation
+- **SEO:** metadata, Open Graph image, `sitemap.xml` and `robots.txt`.
+
+### Private workspace (`/workspace`)
+| Page | What it does |
+|---|---|
+| Dashboard | Overview of outreach activity, the upcoming queue and logs |
+| Clients | Client CRM, with CSV/JSON import |
+| Prospect Finder | Search Google Maps for local businesses and turn them into clients |
+| Templates | WhatsApp and email message templates with tags |
+| Schedules | Queue and schedule outreach broadcasts |
+| History | Log of sent and failed outreach |
+| Job Applications | Send applications to HR contacts, with a rate-limited automatic loop and an email template library |
+| Delivery Estimator | Road distance, drive time and delivery cost on an interactive map |
+| WhatsApp Link | Connect the WhatsApp gateway (QR code) and configure SMTP |
+
+Old URLs such as `/clients` redirect to `/workspace/clients`.
+
+---
+
+## Security
+
+Hiding the login button is not the security. The server checks every request:
+
+- **Proxy check:** `src/proxy.js` runs before every request. Logged-out visitors are redirected to the login page from workspace pages, and get a `401` from private API routes.
+- **Second check:** each page layout and API route verifies the session again on its own.
+- **Password:** stored only as a bcrypt hash in an environment variable, never in code.
+- **Session cookie:** httpOnly, secure and signed. It lasts 12 hours, or 30 days with "keep me signed in".
+- **Login lockout:** 5 failed attempts lock the login for 15 minutes.
+- **Database access:** the browser never talks to Supabase directly. All queries go through the login-protected `/api/db` bridge, which uses the service-role key on the server.
+- **Search engines:** the login and workspace pages send `noindex`, and `robots.txt` blocks them.
+
+Public API routes: `/api/contact`, `/api/auth/login` and `/api/auth/logout`. The worker reaches `/api/send-job-emails` with the `x-worker-secret` header.
+
+---
+
+## Project structure
+
+```
+src/
+  app/
+    (site)/              public portfolio (/) and the login page (/lancer-login)
+    workspace/           private workspace pages (auth-protected layout)
+    api/
+      auth/              login / logout
+      contact/           portfolio contact form
+      db/                authenticated Supabase bridge (+ storage)
+      places/            Google Places search
+      delivery-estimate/ route distance & cost
+      send-job-emails/   batch sender (called by the worker)
+      send-single-application/
+      job-email-template/
+    robots.js, sitemap.js, opengraph-image.js, manifest.js
+  components/
+    portfolio/           portfolio sections
+    auth/                login form
+    clients/ prospect/ templates/ schedules/ dashboard/
+    job-applications/ delivery/ settings/
+  data/portfolio.js      ALL portfolio content
+  lib/
+    auth/                session + server-side auth helpers
+    db/                  /api/db bridge client and schema
+    supabase.js          browser data client (goes through the bridge)
+    supabaseServer.js    service-role client (server only)
+    mailer.js, media.js, rateLimit.js, contactValidation.js
+  proxy.js               request gate for /workspace and /api
+  scripts/
+    whatsapp-worker.js        WhatsApp gateway + schedule sender
+    job-application-worker.js job-application sending loop
+    hash-password.js          generates login secrets
+  styles/portfolio.css
+job-application-email/   React Email project for the job-application template
+supabase/migrations/     SQL migrations (run in order)
+public/brand/            logos and avatar
+```
+
+---
+
+## Getting started
+
+### Requirements
+- Node.js 20.9 or newer
+- A Supabase project
+- SMTP credentials (for example a Gmail app password)
+- Optional: Google Places and LocationIQ API keys
+
+### 1. Install
+```bash
+npm install
+```
+
+### 2. Environment variables
+Copy the example file and fill it in:
+```bash
+cp .env.local.example .env.local
+```
+Every variable is explained in `.env.local.example`. The most important ones:
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Public URL of the site (canonical URLs, sitemap, OG image) |
+| `CONTACT_TO_EMAIL` | Inbox that receives contact-form messages |
+| `OWNER_LOGIN_ID` | Login ID for the workspace |
+| `OWNER_PASSWORD_HASH_B64` | bcrypt hash of the owner password (base64) |
+| `AUTH_SECRET` | Signs the session cookie. Changing it logs everyone out |
+| `WORKER_SECRET` | Lets the job-application worker call `/api/send-job-emails` |
+| `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase connection (the service key stays on the server) |
+| `SMTP_*`, `SENDER_*` | Outreach and contact-form email |
+| `JOB_APPLICATION_*` | Job-application sender, links and app base URL |
+| `GOOGLE_PLACES_API_KEY`, `LOCATIONIQ_API_KEY` | Prospect Finder and Delivery Estimator |
+
+### 3. Set the owner login
+```bash
+npm run hash-password -- "your-strong-password"
+```
+This prints `OWNER_PASSWORD_HASH_B64`, `AUTH_SECRET` and `WORKER_SECRET`. Paste them into `.env.local` together with `OWNER_LOGIN_ID`. The password itself is never stored.
+
+### 4. Database
+Run the SQL files in `supabase/migrations/` in order, in the Supabase SQL editor.
+
+> ⚠️ **`0004_lock_down_anon_access.sql`** removes all anon-key access. On a live site, run it only **after** this version is deployed. Older builds still read through the anon key and will break if you run it first.
+
+### 5. Run locally
+```bash
+npm run dev                     # http://localhost:3000
+npm run whatsapp-worker         # WhatsApp gateway (scan the QR in Workspace → WhatsApp Link)
+npm run job-application-worker  # job-application sending loop
+```
+
+---
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the dev server (exports the email template first if it is missing) |
+| `npm run build` | Export the job-application email template, then build for production |
+| `npm run start` | Serve the production build |
+| `npm run whatsapp-worker` | Run the Baileys WhatsApp gateway and schedule sender |
+| `npm run job-application-worker` | Run the rate-limited job-application loop |
+| `npm run hash-password -- "<pw>"` | Generate the owner password hash and secrets |
+| `npm run export-job-application-template` | Rebuild `job-application-email/dist/template.html` |
+
+---
+
+## Deployment
+
+The web app and the two workers are deployed separately.
+
+**Web app (Vercel or any Node host)**
+1. Add every variable from `.env.local` to the host's environment settings.
+2. Deploy, which runs `npm run build`.
+3. After the deploy is live, run migration `0004` (see above).
+
+**Workers (an always-on machine or VPS)**
+- The WhatsApp and job-application workers are long-running processes. They cannot run on serverless hosts such as Vercel.
+- Run them with pm2 on a VPS or an always-on PC. `ecosystem.config.js` already defines the job-application worker:
+  ```bash
+  npx pm2 start ecosystem.config.js
+  ```
+- The workers read `.env.local` on that machine.
+- Set `JOB_APPLICATION_APP_BASE_URL` to the deployed site URL, and use the same `WORKER_SECRET` as the web app.
+
+**Notes**
+- **Rate limits:** the login and contact-form limits are kept in server memory. They are strongest on one long-running server. On serverless, each instance keeps its own counter.
+- **nginx:** behind nginx, set `proxy_set_header X-Real-IP $remote_addr;` so that the rate limits see the real client IP.
+
+---
+
+## Test checklist
+
+- [ ] In an incognito window, `/` shows the portfolio.
+- [ ] `/workspace` and `/workspace/clients` redirect to `/lancer-login`.
+- [ ] `curl -X POST https://<domain>/api/db` returns `401`.
+- [ ] Logging in opens `/workspace`, and all workspace pages load.
+- [ ] After logging out, `/workspace` redirects to the login page again.
+- [ ] 6 wrong passwords in a row show the lockout message.
+- [ ] Submitting the contact form delivers an email to `CONTACT_TO_EMAIL`.
+
+---
+
+## Contact
+
+- Email: ordinarylancer@gmail.com
+- LinkedIn: https://www.linkedin.com/in/ordinary-lancer-a35722414
