@@ -10,15 +10,19 @@
     "start": "next start",
     "export-job-application-template": "cd job-application-email && node -e \"if(!require('fs').existsSync('node_modules')) require('child_process').execSync('npm install', {stdio:'inherit', shell:true})\" && npm run export",
     "whatsapp-worker": "node src/scripts/whatsapp-worker.js",
-    "job-application-worker": "node src/scripts/job-application-worker.js"
+    "job-application-worker": "node src/scripts/job-application-worker.js",
+    "hash-password": "node src/scripts/hash-password.js"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@supabase/supabase-js": "^2.107.0",
     "@whiskeysockets/baileys": "^7.0.0-rc13",
     "audio-decode": "^2.2.3",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
+    "framer-motion": "^14.6.0",
     "jimp": "^1.6.1",
+    "jose": "^6.2.13",
     "leaflet": "^1.9.4",
     "link-preview-js": "^3.2.0",
     "lucide-react": "^1.17.0",

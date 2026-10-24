@@ -24,6 +24,20 @@
   --surface-tint: #F7F3EE;
   --border: #E6DED3;
   --primary: var(--brand);
+
+  /*
+   * Ordinary Lancer public brand (portfolio + owner login).
+   * Fixed values — these pages are always light, independent of the workspace theme.
+   */
+  --ol-red: #C1270A;
+  --ol-red-hover: #9E1F08;
+  --ol-red-on-dark: #FF6B4F;
+  --ol-ink: #1B1A19;
+  --ol-paper: #F4F2EE;
+  --ol-card: #FFFFFF;
+  --ol-border: #E2DDD6;
+  --ol-muted: #4A4541;
+  --ol-shadow-offset: 8px 10px 0 #1B1A19;
 }
 
 .dark {
@@ -44,6 +58,17 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-montserrat);
+  --font-hand: var(--font-caveat);
+
+  /* Ordinary Lancer public brand → utilities like bg-ol-red, text-ol-ink */
+  --color-ol-red: var(--ol-red);
+  --color-ol-red-hover: var(--ol-red-hover);
+  --color-ol-red-on-dark: var(--ol-red-on-dark);
+  --color-ol-ink: var(--ol-ink);
+  --color-ol-paper: var(--ol-paper);
+  --color-ol-card: var(--ol-card);
+  --color-ol-border: var(--ol-border);
+  --color-ol-muted: var(--ol-muted);
 
   /* Semantic brand tokens */
   --color-brand: var(--brand);

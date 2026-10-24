@@ -161,7 +161,7 @@ export default function TemplateLibraryPage() {
         .select()
         .single();
       if (insertError) throw insertError;
-      router.push(`/job-applications/templates/${inserted.id}`);
+      router.push(`/workspace/job-applications/templates/${inserted.id}`);
     } catch (err) {
       setError(err.message || 'Failed to create a new template.');
       setCreating(false);
@@ -316,7 +316,7 @@ export default function TemplateLibraryPage() {
                 </p>
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <Link
-                    href={`/job-applications/templates/${t.id}`}
+                    href={`/workspace/job-applications/templates/${t.id}`}
                     className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-[11px] font-bold rounded-xl bg-mist/30 dark:bg-black text-brand border border-mist dark:border-line hover:bg-mist/50 transition-all"
                   >
                     <Pencil className="h-3 w-3" />

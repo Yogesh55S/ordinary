@@ -204,7 +204,7 @@ export default function TemplateEditorPage() {
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div className="min-w-0 flex-1">
           <Link
-            href="/job-applications/templates"
+            href="/workspace/job-applications/templates"
             className="inline-flex items-center space-x-1.5 text-xs font-semibold text-black/70 dark:text-mist hover:text-brand mb-3"
           >
             <ArrowLeft className="h-3.5 w-3.5" />

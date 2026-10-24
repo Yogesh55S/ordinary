@@ -298,7 +298,7 @@ export default function JobApplicationsPage() {
         description="Direct dispatch and rate-limited loop automation for HR application outreach."
         actions={
           <Link
-            href="/job-applications/templates"
+            href="/workspace/job-applications/templates"
             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-white dark:bg-ink-800 text-brand border border-mist dark:border-line hover:bg-mist/25 dark:hover:bg-ink-700 shadow-sm transition-colors"
           >
             <Palette className="h-4 w-4" />

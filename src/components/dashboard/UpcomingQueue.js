@@ -10,7 +10,7 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
           <p className="text-xs text-slate-500 dark:text-slate-400">The next 5 scheduled outreach tasks</p>
         </div>
         <Link 
-          href="/schedules" 
+          href="/workspace/schedules" 
           className="shrink-0 whitespace-nowrap text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 transition-colors"
         >
           <span>View all</span>

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import { requireApiAuth } from '@/lib/auth/server';
 import fs from 'fs';
 import path from 'path';
-import { supabaseService } from '@/lib/supabase';
+import { supabaseService } from '@/lib/supabaseServer';
 import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
 import { getTransporter, getSmtpConfig } from '@/lib/mailer';
 
@@ -70,6 +71,10 @@ function buildEmailText(templateText, { hrName, companyName, jobTitle, whyCompan
 }
 
 export async function POST(request) {
+  // The job-application worker calls this route with WORKER_SECRET instead of a session.
+  const denied = await requireApiAuth(request, { allowWorker: true });
+  if (denied) return denied;
+
   if (!supabaseService) {
     return NextResponse.json(
       { error: 'Missing SUPABASE_SERVICE_ROLE_KEY — required to send job application batches from the server.' },

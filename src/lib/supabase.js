@@ -1,20 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBridgeClient } from './db/bridgeClient';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables in .env.local');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export const supabaseService = supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    })
-  : null;
+/**
+ * Workspace data client.
+ *
+ * Same chainable API as supabase-js, but every query runs on the server through
+ * the authenticated /api/db bridge with the service-role key. The browser never
+ * gets a Supabase key, so data is only reachable with a valid owner session.
+ *
+ * Server code (API routes) should import `supabaseService` from '@/lib/supabaseServer'.
+ */
+export const supabase = createBridgeClient();

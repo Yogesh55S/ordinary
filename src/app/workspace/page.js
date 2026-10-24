@@ -104,14 +104,14 @@ export default function Dashboard() {
         actions={
           <>
             <Link
-              href="/clients"
+              href="/workspace/clients"
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-ink-800 hover:bg-slate-50 dark:hover:bg-ink-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-colors"
             >
               <UserPlus className="h-4 w-4" />
               <span>Add Client</span>
             </Link>
             <Link
-              href="/schedules"
+              href="/workspace/schedules"
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-sm transition-colors"
             >
               <Calendar className="h-4 w-4" />

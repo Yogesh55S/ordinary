@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabaseService } from '@/lib/supabase';
+import { requireApiAuth } from '@/lib/auth/server';
+import { supabaseService } from '@/lib/supabaseServer';
 import { DEFAULT_TECH_STACK, buildTechStackSectionHtml } from '@/lib/jobApplicationTechStack';
 import { getTransporter, getSmtpConfig } from '@/lib/mailer';
 
@@ -36,6 +37,9 @@ function renderTemplate(template, tokens) {
 // loop): the caller picks a specific template + a custom skills subset for this one
 // application, and the email goes out right away instead of joining the Pending queue.
 export async function POST(request) {
+  const denied = await requireApiAuth(request);
+  if (denied) return denied;
+
   if (!supabaseService) {
     return NextResponse.json(
       { error: 'Missing SUPABASE_SERVICE_ROLE_KEY — required to send job application emails from the server.' },

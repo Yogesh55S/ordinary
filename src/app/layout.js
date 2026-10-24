@@ -1,24 +1,38 @@
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import SplashLoader from "@/components/SplashLoader";
+import { site } from "@/data/portfolio";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+// Defaults describe the public portfolio; the workspace layout overrides them (and adds noindex).
 export const metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "ordinary · Lancer",
-    template: "%s · ordinary",
+    default: site.title,
+    template: `%s · ${site.name}`,
   },
-  description: "Manage clients, create templates, schedule outreach, and link WhatsApp",
-  applicationName: "ordinary",
-  appleWebApp: {
-    capable: true,
-    title: "ordinary",
-    statusBarStyle: "default",
+  description: site.description,
+  applicationName: site.name,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: site.name,
+    title: site.title,
+    description: site.description,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
   },
   formatDetection: { telephone: false },
 };
@@ -27,10 +41,7 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F0EFED" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F0C0A" },
-  ],
+  themeColor: "#F4F2EE",
 };
 
 export default function RootLayout({ children }) {
@@ -41,11 +52,13 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <head>
+        {/* The light/dark preference only applies inside the private workspace. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                var inWorkspace = location.pathname === '/workspace' || location.pathname.indexOf('/workspace/') === 0;
+                if (inWorkspace && (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))) {
                   document.documentElement.classList.add('dark');
                 } else {
                   document.documentElement.classList.remove('dark');
@@ -55,13 +68,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col md:flex-row font-sans bg-canvas text-slate-900 dark:bg-ink-950 dark:text-slate-100 transition-colors duration-200">
-        <SplashLoader />
-        <Sidebar />
-        <main className="flex-1 flex min-w-0 flex-col min-h-[100dvh] overflow-x-hidden pb-safe-nav">
-          {children}
-        </main>
-      </body>
+      <body className="min-h-full font-sans">{children}</body>
     </html>
   );
 }

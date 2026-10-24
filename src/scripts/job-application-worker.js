@@ -20,6 +20,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const APP_BASE_URL = process.env.JOB_APPLICATION_APP_BASE_URL || 'http://localhost:3000';
+// Shared secret that lets this worker call the auth-protected /api/send-job-emails route.
+const WORKER_SECRET = process.env.WORKER_SECRET;
 
 // How often the worker checks whether it's time to send the next batch.
 // Kept well below the smallest realistic interval (1 minute) so batches fire promptly.
@@ -28,6 +30,11 @@ const TICK_MS = 15000;
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Error: Missing Supabase environment variables in .env.local');
   console.error('Please ensure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set.');
+  process.exit(1);
+}
+
+if (!WORKER_SECRET) {
+  console.error('Error: Missing WORKER_SECRET in .env.local — the app rejects unauthenticated batch requests.');
   process.exit(1);
 }
 
@@ -74,7 +81,10 @@ async function tick() {
     running = true;
     log(`Interval elapsed — triggering batch of up to ${settings.batch_size} email(s)...`);
 
-    const res = await fetch(`${APP_BASE_URL}/api/send-job-emails`, { method: 'POST' });
+    const res = await fetch(`${APP_BASE_URL}/api/send-job-emails`, {
+      method: 'POST',
+      headers: { 'x-worker-secret': WORKER_SECRET },
+    });
     const result = await res.json();
 
     if (!res.ok) {

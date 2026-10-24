@@ -19,40 +19,43 @@ import {
   LayoutGrid,
 } from 'lucide-react';
 import BrandLogo from './BrandLogo';
+import LogoutButton from './LogoutButton';
+
+const WORKSPACE_HOME = '/workspace';
 
 const NAV_GROUPS = [
   {
     label: 'Outreach',
     links: [
-      { name: 'Dashboard', short: 'Home', href: '/', icon: LayoutDashboard },
-      { name: 'Clients', short: 'Clients', href: '/clients', icon: Users },
-      { name: 'Prospect Finder', short: 'Prospects', href: '/prospect', icon: MapPin },
-      { name: 'Templates', short: 'Templates', href: '/templates', icon: FileText },
-      { name: 'Schedules', short: 'Schedules', href: '/schedules', icon: Calendar },
-      { name: 'History', short: 'History', href: '/history', icon: History },
+      { name: 'Dashboard', short: 'Home', href: WORKSPACE_HOME, icon: LayoutDashboard },
+      { name: 'Clients', short: 'Clients', href: '/workspace/clients', icon: Users },
+      { name: 'Prospect Finder', short: 'Prospects', href: '/workspace/prospect', icon: MapPin },
+      { name: 'Templates', short: 'Templates', href: '/workspace/templates', icon: FileText },
+      { name: 'Schedules', short: 'Schedules', href: '/workspace/schedules', icon: Calendar },
+      { name: 'History', short: 'History', href: '/workspace/history', icon: History },
     ],
   },
   {
     label: 'Tools',
     links: [
-      { name: 'Job Applications', short: 'Jobs', href: '/job-applications', icon: Briefcase },
-      { name: 'Delivery Estimator', short: 'Delivery', href: '/delivery', icon: Truck },
+      { name: 'Job Applications', short: 'Jobs', href: '/workspace/job-applications', icon: Briefcase },
+      { name: 'Delivery Estimator', short: 'Delivery', href: '/workspace/delivery', icon: Truck },
     ],
   },
   {
     label: 'System',
-    links: [{ name: 'WhatsApp Link', short: 'WhatsApp', href: '/settings', icon: Settings }],
+    links: [{ name: 'WhatsApp Link', short: 'WhatsApp', href: '/workspace/settings', icon: Settings }],
   },
 ];
 
 const ALL_LINKS = NAV_GROUPS.flatMap((group) => group.links);
 
 // Most-used destinations get a permanent slot in the mobile tab bar.
-const PRIMARY_MOBILE_HREFS = ['/', '/clients', '/schedules', '/job-applications'];
+const PRIMARY_MOBILE_HREFS = [WORKSPACE_HOME, '/workspace/clients', '/workspace/schedules', '/workspace/job-applications'];
 const PRIMARY_MOBILE_LINKS = PRIMARY_MOBILE_HREFS.map((href) => ALL_LINKS.find((link) => link.href === href));
 
 function isLinkActive(pathname, href) {
-  return pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+  return pathname === href || (href !== WORKSPACE_HOME && pathname.startsWith(`${href}/`));
 }
 
 function ThemeToggle({ theme, onToggle, compact = false }) {
@@ -139,10 +142,13 @@ export default function Sidebar() {
         className="sticky top-0 z-40 flex items-center justify-between gap-3 px-4 py-2 md:hidden bg-canvas/85 dark:bg-ink-950/85 backdrop-blur-lg border-b border-mist/70 dark:border-line"
         style={{ paddingTop: 'calc(0.5rem + env(safe-area-inset-top))' }}
       >
-        <Link href="/" aria-label="ordinary home" className="flex items-center">
+        <Link href={WORKSPACE_HOME} aria-label="ordinary workspace home" className="flex items-center">
           <BrandLogo width={78} priority />
         </Link>
-        <ThemeToggle theme={theme} onToggle={toggleTheme} compact />
+        <div className="flex items-center gap-1">
+          <ThemeToggle theme={theme} onToggle={toggleTheme} compact />
+          <LogoutButton compact />
+        </div>
       </header>
 
       {/* Mobile Bottom Tab Bar */}
@@ -252,6 +258,7 @@ export default function Sidebar() {
                 </section>
               ))}
               <ThemeToggle theme={theme} onToggle={toggleTheme} />
+              <LogoutButton />
             </div>
           </div>
         </div>
@@ -263,7 +270,7 @@ export default function Sidebar() {
         - xl and up: full sidebar with labels and grouped sections
       */}
       <aside className="hidden md:flex flex-col w-[76px] xl:w-64 shrink-0 bg-white dark:bg-ink-900 border-r border-mist dark:border-line h-screen sticky top-0 transition-[width,colors] duration-200">
-        <Link href="/" aria-label="ordinary home" className="flex items-center justify-center xl:justify-start px-3 xl:px-6 pt-5 pb-4">
+        <Link href={WORKSPACE_HOME} aria-label="ordinary workspace home" className="flex items-center justify-center xl:justify-start px-3 xl:px-6 pt-5 pb-4">
           <BrandLogo variant="mark" width={40} priority className="xl:hidden" />
           <span className="hidden xl:block">
             <BrandLogo width={118} priority />
@@ -313,6 +320,12 @@ export default function Sidebar() {
           </div>
           <div className="hidden xl:block">
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          </div>
+          <div className="flex justify-center xl:hidden">
+            <LogoutButton compact />
+          </div>
+          <div className="hidden xl:block">
+            <LogoutButton />
           </div>
           <div className="flex items-center justify-center xl:justify-start gap-2 px-3.5 py-2" title="Active Session">
             <span className="relative flex h-2 w-2">

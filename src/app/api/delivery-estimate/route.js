@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireApiAuth } from '@/lib/auth/server';
 
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
@@ -178,6 +179,8 @@ function pickVehicle(weightKg, restrictHeavy) {
 
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request) {
+  const denied = await requireApiAuth(request);
+  if (denied) return denied;
 
   let body;
   try {

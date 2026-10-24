@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireApiAuth } from '@/lib/auth/server';
 
 const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 const LOCATIONIQ_API_KEY = process.env.LOCATIONIQ_API_KEY || 
@@ -20,6 +21,9 @@ const FIELD_MASK = [
 ].join(',');
 
 export async function GET(request) {
+  const denied = await requireApiAuth(request);
+  if (denied) return denied;
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
   const pagetoken = searchParams.get('pagetoken');
