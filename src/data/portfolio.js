@@ -34,7 +34,7 @@ export const nav = {
 };
 
 /**
- * Projects power the Work section, the hero, the brand strip and every case study page
+ * Projects power the Work section and every case study page
  * (/work/[slug]). `cover: false` shows the image centred (contained) on a dark backdrop.
  */
 export const projects = [
@@ -295,24 +295,23 @@ export function getNextProject(slug) {
 }
 
 export const hero = {
+  // Used by the social share image (src/app/opengraph-image.js).
   headingLead: 'I turn complex ideas into',
-  headingLines: ['I turn complex', 'ideas into'],
-  // The highlighted last line of the H1 cycles through these.
   rotatingWords: ['shipped products.', 'online stores.', 'mobile apps.', 'web platforms.'],
-  intro:
-    'Full-stack & mobile developer building production-grade web apps, online stores and Android apps — with payments, dashboards and interfaces made for real users.',
-  primaryCta: { label: 'Start a project', href: '#contact' },
-  secondaryCta: { label: 'See my work', href: '#work' },
-  stickyNote: ['Same person.', 'Bigger dreams…'],
-  // `accent` paints the number red.
-  stats: [
-    { value: '7+', label: ['products', 'shipped live'], accent: true },
-    { value: '2021', label: ['building', 'since'], accent: false },
-    { value: '2', label: ['platforms:', 'web & mobile'], accent: true },
-    { value: 'SIH', label: ['Smart India', "Hackathon '24"], accent: false },
+  // The hero is the hand-lettered wordmark; its alt text is the page's H1.
+  wordmark: { src: '/brand/hero/wordmark.png', width: 866, height: 320, alt: 'Ordinary Lancer' },
+  /**
+   * Whiskers drawn around the wordmark. Boxes are % of the wordmark, `origin` is the
+   * pivot they swing from, `pop`/`whisk` are the entry and swing delays in seconds.
+   */
+  whiskers: [
+    { src: '/brand/hero/whisker-l1.png', side: 'l', box: [9.007, 14.688, 4.734, 23.125], origin: '85% 95%', pop: 0.9, whisk: 1.4 },
+    { src: '/brand/hero/whisker-l2.png', side: 'l', box: [1.848, 35.312, 7.621, 12.188], origin: '95% 85%', pop: 1, whisk: 1.55 },
+    { src: '/brand/hero/whisker-l3.png', side: 'l', box: [1.039, 55.937, 7.044, 7.5], origin: '96% 50%', pop: 1.1, whisk: 1.7 },
+    { src: '/brand/hero/whisker-r1.png', side: 'r', box: [91.801, 57.5, 7.044, 9.375], origin: '4% 85%', pop: 1.2, whisk: 1.5 },
+    { src: '/brand/hero/whisker-r2.png', side: 'r', box: [91.224, 72.5, 6.697, 11.875], origin: '4% 12%', pop: 1.3, whisk: 1.65 },
   ],
-  brandsLabel: 'built for real brands →',
-  brands: ['house-of-aerawat', 'rabbit-auto-care', 'nidas-pure', 'genesis-classes', 'sanskriti-retails'],
+  tagline: 'Build. Learn. Grow. Repeat',
 };
 
 export const skills = ['NEXT.JS', 'REACT', 'REACT NATIVE', 'NODE.JS', 'SUPABASE', 'MONGODB', 'AWS LAMBDA', 'PYTHON', 'RAZORPAY', 'SHOPIFY'];
