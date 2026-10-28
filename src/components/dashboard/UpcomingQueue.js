@@ -4,7 +4,7 @@ import { Calendar, ArrowRight, FileText, MessageSquare } from 'lucide-react';
 export default function UpcomingQueue({ upcomingSchedules, loading }) {
   return (
     <div className="bg-white dark:bg-ink-800 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-xs flex flex-col overflow-hidden">
-      <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+      <div className="p-3.5 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
         <div>
           <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">Upcoming Queue</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">The next 5 scheduled outreach tasks</p>
@@ -41,18 +41,24 @@ export default function UpcomingQueue({ upcomingSchedules, loading }) {
           <>
           <div className="divide-y divide-slate-100 dark:divide-slate-800 lg:hidden">
             {upcomingSchedules.map((item) => (
-              <div key={item.id} className="space-y-2 px-5 py-4">
+              <div key={item.id} className="space-y-1.5 px-3.5 sm:px-5 py-3.5 sm:py-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="truncate font-semibold text-slate-800 dark:text-slate-200">{item.clients?.business_name || 'Unknown Business'}</p>
-                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{item.clients?.phone_number || 'No phone number'}</p>
+                    <p className="truncate font-semibold text-sm text-slate-800 dark:text-slate-200">
+                      {item.clients?.business_name || 'Unknown Business'}
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      {item.clients?.phone_number || 'No phone number'}
+                    </p>
                   </div>
                   <div className="shrink-0 text-right text-xs">
                     <p className="font-medium text-slate-700 dark:text-slate-300">{item.schedule_date || 'Date not set'}</p>
                     <p className="mt-0.5 text-slate-400">{item.schedule_time ? `at ${item.schedule_time.slice(0, 5)}` : 'Time not set'}</p>
                   </div>
                 </div>
-                <p className="truncate text-xs text-slate-500 dark:text-slate-400">{item.templates?.template_name || item.custom_message || 'Custom message'}</p>
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                  {item.templates?.template_name || item.custom_message || 'Custom message'}
+                </p>
               </div>
             ))}
           </div>

@@ -107,16 +107,34 @@ export default function About() {
 
         <Reveal className="ol-toolbox">
           <div className="ol-toolbox__head">
-            <p className="ol-eyebrow">{about.toolbox.eyebrow}</p>
-            <h2 className="ol-toolbox__title">{about.toolbox.heading}</h2>
+            <div>
+              <p className="ol-eyebrow">{about.toolbox.eyebrow}</p>
+              <h2 className="ol-toolbox__title">{about.toolbox.heading}</h2>
+            </div>
+            <p className="ol-toolbox__intro">{about.toolbox.intro}</p>
           </div>
-          <ul className="ol-tools">
-            {about.toolbox.tools.map((tool) => (
-              <li key={tool} className="ol-pill">
-                {tool}
-              </li>
+          <RevealGroup as="ul" className="ol-tgroups">
+            {about.toolbox.groups.map((group) => (
+              <RevealItem as="li" key={group.title} className="ol-tgroup">
+                <div className="ol-tgroup__head">
+                  <span className="ol-tgroup__icon" aria-hidden="true">
+                    <Icon name={group.icon} size={20} strokeWidth={2} />
+                  </span>
+                  <h3 className="ol-tgroup__title">{group.title}</h3>
+                  <span className="ol-tgroup__count" aria-label={`${group.tools.length} tools`}>
+                    {String(group.tools.length).padStart(2, '0')}
+                  </span>
+                </div>
+                <ul className="ol-tgroup__tools">
+                  {group.tools.map((tool) => (
+                    <li key={tool} className="ol-pill">
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              </RevealItem>
             ))}
-          </ul>
+          </RevealGroup>
         </Reveal>
       </div>
     </section>

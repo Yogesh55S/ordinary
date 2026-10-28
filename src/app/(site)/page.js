@@ -5,12 +5,11 @@ import Pillars from '@/components/portfolio/Pillars';
 import Services from '@/components/portfolio/Services';
 import Work from '@/components/portfolio/Work';
 import Process from '@/components/portfolio/Process';
-import Journey from '@/components/portfolio/Journey';
 import About from '@/components/portfolio/About';
 import Pricing from '@/components/portfolio/Pricing';
 import Faq from '@/components/portfolio/Faq';
 import Contact from '@/components/portfolio/Contact';
-import { site } from '@/data/portfolio';
+import { marqueeLines, site } from '@/data/portfolio';
 
 export const dynamic = 'force-static';
 
@@ -29,12 +28,11 @@ export default function PortfolioPage() {
   return (
     <SiteShell>
       <Hero />
-      <SkillsMarquee />
+      <SkillsMarquee items={marqueeLines} label="What I stand for" />
       <Pillars />
       <Services />
       <Work />
       <Process />
-      <Journey />
       <About />
       <Pricing />
       <Faq />

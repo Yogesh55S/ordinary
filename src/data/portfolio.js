@@ -26,7 +26,6 @@ export const nav = {
   links: [
     { label: 'Services', href: '#services' },
     { label: 'Work', href: '#work' },
-    { label: 'Experience', href: '#journey' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'FAQ', href: '#faq' },
   ],
@@ -257,9 +256,9 @@ export const projects = [
     image: { src: '/projects/lukewarm.jpg', width: 1536, height: 1024 },
     cover: true,
     status: 'Android app',
-    live: 'https://business-card-web-pi.vercel.app/',
-    liveLabel: 'Explore app specs',
-    domain: 'business-card-web-pi.vercel.app',
+    live: '',
+    liveLabel: 'View app specs',
+    domain: '',
     subtitle: 'An Android app that turns physical business cards into structured, searchable contact intelligence.',
     type: 'Mobile app',
     platform: 'Android · React Native',
@@ -298,23 +297,42 @@ export const hero = {
   // Used by the social share image (src/app/opengraph-image.js).
   headingLead: 'I turn complex ideas into',
   rotatingWords: ['shipped products.', 'online stores.', 'mobile apps.', 'web platforms.'],
-  // The hero is the hand-lettered wordmark; its alt text is the page's H1.
-  wordmark: { src: '/brand/hero/wordmark.png', width: 866, height: 320, alt: 'Ordinary Lancer' },
+  // The hero wordmark — full "ordinary Lancer" brush lockup (transparent PNG).
+  wordmark: { src: '/brand/wordmark-full.png', width: 866, height: 344, alt: 'Ordinary Lancer' },
   /**
    * Whiskers drawn around the wordmark. Boxes are % of the wordmark, `origin` is the
    * pivot they swing from, `pop`/`whisk` are the entry and swing delays in seconds.
+   * Values taken verbatim from the HeroWordmark design export (866×344 lockup).
    */
   whiskers: [
-    { src: '/brand/hero/whisker-l1.png', side: 'l', box: [9.007, 14.688, 4.734, 23.125], origin: '85% 95%', pop: 0.9, whisk: 1.4 },
-    { src: '/brand/hero/whisker-l2.png', side: 'l', box: [1.848, 35.312, 7.621, 12.188], origin: '95% 85%', pop: 1, whisk: 1.55 },
-    { src: '/brand/hero/whisker-l3.png', side: 'l', box: [1.039, 55.937, 7.044, 7.5], origin: '96% 50%', pop: 1.1, whisk: 1.7 },
-    { src: '/brand/hero/whisker-r1.png', side: 'r', box: [91.801, 57.5, 7.044, 9.375], origin: '4% 85%', pop: 1.2, whisk: 1.5 },
-    { src: '/brand/hero/whisker-r2.png', side: 'r', box: [91.224, 72.5, 6.697, 11.875], origin: '4% 12%', pop: 1.3, whisk: 1.65 },
+    { src: '/brand/hero/whisker-l1.png', side: 'l', box: [9.007, 13.663, 4.734, 21.512], origin: '85% 95%', pop: 0.9, whisk: 1.4 },
+    { src: '/brand/hero/whisker-l2.png', side: 'l', box: [1.848, 32.849, 7.621, 11.337], origin: '95% 85%', pop: 1, whisk: 1.55 },
+    { src: '/brand/hero/whisker-l3.png', side: 'l', box: [1.039, 52.035, 7.044, 6.977], origin: '96% 50%', pop: 1.1, whisk: 1.7 },
+    { src: '/brand/hero/whisker-r1.png', side: 'r', box: [91.801, 53.488, 7.044, 8.721], origin: '4% 85%', pop: 1.2, whisk: 1.5 },
+    { src: '/brand/hero/whisker-r2.png', side: 'r', box: [91.224, 67.442, 6.697, 11.047], origin: '4% 12%', pop: 1.3, whisk: 1.65 },
   ],
   tagline: 'Build. Learn. Grow. Repeat',
+  // Hero tagline doubles as a download link; the "click here" hint shows for 3s after the intro.
+  card: {
+    src: '/brand/ordinary-lancer-business-card.png',
+    filename: 'Ordinary-Lancer-Business-Card.png',
+    hint: 'click here!',
+    label: 'Download the Ordinary Lancer business card',
+  },
 };
 
 export const skills = ['NEXT.JS', 'REACT', 'REACT NATIVE', 'NODE.JS', 'SUPABASE', 'MONGODB', 'AWS LAMBDA', 'PYTHON', 'RAZORPAY', 'SHOPIFY'];
+
+/** Brand lines for the tilted strip under the hero (case studies still show their stack). */
+export const marqueeLines = [
+  'IDEAS INTO PRODUCTS',
+  'SHIPPED, NOT JUST STARTED',
+  'ONE DEV · WHOLE STACK',
+  'BUILT TO SCALE',
+  'DESIGNED TO CONVERT',
+  'CLEAN CODE, ON TIME',
+  'FROM SKETCH TO LAUNCH',
+];
 
 export const pillars = [
   { icon: 'monitorCode', lines: ['Web', 'Development'] },
@@ -336,41 +354,51 @@ export const services = {
       'Complete products on Next.js, React and Node.js with Supabase or MongoDB — dashboards, client portals, LMS platforms, booking marketplaces and SaaS.',
     tags: ['Next.js', 'React', 'Node.js', 'Supabase', 'MongoDB'],
   },
-  // tone: 'light' (white card) or 'red' (brand card)
+  // tone: 'light' (white card) or 'red' (brand card). `points` are what the client walks away with.
   items: [
     {
       icon: 'bag',
       tone: 'red',
       title: 'E-commerce & Payments',
-      description: 'Online stores that sell — product catalogs, carts, invoices and secure checkout.',
+      description:
+        'Online stores that actually sell — fast product pages, smooth carts and a checkout people trust on the first try.',
+      points: ['Catalog, cart & order dashboard', 'UPI & card payments with invoices', 'Shopify setup or fully custom store'],
       stack: 'Razorpay · Cashfree · Shopify',
     },
     {
       icon: 'phone',
       tone: 'light',
       title: 'Mobile Apps',
-      description: 'iOS and Android MVPs with React Native and Expo — offline-ready and fast.',
+      description:
+        'iOS and Android apps from one React Native codebase — built to work offline and feel native in the hand.',
+      points: ['MVP to Play Store / App Store', 'Offline sync & push notifications', 'One codebase, both platforms'],
       stack: 'React Native · Expo · SQLite',
     },
     {
       icon: 'layout',
       tone: 'light',
       title: 'Frontend & Motion',
-      description: 'Responsive, animated interfaces that feel premium on every screen.',
+      description:
+        'Responsive, animated interfaces that feel premium on every screen — from a 320px phone to a wide desktop.',
+      points: ['Pixel-close build from Figma', 'Scroll & micro-interactions', 'Fast loads & accessible markup'],
       stack: 'React · Tailwind · GSAP · Framer Motion',
     },
     {
       icon: 'cloud',
       tone: 'light',
       title: 'Backend & Cloud',
-      description: 'APIs, auth, databases and serverless infrastructure that scales quietly.',
+      description:
+        'APIs, auth, databases and serverless infrastructure that scales quietly in the background while you grow.',
+      points: ['REST APIs, auth & roles', 'Database design & migrations', 'Serverless jobs, cron & webhooks'],
       stack: 'Python · AWS Lambda · Supabase · Redis',
     },
     {
       icon: 'wrench',
       tone: 'light',
       title: 'Fixes, Upgrades & Care',
-      description: 'Bug fixes, new features, speed boosts and monthly support for apps you already have.',
+      description:
+        'Already have an app? I jump in to fix what is broken, ship the features you are missing and keep it healthy.',
+      points: ['Bug hunts & speed boosts', 'New features on existing code', 'Monthly care & monitoring plans'],
       stack: 'Debugging · Features · Support',
     },
   ],
@@ -379,7 +407,7 @@ export const services = {
 export const work = {
   eyebrow: "things I've shipped",
   heading: 'Selected work',
-  intro: 'Live products for real businesses. Hover a project to preview it — click for the full story.',
+  intro: 'Live products for real businesses — pick one for the full story.',
   // Filter ids match `project.kind`.
   filters: [
     { id: 'all', label: 'All' },
@@ -393,12 +421,14 @@ export const work = {
 export const workflow = {
   eyebrow: "how we'll work",
   heading: 'Simple process. No surprises.',
+  intro: 'Five clear steps from first call to launch — you always know what is happening and what comes next.',
+  // `when` is the rough timing, `gets` is what the client has in hand after the step.
   steps: [
-    { title: 'Discuss', text: 'A free call about your idea, goals, budget and timeline.' },
-    { title: 'Plan', text: 'Clear scope, milestones and a fixed quote in writing.' },
-    { title: 'Build', text: 'Weekly demos you can click through and give feedback on.' },
-    { title: 'Deliver', text: 'Tested, deployed and handed over with full source code.' },
-    { title: 'Support', text: 'I stay around for fixes, updates and the next version.' },
+    { icon: 'chat', title: 'Discuss', when: '30-min call · free', text: 'A free call about your idea, goals, budget and timeline.', gets: 'Honest advice on scope & stack' },
+    { icon: 'layout', title: 'Plan', when: '1–2 days', text: 'Clear scope, milestones and a fixed quote in writing.', gets: 'Fixed quote + milestone plan' },
+    { icon: 'code', title: 'Build', when: 'Weekly sprints', text: 'Weekly demos you can click through and give feedback on.', gets: 'A live demo link every week' },
+    { icon: 'send', title: 'Deliver', when: 'Launch day', text: 'Tested, deployed and handed over with full source code.', gets: 'Source code, docs & handover' },
+    { icon: 'wrench', title: 'Support', when: '30 days included', text: 'I stay around for fixes, updates and the next version.', gets: 'Fixes & a plan for v2' },
   ],
 };
 
@@ -411,13 +441,6 @@ export const experience = {
     text: 'National level. Led frontend architecture and rapid prototyping for a team of 6 — cleared the 1st stage with 100% of the MVP delivered.',
   },
   roles: [
-    {
-      period: '2025 — PRESENT',
-      active: true,
-      title: 'Full-Stack Developer',
-      org: 'Indiefluence',
-      text: 'Building end-to-end web products, including real-time client platforms, and introduced design systems for the team.',
-    },
     {
       period: 'JUL — AUG 2023',
       active: false,
@@ -463,16 +486,21 @@ export const about = {
       ['status', "'open for work'", 'cursor'],
     ],
     nowLabel: 'RIGHT NOW',
-    now: 'Full-Stack Developer @ Indiefluence',
+    now: 'Independent Full-Stack Developer',
     nowNote: '…and taking on new freelance projects.',
   },
   toolbox: {
     eyebrow: 'my toolbox',
     heading: 'Tech I work with',
-    tools: [
-      'Next.js', 'React.js', 'React Native', 'Expo', 'Node.js', 'TypeScript', 'JavaScript', 'Python', 'MongoDB', 'Supabase',
-      'MySQL', 'Drizzle ORM', 'Valkey / Redis', 'AWS Lambda', 'Vercel', 'Tailwind CSS', 'Vite', 'Razorpay',
-      'GetStream Video SDK', 'Git & GitHub', 'C++', 'HTML5 / CSS3',
+    intro: 'The stack I reach for, grouped by where it lives in a product.',
+    // `icon` is an Icon.js name. Every tool appears in exactly one group.
+    groups: [
+      { icon: 'layout', title: 'Frontend', tools: ['Next.js', 'React.js', 'Tailwind CSS', 'Vite', 'HTML5 / CSS3'] },
+      { icon: 'phone', title: 'Mobile', tools: ['React Native', 'Expo'] },
+      { icon: 'code', title: 'Backend', tools: ['Node.js', 'Python', 'AWS Lambda'] },
+      { icon: 'database', title: 'Data', tools: ['MongoDB', 'Supabase', 'MySQL', 'Drizzle ORM', 'Valkey / Redis'] },
+      { icon: 'brackets', title: 'Languages', tools: ['TypeScript', 'JavaScript', 'C++'] },
+      { icon: 'cloud', title: 'Ship & integrate', tools: ['Vercel', 'Git & GitHub', 'Razorpay', 'GetStream Video SDK'] },
     ],
   },
 };
@@ -576,7 +604,7 @@ export const footer = {
       links: [
         { label: 'Services', href: '#services', section: true },
         { label: 'Work', href: '#work', section: true },
-        { label: 'Experience', href: '#journey', section: true },
+        { label: 'Process', href: '#process', section: true },
         { label: 'Pricing', href: '#pricing', section: true },
       ],
     },

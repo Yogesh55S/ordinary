@@ -8,11 +8,61 @@ import { Reveal } from './Reveal';
 import { projectHref, projects, work } from '@/data/portfolio';
 
 const pad = (n) => String(n).padStart(2, '0');
+const MAX_CHIPS = 3;
 
 /**
- * Project list + sticky preview. Hover or keyboard focus on a row previews it
- * (desktop); every row is a real link to the case study, so touch users tap
- * straight through and see a thumbnail inline instead of the preview panel.
+ * Mobile project card. The title link is stretched over the whole card (one tab stop,
+ * one link to the case study); "Live" sits above it as its own link.
+ */
+function ProjectCard({ project, index }) {
+  const stack = project.stackLine.split(' · ');
+  const extra = stack.length - MAX_CHIPS;
+  return (
+    <article className="ol-pcard">
+      <div className="ol-pcard__media">
+        <ProjectMedia project={project} alt="" sizes="(min-width: 640px) 600px, 92vw" />
+        <span className="ol-pcard__num" aria-hidden="true">
+          {pad(index + 1)}
+        </span>
+        <p className="ol-pcard__status">
+          <span aria-hidden="true" className="ol-dot" />
+          {project.status}
+        </p>
+      </div>
+      <div className="ol-pcard__body">
+        <p className="ol-pcard__cat">{project.category}</p>
+        <h3 className="ol-pcard__name">
+          <Link href={projectHref(project.slug)} className="ol-pcard__link">
+            {project.name}
+          </Link>
+        </h3>
+        <p className="ol-pcard__blurb">{project.shortBlurb}</p>
+        <ul className="ol-pcard__chips" aria-label="Stack">
+          {stack.slice(0, MAX_CHIPS).map((tech) => (
+            <li key={tech}>{tech}</li>
+          ))}
+          {extra > 0 && <li>+{extra}</li>}
+        </ul>
+        <div className="ol-pcard__foot">
+          <span className="ol-pcard__cta" aria-hidden="true">
+            Case study <Icon name="arrowRight" size={16} strokeWidth={2.6} />
+          </span>
+          {project.live && (
+            <a className="ol-pcard__live" href={project.live} target="_blank" rel="noopener noreferrer">
+              Live <Icon name="arrowUpRight" size={14} strokeWidth={2.6} />
+              <span className="ol-sr-only"> — {project.name} (opens in a new tab)</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/**
+ * Desktop (≥1024px): project list + sticky preview — hover or keyboard focus on a
+ * row previews it, every row links to the case study.
+ * Below 1024px: a stack of full project cards (screenshot first) instead.
  */
 export default function Work() {
   const [filter, setFilter] = useState('all');
@@ -55,6 +105,16 @@ export default function Work() {
         <p className="ol-sr-only" aria-live="polite">
           {`Showing ${shown.length} project${shown.length === 1 ? '' : 's'}`}
         </p>
+
+        {/* Phone/tablet: big project cards that stack over each other as you scroll.
+            Keyed on the filter so a new selection re-plays the entrance. */}
+        <ol key={filter} aria-label="Projects" className="ol-stack">
+          {shown.map((project, index) => (
+            <li key={project.slug} className="ol-stack__item" style={{ '--i': index }}>
+              <ProjectCard project={project} index={index} />
+            </li>
+          ))}
+        </ol>
 
         <div className="ol-showcase">
           <ol aria-label="Projects" className="ol-rows">

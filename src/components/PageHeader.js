@@ -34,7 +34,7 @@ export default function PageHeader({ title, description, icon: Icon, actions, ba
       </div>
 
       {actions && (
-        <div className="flex shrink-0 items-center gap-2.5 [&>*]:flex-1 [&>*]:whitespace-nowrap sm:[&>*]:flex-none">
+        <div className="flex flex-col xs:flex-row shrink-0 items-stretch xs:items-center gap-2 sm:gap-2.5 [&>*]:w-full xs:[&>*]:w-auto sm:[&>*]:flex-none sm:[&>*]:whitespace-nowrap">
           {actions}
         </div>
       )}
