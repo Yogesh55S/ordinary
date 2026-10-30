@@ -1620,7 +1620,7 @@ html[data-ol-intro='wait'] body::after {
 .ol-plan__name { font-size: 22px; font-weight: 800; }
 .ol-plan__summary { font-size: 15px; color: var(--ol-muted); }
 .ol-plan--featured .ol-plan__summary { color: #D6D0C9; }
-.ol-plan__price { font-size: clamp(36px, 6vw, 44px); font-weight: 900; letter-spacing: -1px; }
+.ol-plan__price { font-size: clamp(28px, 3vw, 32px); font-weight: 900; letter-spacing: -0.8px; line-height: 1.15; }
 .ol-plan__unit { font-size: 16px; font-weight: 600; color: var(--ol-muted); letter-spacing: 0; }
 .ol-plan--featured .ol-plan__unit { color: #D6D0C9; }
 .ol-plan__features { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
@@ -1800,8 +1800,40 @@ select.ol-input { appearance: none; background-image: url("data:image/svg+xml,%3
 .ol-chip:has(input:checked) { background: var(--ol-red); color: #FFFFFF; }
 .ol-chip:has(input:focus-visible) { outline: 3px solid var(--ol-ink); outline-offset: 3px; }
 .ol-chip:active { transform: scale(0.96); }
+/* Pricing cards jump to #contact-form; extra room (on top of the header's scroll-padding)
+   covers the reveal slide-in so the form and the section label stay clear of the header. */
+#contact-form { scroll-margin-top: 56px; }
+/* Plan chosen from a pricing card. */
+.ol-form__plan {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 4px 4px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--ol-ink);
+  background: var(--ol-paper);
+}
+.ol-form__plan strong { font-weight: 800; color: var(--ol-red); }
+.ol-form__plan-clear {
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ol-ink);
+  cursor: pointer;
+}
+.ol-form__plan-clear:hover { background: #FFFFFF; }
+.ol-form__plan-clear:focus-visible { outline: 3px solid var(--ol-ink); outline-offset: 1px; }
 .ol-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .ol-form__submit { font-weight: 800; }
+.ol-form__hint { margin-top: -8px; font-size: 13px; color: var(--ol-muted); text-align: center; }
 .ol-form__alert {
   border: 2px solid var(--ol-red);
   background: #FFF3F0;

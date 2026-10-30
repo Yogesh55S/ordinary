@@ -1,4 +1,4 @@
-import { contact } from '@/data/portfolio';
+import { contact, pricing } from '@/data/portfolio';
 
 /**
  * Contact form rules, shared by the browser (instant feedback) and the API route
@@ -14,6 +14,7 @@ export const CONTACT_LIMITS = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const NEED_IDS = new Set(contact.form.needs.map((need) => need.id));
 const BUDGETS = new Set(contact.form.budgets);
+const PLAN_IDS = new Set(pricing.plans.map((plan) => plan.id));
 
 export function validateContact(input) {
   const values = {
@@ -21,6 +22,8 @@ export function validateContact(input) {
     email: String(input?.email ?? '').trim(),
     need: String(input?.need ?? ''),
     budget: String(input?.budget ?? ''),
+    // Optional: set when the visitor came from a pricing card. Unknown ids are dropped.
+    plan: PLAN_IDS.has(String(input?.plan ?? '')) ? String(input.plan) : '',
     message: String(input?.message ?? '').trim(),
   };
   const errors = {};
@@ -47,4 +50,8 @@ export function validateContact(input) {
 
 export function needLabel(id) {
   return contact.form.needs.find((need) => need.id === id)?.label ?? id;
+}
+
+export function findPlan(id) {
+  return pricing.plans.find((plan) => plan.id === id) ?? null;
 }

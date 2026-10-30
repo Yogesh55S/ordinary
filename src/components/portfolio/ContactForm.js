@@ -2,25 +2,32 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Icon from './Icon';
-import { contact, site } from '@/data/portfolio';
-import { CONTACT_LIMITS, validateContact } from '@/lib/contactValidation';
+import { contact } from '@/data/portfolio';
+import { CONTACT_LIMITS, findPlan, validateContact } from '@/lib/contactValidation';
+import { PLAN_SELECT_EVENT } from '@/lib/planSelection';
+import { buildWhatsAppUrl } from '@/lib/whatsappMessage';
 
 const INITIAL = {
   name: '',
   email: '',
   need: contact.form.defaultNeed,
-  budget: contact.form.budgets[0],
+  budget: '', // required: the visitor must pick one (or "Not sure yet")
+  plan: '',
   message: '',
 };
+
+// Anchor target for the pricing cards (data: pricing.plans[].cta.href), on both form and success views.
+const FORM_ID = 'contact-form';
 
 const FIELD_ORDER = ['name', 'email', 'need', 'budget', 'message'];
 
 export default function ContactForm() {
   const [values, setValues] = useState(INITIAL);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('idle'); // idle | sending | success | error
-  const [serverMessage, setServerMessage] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | success
+  const [whatsappUrl, setWhatsappUrl] = useState('');
   const startedAt = useRef(0);
+  const statusRef = useRef(status);
   const formRef = useRef(null);
   const successRef = useRef(null);
 
@@ -29,8 +36,26 @@ export default function ContactForm() {
   }, []);
 
   useEffect(() => {
+    statusRef.current = status;
     if (status === 'success') successRef.current?.focus();
   }, [status]);
+
+  // A pricing card was tapped: pre-select its plan and matching "What do you need?" chip.
+  useEffect(() => {
+    const onSelectPlan = (event) => {
+      const plan = findPlan(event.detail?.planId);
+      if (!plan) return;
+      setValues((current) => ({ ...current, plan: plan.id, need: plan.need ?? current.need }));
+      setErrors((current) => ({ ...current, need: undefined }));
+      // After a sent message, bring the form back so the selection is visible.
+      if (statusRef.current === 'success') {
+        startedAt.current = Date.now();
+        setStatus('idle');
+      }
+    };
+    window.addEventListener(PLAN_SELECT_EVENT, onSelectPlan);
+    return () => window.removeEventListener(PLAN_SELECT_EVENT, onSelectPlan);
+  }, []);
 
   const update = (field) => (event) => {
     const value = event.target.value;
@@ -44,44 +69,38 @@ export default function ContactForm() {
     formRef.current?.querySelector(`[data-field="${first}"]`)?.focus();
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (status === 'sending') return;
 
-    const { errors: fieldErrors } = validateContact(values);
+    const { values: clean, errors: fieldErrors } = validateContact(values);
     if (Object.keys(fieldErrors).length) {
       setErrors(fieldErrors);
       focusFirstError(fieldErrors);
       return;
     }
 
-    setStatus('sending');
-    setServerMessage('');
+    // Open WhatsApp with the enquiry pre-filled. This must stay synchronous in the
+    // submit handler: browsers (iOS Safari especially) block windows opened later.
+    const chatUrl = buildWhatsAppUrl(clean);
+    window.open(chatUrl, '_blank', 'noopener,noreferrer');
+
+    // Email copy as a backup channel, sent in the background (keepalive survives the
+    // visitor switching to WhatsApp). The browser already ran the same validation.
     const honeypot = new FormData(event.currentTarget).get('website') || '';
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...values, website: honeypot, startedAt: startedAt.current }),
+      keepalive: true,
+    })
+      .then((res) => {
+        if (!res.ok) console.warn('[contact] email copy not sent:', res.status);
+      })
+      .catch(() => console.warn('[contact] email copy not sent: network error'));
 
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...values, website: honeypot, startedAt: startedAt.current }),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        setStatus('success');
-        setValues(INITIAL);
-        return;
-      }
-      if (data.errors) {
-        setErrors(data.errors);
-        focusFirstError(data.errors);
-      }
-      setServerMessage(data.error || 'Something went wrong while sending.');
-      setStatus('error');
-    } catch (_) {
-      setServerMessage('Could not reach the server. Check your connection and try again.');
-      setStatus('error');
-    }
+    setWhatsappUrl(chatUrl);
+    setStatus('success');
+    setValues(INITIAL);
   };
 
   const reset = () => {
@@ -92,18 +111,27 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div className="ol-form ol-form__success" role="status" tabIndex={-1} ref={successRef}>
+      <div id={FORM_ID} className="ol-form ol-form__success" role="status" tabIndex={-1} ref={successRef}>
         <span className="ol-form__success-icon" aria-hidden="true">
           <Icon name="check" size={30} color="#FFFFFF" strokeWidth={2.6} />
         </span>
         <h3 className="ol-form__title">{contact.form.successTitle}</h3>
         <p className="ol-form__success-text">{contact.form.successText}</p>
+        {/* Fallback if the browser blocked the automatic WhatsApp window. */}
+        {whatsappUrl && (
+          <a className="ol-btn ol-btn--ink ol-btn--md" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="whatsapp" size={18} />
+            {contact.form.whatsappRetryLabel}
+          </a>
+        )}
         <button type="button" className="ol-btn ol-btn--white ol-btn--md" onClick={reset}>
           Send another message
         </button>
       </div>
     );
   }
+
+  const selectedPlan = findPlan(values.plan);
 
   const fieldProps = (field) => ({
     'data-field': field,
@@ -119,7 +147,7 @@ export default function ContactForm() {
     ) : null;
 
   return (
-    <form ref={formRef} className="ol-form" aria-label="Project enquiry" noValidate onSubmit={handleSubmit}>
+    <form ref={formRef} id={FORM_ID} className="ol-form" aria-label="Project enquiry" noValidate onSubmit={handleSubmit}>
       <h3 className="ol-form__title">{contact.form.title}</h3>
 
       <div className="ol-form__row">
@@ -159,6 +187,22 @@ export default function ContactForm() {
         </div>
       </div>
 
+      {selectedPlan && (
+        <p className="ol-form__plan">
+          <span>
+            {contact.form.planLabel}: <strong>{selectedPlan.name}</strong>
+          </span>
+          <button
+            type="button"
+            className="ol-form__plan-clear"
+            aria-label={`${contact.form.clearPlanLabel} (${selectedPlan.name})`}
+            onClick={() => setValues((current) => ({ ...current, plan: '' }))}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </p>
+      )}
+
       <fieldset className="ol-fieldset" aria-describedby={errors.need ? 'c-need-error' : undefined}>
         <legend className="ol-legend">What do you need?</legend>
         <div className="ol-chips">
@@ -181,7 +225,18 @@ export default function ContactForm() {
 
       <div className="ol-field">
         <label htmlFor="c-budget">Budget range</label>
-        <select id="c-budget" name="budget" className="ol-input" value={values.budget} onChange={update('budget')} {...fieldProps('budget')}>
+        <select
+          id="c-budget"
+          name="budget"
+          className="ol-input"
+          required
+          value={values.budget}
+          onChange={update('budget')}
+          {...fieldProps('budget')}
+        >
+          <option value="" disabled>
+            {contact.form.budgetPlaceholder}
+          </option>
           {contact.form.budgets.map((budget) => (
             <option key={budget} value={budget}>
               {budget}
@@ -214,16 +269,11 @@ export default function ContactForm() {
         <input id="c-website" name="website" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
 
-      {status === 'error' && serverMessage && (
-        <p className="ol-form__alert" role="alert">
-          {serverMessage} You can also email me at <a href={`mailto:${site.email}`}>{site.email}</a>.
-        </p>
-      )}
-
-      <button className="ol-btn ol-btn--ink ol-form__submit" type="submit" disabled={status === 'sending'}>
-        {status === 'sending' ? 'Sending…' : contact.form.submitLabel}
+      <button className="ol-btn ol-btn--ink ol-form__submit" type="submit">
+        {contact.form.submitLabel}
         <Icon name="send" size={18} strokeWidth={2.4} />
       </button>
+      <p className="ol-form__hint">{contact.form.submitHint}</p>
     </form>
   );
 }

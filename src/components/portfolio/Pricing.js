@@ -1,4 +1,5 @@
 import Icon from './Icon';
+import PlanCta from './PlanCta';
 import { Reveal, RevealGroup, RevealItem } from './Reveal';
 import { pricing } from '@/data/portfolio';
 
@@ -25,7 +26,7 @@ export default function Pricing() {
                 </div>
                 <p className="ol-plan__price">
                   {plan.price}
-                  <span className="ol-plan__unit">{plan.unit}</span>
+                  {plan.unit && <span className="ol-plan__unit">{plan.unit}</span>}
                 </p>
                 <ul className="ol-plan__features">
                   {plan.features.map((feature) => (
@@ -40,12 +41,13 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <a
+                <PlanCta
+                  planId={plan.id}
                   className={`ol-btn ${plan.featured ? 'ol-btn--red ol-btn--paper-border' : 'ol-btn--white'}`}
                   href={plan.cta.href}
                 >
                   {plan.cta.label}
-                </a>
+                </PlanCta>
               </article>
             </RevealItem>
           ))}

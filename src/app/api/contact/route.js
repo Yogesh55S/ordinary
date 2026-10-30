@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getClientIp, isCrossOrigin } from '@/lib/auth/server';
 import { getSmtpConfig, getTransporter } from '@/lib/mailer';
 import { hit } from '@/lib/rateLimit';
-import { needLabel, validateContact } from '@/lib/contactValidation';
+import { findPlan, needLabel, validateContact } from '@/lib/contactValidation';
 import { site } from '@/data/portfolio';
 
 /**
@@ -69,6 +69,7 @@ export async function POST(request) {
 
   const to = process.env.CONTACT_TO_EMAIL || site.email;
   const need = needLabel(values.need);
+  const plan = findPlan(values.plan)?.name ?? 'Not chosen';
   const name = oneLine(values.name);
 
   const text = [
@@ -77,6 +78,7 @@ export async function POST(request) {
     `Name: ${name}`,
     `Email: ${values.email}`,
     `Needs: ${need}`,
+    `Plan: ${plan}`,
     `Budget: ${values.budget}`,
     '',
     values.message,
@@ -88,6 +90,7 @@ export async function POST(request) {
       <p style="margin:0"><strong>Name:</strong> ${escapeHtml(name)}</p>
       <p style="margin:0"><strong>Email:</strong> ${escapeHtml(values.email)}</p>
       <p style="margin:0"><strong>Needs:</strong> ${escapeHtml(need)}</p>
+      <p style="margin:0"><strong>Plan:</strong> ${escapeHtml(plan)}</p>
       <p style="margin:0 0 12px"><strong>Budget:</strong> ${escapeHtml(values.budget)}</p>
       <p style="margin:0;white-space:pre-wrap">${escapeHtml(values.message)}</p>
     </div>`;
@@ -97,7 +100,7 @@ export async function POST(request) {
       from: { name: `${site.name} Portfolio`, address: smtp.auth.user },
       to,
       replyTo: { name, address: values.email },
-      subject: oneLine(`New enquiry: ${need} — ${name}`),
+      subject: oneLine(`New enquiry: ${need} · ${values.budget} — ${name}`),
       text,
       html,
     });
