@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { getClientIp, isCrossOrigin, safeEqual } from '@/lib/auth/server';
 import {
   SESSION_COOKIE,
@@ -8,6 +8,7 @@ import {
   sessionMaxAge,
 } from '@/lib/auth/session';
 import { hit, peek, reset } from '@/lib/rateLimit';
+import { flushPostHogLogs, logPostHogInfo } from '@/lib/posthogLogs';
 
 const WINDOW_MS = 15 * 60 * 1000;
 const PER_ID_LIMIT = 5; // failed attempts per login ID per window
@@ -90,5 +91,11 @@ export async function POST(request) {
   const token = await createSessionToken(owner.loginId, remember);
   const response = NextResponse.json({ ok: true });
   response.cookies.set(SESSION_COOKIE, token, sessionCookieOptions(maxAge));
+  logPostHogInfo('workspace authentication completed', {
+    route: '/api/auth/login',
+    outcome: 'authenticated',
+    remember_session: remember,
+  });
+  after(flushPostHogLogs);
   return response;
 }

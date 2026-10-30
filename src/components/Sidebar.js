@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -87,11 +88,17 @@ function ThemeToggle({ theme, onToggle, compact = false }) {
   );
 }
 
-export default function Sidebar() {
+export default function Sidebar({ distinctId }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState('light');
   const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      posthog.identify(distinctId, { role: 'owner' });
+    }
+  }, [distinctId]);
 
   useEffect(() => {
     // Safely verify theme state on client mount

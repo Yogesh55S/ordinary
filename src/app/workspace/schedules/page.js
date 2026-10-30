@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import posthog from 'posthog-js';
 import { supabase } from '@/lib/supabase';
 import { Plus, AlertCircle, Calendar, RefreshCw, Search, X, Filter } from 'lucide-react';
 import { uploadAttachment } from '@/lib/media';
@@ -326,6 +327,10 @@ export default function SchedulesPage() {
         details: `Requested immediate dispatch of outreach message to "${item.clients?.business_name}".`
       });
 
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('outreach_send_requested', { channel: item.custom_message?.startsWith('[EMAIL]') ? 'email' : 'whatsapp' });
+      }
+
       fetchData();
     } catch (err) {
       console.error('Error forcing dispatch:', err);
@@ -352,6 +357,10 @@ export default function SchedulesPage() {
         action_type: 'Cancelled Schedule',
         details: `Deleted scheduled outreach for client "${item.clients?.business_name}".`
       });
+
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('outreach_schedule_cancelled');
+      }
 
       fetchData();
     } catch (err) {
@@ -416,6 +425,10 @@ export default function SchedulesPage() {
           action_type: 'Updated Schedule',
           details: `Updated queue schedule details for client "${clients.find(c => c.id === payload.client_id)?.business_name}".`
         });
+
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('outreach_schedule_updated', { channel: formData.channel });
+        }
       } else {
         const { error: insertError } = await supabase
           .from('outreach_schedules')
@@ -427,6 +440,10 @@ export default function SchedulesPage() {
           action_type: 'Scheduled Outreach',
           details: `Scheduled new ${formData.channel === 'email' ? 'Email' : 'WhatsApp'} outreach for client "${clients.find(c => c.id === payload.client_id)?.business_name}".`
         });
+
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('outreach_scheduled', { channel: formData.channel });
+        }
       }
 
       setIsModalOpen(false);

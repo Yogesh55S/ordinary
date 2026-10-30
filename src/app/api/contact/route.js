@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { getClientIp, isCrossOrigin } from '@/lib/auth/server';
 import { getSmtpConfig, getTransporter } from '@/lib/mailer';
 import { hit } from '@/lib/rateLimit';
 import { findPlan, needLabel, validateContact } from '@/lib/contactValidation';
 import { site } from '@/data/portfolio';
+import { flushPostHogLogs, logPostHogError, logPostHogInfo } from '@/lib/posthogLogs';
 
 /**
  * Public contact form endpoint (the only public write route).
@@ -64,6 +65,11 @@ export async function POST(request) {
   const smtp = getSmtpConfig();
   if (!transporter || !smtp) {
     console.error('[api/contact] SMTP is not configured.');
+    logPostHogError('contact delivery unavailable', {
+      route: '/api/contact',
+      reason: 'smtp_not_configured',
+    });
+    after(flushPostHogLogs);
     return NextResponse.json({ error: 'The message could not be sent right now.' }, { status: 503 });
   }
 
@@ -106,8 +112,18 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error('[api/contact] sendMail failed:', err?.message);
+    logPostHogError('contact delivery failed', {
+      route: '/api/contact',
+      reason: 'mail_transport_error',
+    });
+    after(flushPostHogLogs);
     return NextResponse.json({ error: 'The message could not be sent right now.' }, { status: 502 });
   }
 
+  logPostHogInfo('contact delivery completed', {
+    route: '/api/contact',
+    outcome: 'sent',
+  });
+  after(flushPostHogLogs);
   return NextResponse.json({ ok: true });
 }

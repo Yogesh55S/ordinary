@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import posthog from 'posthog-js';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import {
@@ -185,6 +186,9 @@ export default function JobApplicationsPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to send.');
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('job_application_dispatched');
+      }
       await fetchAll();
       return { success: true, message: `Application email sent immediately to ${payload.hrEmail}!` };
     }
@@ -227,6 +231,14 @@ export default function JobApplicationsPage() {
       action_type: 'Job Applications Queued',
       details: `Queued ${rows.length} application(s) with ${payload.rateLimit.interval_value} ${payload.rateLimit.interval_unit} interval delay.`,
     });
+
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      posthog.capture('job_applications_queued', {
+        recipient_type: payload.recipientType,
+        queued_count: rows.length,
+        send_first_immediately: Boolean(payload.rateLimit?.sendFirstImmediately),
+      });
+    }
 
     let immediateNotice = '';
     if (payload.rateLimit?.sendFirstImmediately) {

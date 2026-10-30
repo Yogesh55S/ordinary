@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import posthog from 'posthog-js';
 import { supabase } from '@/lib/supabase';
 import { X, Send, Loader2, PhoneOff, Clock, CheckCircle2, MessageSquare } from 'lucide-react';
 import { mapPlaceTypeToCategory, extractCityFromAddress } from '@/lib/placeUtils';
@@ -114,6 +115,10 @@ export default function BulkSendModal({ prospects, clientStatusMap, onClose, onQ
         action_type: 'Bulk Outreach Queued',
         details: `Queued WhatsApp outreach ("${selectedTemplate.template_name}") to ${queued.length} prospect(s) from Prospect Finder.`,
       });
+
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('bulk_outreach_queued', { queued_count: queued.length });
+      }
 
       onQueued(queued);
     } catch (err) {

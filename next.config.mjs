@@ -1,4 +1,5 @@
 import path from 'path';
+import { withPostHogConfig } from '@posthog/nextjs-config';
 
 // Workspace pages used to live at the site root; keep old bookmarks working.
 const LEGACY_WORKSPACE_ROUTES = [
@@ -40,10 +41,16 @@ const nextConfig = {
 
   // First-party proxy for PostHog so ad blockers don't drop portfolio visits.
   async rewrites() {
-    const ingestHost = (process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com').replace(/\/+$/, '');
+    const ingestHost = process.env.NEXT_PUBLIC_POSTHOG_HOST?.replace(/\/+$/, '');
+
+    if (!ingestHost) {
+      return [];
+    }
+
     const assetsHost = ingestHost.replace('.i.posthog.com', '-assets.i.posthog.com');
     return [
       { source: '/ingest/static/:path*', destination: `${assetsHost}/static/:path*` },
+      { source: '/ingest/array/:path*', destination: `${assetsHost}/array/:path*` },
       { source: '/ingest/:path*', destination: `${ingestHost}/:path*` },
     ];
   },
@@ -66,4 +73,11 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPostHogConfig(nextConfig, {
+  personalApiKey: process.env.POSTHOG_API_KEY ?? '',
+  projectId: process.env.POSTHOG_PROJECT_ID ?? '',
+  sourcemaps: {
+    enabled: Boolean(process.env.POSTHOG_API_KEY && process.env.POSTHOG_PROJECT_ID),
+    deleteAfterUpload: true,
+  },
+});

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import posthog from 'posthog-js';
 import Icon from './Icon';
 import { contact } from '@/data/portfolio';
 import { CONTACT_LIMITS, findPlan, validateContact } from '@/lib/contactValidation';
@@ -97,6 +98,14 @@ export default function ContactForm() {
         if (!res.ok) console.warn('[contact] email copy not sent:', res.status);
       })
       .catch(() => console.warn('[contact] email copy not sent: network error'));
+
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      posthog.capture('contact_form_submitted', {
+        need: clean.need,
+        budget: clean.budget,
+        has_selected_plan: Boolean(clean.plan),
+      });
+    }
 
     setWhatsappUrl(chatUrl);
     setStatus('success');

@@ -17,6 +17,9 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
+const { getPostHogServer, shutdownPostHog } = require('../lib/posthog-server.cjs');
+getPostHogServer();
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const APP_BASE_URL = process.env.JOB_APPLICATION_APP_BASE_URL || 'http://localhost:3000';
@@ -109,13 +112,12 @@ log(`Starting job application worker. Polling every ${TICK_MS / 1000}s, dispatch
 tick();
 const timer = setInterval(tick, TICK_MS);
 
-process.on('SIGINT', () => {
+async function shutdownWorker() {
   log('Shutting down job application worker.');
   clearInterval(timer);
+  await shutdownPostHog();
   process.exit(0);
-});
+}
 
-process.on('SIGTERM', () => {
-  clearInterval(timer);
-  process.exit(0);
-});
+process.on('SIGINT', shutdownWorker);
+process.on('SIGTERM', shutdownWorker);

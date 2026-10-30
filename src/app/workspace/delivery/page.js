@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import posthog from 'posthog-js';
 import {
   Truck, MapPin, Package, Calculator, Clock, IndianRupee,
   AlertCircle, Loader2, ChevronDown, RotateCcw, Info,
@@ -105,6 +106,14 @@ export default function DeliveryEstimatorPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Estimation failed. Please try again.');
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('delivery_estimate_calculated', {
+          material_id: materialId,
+          quantity: Number(quantity),
+          restrict_heavy: restrictHeavy,
+          trip_count: data.trips,
+        });
+      }
       setResult(data);
     } catch (err) {
       setError(err.message);

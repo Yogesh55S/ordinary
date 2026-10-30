@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LogOut } from 'lucide-react';
+import posthog from 'posthog-js';
 
 /**
  * Ends the owner session. The cookie is httpOnly, so the server clears it;
@@ -12,6 +13,9 @@ export default function LogoutButton({ compact = false }) {
 
   const handleLogout = async () => {
     setPending(true);
+    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      posthog.reset();
+    }
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (_) {

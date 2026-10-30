@@ -31,12 +31,12 @@ export const viewport = {
 
 // Server-side gate: every workspace request is checked here (in addition to the proxy).
 export default async function WorkspaceLayout({ children }) {
-  await requireSession();
+  const session = await requireSession();
 
   return (
     <div className="min-h-[100dvh] flex flex-col md:flex-row font-sans bg-canvas text-slate-900 dark:bg-ink-950 dark:text-slate-100 transition-colors duration-200">
       <SplashLoader />
-      <Sidebar />
+      <Sidebar distinctId={session.role} />
       <main className="flex-1 flex min-w-0 flex-col min-h-[100dvh] overflow-x-hidden pb-safe-nav">
         {children}
       </main>

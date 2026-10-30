@@ -11,6 +11,9 @@ const fs = require('fs');
 // Load environment variables from .env.local
 dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
+const { getPostHogServer, shutdownPostHog } = require('../lib/posthog-server.cjs');
+getPostHogServer();
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -1022,10 +1025,15 @@ async function startWorker() {
   setTimeout(processSchedules, 5000);
 }
 
-// Catch unexpected crashes
-process.on('uncaughtException', (err) => {
-  console.error("Uncaught Exception crash:", err);
-});
+async function shutdownWorker() {
+  clearInterval(checkInterval);
+  clearInterval(scheduleInterval);
+  await shutdownPostHog();
+  process.exit(0);
+}
+
+process.on('SIGINT', shutdownWorker);
+process.on('SIGTERM', shutdownWorker);
 
 // Run
 startWorker();

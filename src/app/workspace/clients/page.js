@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import posthog from 'posthog-js';
 import { supabase } from '@/lib/supabase';
 import { Plus, AlertCircle, Upload, Download, FileSpreadsheet, Users } from 'lucide-react';
 
@@ -415,6 +416,10 @@ export default function ClientsPage() {
         details: `Removed client "${client.business_name}" from CRM.`
       });
 
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('client_deleted');
+      }
+
       // Clear selection if deleted client was open
       if (selectedClient?.id === client.id) {
         setSelectedClient(null);
@@ -484,6 +489,10 @@ export default function ClientsPage() {
           details: `Updated info for client "${clientPayload.business_name}".`
         });
 
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('client_updated', { status: clientPayload.status });
+        }
+
         // Update selectedClient if open in drawer
         if (selectedClient?.id === editingClient.id) {
           setSelectedClient({ ...editingClient, ...clientPayload });
@@ -500,6 +509,10 @@ export default function ClientsPage() {
           action_type: 'Created Client',
           details: `Created new client "${clientPayload.business_name}".`
         });
+
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('client_created', { status: clientPayload.status });
+        }
       }
 
       setIsModalOpen(false);

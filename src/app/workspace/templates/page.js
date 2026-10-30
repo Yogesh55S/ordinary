@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import posthog from 'posthog-js';
 import { supabase } from '@/lib/supabase';
 import { Plus, AlertCircle } from 'lucide-react';
 import { uploadAttachment, deleteAttachment } from '@/lib/media';
@@ -216,6 +217,10 @@ export default function TemplatesPage() {
         details: `Deleted template "${template.template_name}" and its attachments from system.`
       });
 
+      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.capture('template_deleted');
+      }
+
       fetchTemplates();
     } catch (err) {
       console.error('Error deleting template:', err);
@@ -272,6 +277,10 @@ export default function TemplatesPage() {
           action_type: 'Updated Template',
           details: `Updated template content for "${payload.template_name}".`
         });
+
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('template_updated', { channel: formData.channel });
+        }
       } else {
         // Add template
         const { error: insertError } = await supabase
@@ -284,6 +293,10 @@ export default function TemplatesPage() {
           action_type: 'Created Template',
           details: `Added new template "${payload.template_name}" to template list.`
         });
+
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture('template_created', { channel: formData.channel });
+        }
       }
       
       // Cleanup deleted attachments from storage
