@@ -64,6 +64,18 @@ export default function RootLayout({ children }) {
                   document.documentElement.classList.remove('dark');
                 }
               } catch (_) {}
+              // Site loader (IntroLoader): every full load of the portfolio home (incl. refresh),
+              // motion allowed. Covers the page and holds the hero intro until it finishes.
+              try {
+                if (location.pathname === '/' &&
+                    !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                  document.documentElement.setAttribute('data-ol-intro', 'wait');
+                  // Fallback if the app's JS never loads: never leave the page covered.
+                  window.__olIntroTimer = setTimeout(function () {
+                    document.documentElement.removeAttribute('data-ol-intro');
+                  }, 6000);
+                }
+              } catch (_) {}
             `,
           }}
         />

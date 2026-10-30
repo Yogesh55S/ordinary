@@ -20,6 +20,9 @@ const nextConfig = {
 
   poweredByHeader: false,
 
+  // PostHog's API paths rely on trailing slashes; don't let Next redirect them away.
+  skipTrailingSlashRedirect: true,
+
   // Ensures the compiled job application email template ships with the serverless
   // function bundles that read it at runtime via fs.readFileSync.
   outputFileTracingIncludes: {
@@ -33,6 +36,16 @@ const nextConfig = {
       { source: `/${route}`, destination: `/workspace/${route}`, permanent: false },
       { source: `/${route}/:path*`, destination: `/workspace/${route}/:path*`, permanent: false },
     ]);
+  },
+
+  // First-party proxy for PostHog so ad blockers don't drop portfolio visits.
+  async rewrites() {
+    const ingestHost = (process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com').replace(/\/+$/, '');
+    const assetsHost = ingestHost.replace('.i.posthog.com', '-assets.i.posthog.com');
+    return [
+      { source: '/ingest/static/:path*', destination: `${assetsHost}/static/:path*` },
+      { source: '/ingest/:path*', destination: `${ingestHost}/:path*` },
+    ];
   },
 
   async headers() {

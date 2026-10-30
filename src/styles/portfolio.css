@@ -544,6 +544,19 @@ html:has(.ol-root) {
 .ol-hero__stroke--br { right: -40px; bottom: -10px; width: 300px; }
 .ol-hero__stroke--br path { animation-duration: 2.6s; animation-delay: 0.7s; }
 
+/* While the site loader runs (html[data-ol-intro], see IntroLoader.js) the hero intro
+   is held at frame 0, and a plain cover in the loader's colour hides the page until
+   the lazy loader chunk mounts on top of it. */
+html[data-ol-intro='wait'] .ol-hero,
+html[data-ol-intro='wait'] .ol-hero * { animation-play-state: paused !important; }
+html[data-ol-intro='wait'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #f6f3ee;
+}
+
 .ol-hero__stage {
   position: relative;
   width: 100%;

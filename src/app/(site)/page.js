@@ -9,6 +9,7 @@ import About from '@/components/portfolio/About';
 import Pricing from '@/components/portfolio/Pricing';
 import Faq from '@/components/portfolio/Faq';
 import Contact from '@/components/portfolio/Contact';
+import IntroLoader from '@/components/portfolio/IntroLoader';
 import { marqueeLines, site } from '@/data/portfolio';
 
 export const dynamic = 'force-static';
@@ -27,6 +28,7 @@ const personJsonLd = {
 export default function PortfolioPage() {
   return (
     <SiteShell>
+      <IntroLoader />
       <Hero />
       <SkillsMarquee items={marqueeLines} label="What I stand for" />
       <Pillars />
