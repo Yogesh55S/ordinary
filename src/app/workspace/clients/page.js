@@ -416,7 +416,7 @@ export default function ClientsPage() {
         details: `Removed client "${client.business_name}" from CRM.`
       });
 
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('client_deleted');
       }
 
@@ -489,7 +489,7 @@ export default function ClientsPage() {
           details: `Updated info for client "${clientPayload.business_name}".`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('client_updated', { status: clientPayload.status });
         }
 
@@ -510,7 +510,7 @@ export default function ClientsPage() {
           details: `Created new client "${clientPayload.business_name}".`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('client_created', { status: clientPayload.status });
         }
       }

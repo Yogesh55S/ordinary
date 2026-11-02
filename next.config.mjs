@@ -21,6 +21,16 @@ const nextConfig = {
 
   poweredByHeader: false,
 
+  // PostHog runs in the browser, but these vars aren't NEXT_PUBLIC_-prefixed, so Next.js
+  // wouldn't expose them on its own. Inline them at build time for client + server code.
+  // (The project key is a public, write-only ingestion key — safe to ship to browsers.
+  // Never add POSTHOG_API_KEY here: that one is a secret.)
+  env: {
+    POSTHOG_KEYs: process.env.POSTHOG_KEYs ?? '',
+    POSTHOG_HOST: process.env.POSTHOG_HOST ?? '',
+    POSTHOG_UI_HOST: process.env.POSTHOG_UI_HOST ?? '',
+  },
+
   // PostHog's API paths rely on trailing slashes; don't let Next redirect them away.
   skipTrailingSlashRedirect: true,
 
@@ -41,7 +51,7 @@ const nextConfig = {
 
   // First-party proxy for PostHog so ad blockers don't drop portfolio visits.
   async rewrites() {
-    const ingestHost = process.env.NEXT_PUBLIC_POSTHOG_HOST?.replace(/\/+$/, '');
+    const ingestHost = process.env.POSTHOG_HOST?.replace(/\/+$/, '');
 
     if (!ingestHost) {
       return [];

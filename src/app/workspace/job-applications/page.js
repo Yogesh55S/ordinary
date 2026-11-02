@@ -186,7 +186,7 @@ export default function JobApplicationsPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to send.');
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('job_application_dispatched');
       }
       await fetchAll();
@@ -232,7 +232,7 @@ export default function JobApplicationsPage() {
       details: `Queued ${rows.length} application(s) with ${payload.rateLimit.interval_value} ${payload.rateLimit.interval_unit} interval delay.`,
     });
 
-    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+    if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
       posthog.capture('job_applications_queued', {
         recipient_type: payload.recipientType,
         queued_count: rows.length,

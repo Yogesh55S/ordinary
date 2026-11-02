@@ -13,7 +13,7 @@ export default function LogoutButton({ compact = false }) {
 
   const handleLogout = async () => {
     setPending(true);
-    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+    if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
       posthog.reset();
     }
     try {

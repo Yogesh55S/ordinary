@@ -99,7 +99,7 @@ export default function ContactForm() {
       })
       .catch(() => console.warn('[contact] email copy not sent: network error'));
 
-    if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+    if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
       posthog.capture('contact_form_submitted', {
         need: clean.need,
         budget: clean.budget,

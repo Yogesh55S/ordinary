@@ -1,7 +1,7 @@
 import posthog from 'posthog-js';
 
-const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+const posthogKey = process.env.POSTHOG_KEYs;
+const posthogHost = process.env.POSTHOG_HOST;
 
 // Owner-only areas: never count these as portfolio visits, even after a client-side navigation.
 const PRIVATE_PREFIXES = ['/workspace', '/lancer-login'];
@@ -30,13 +30,13 @@ function isPrivatePath(url: unknown): boolean {
 if (!posthogKey) {
   if (process.env.NODE_ENV === 'development') {
     throw new Error(
-      'NEXT_PUBLIC_POSTHOG_KEY variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once NEXT_PUBLIC_POSTHOG_KEY is configured',
+      'POSTHOG_KEYs variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once POSTHOG_KEYs is configured',
     );
   }
 } else if (!posthogHost) {
   if (process.env.NODE_ENV === 'development') {
     throw new Error(
-      'NEXT_PUBLIC_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once NEXT_PUBLIC_POSTHOG_HOST is configured',
+      'POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once POSTHOG_HOST is configured',
     );
   }
 } else {
@@ -44,7 +44,7 @@ if (!posthogKey) {
     // Ingestion goes through the /ingest rewrite in next.config.mjs so ad blockers don't drop visits.
     api_host: '/ingest',
     // Where "open in PostHog" / toolbar links point, since api_host is a relative proxy path.
-    ui_host: process.env.NEXT_PUBLIC_POSTHOG_UI_HOST || 'https://us.posthog.com',
+    ui_host: process.env.POSTHOG_UI_HOST || 'https://us.posthog.com',
     defaults: '2026-01-30',
     // Anonymous portfolio visitors don't need person profiles; only the identified owner gets one.
     person_profiles: 'identified_only',

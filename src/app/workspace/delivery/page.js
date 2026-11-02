@@ -106,7 +106,7 @@ export default function DeliveryEstimatorPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Estimation failed. Please try again.');
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('delivery_estimate_calculated', {
           material_id: materialId,
           quantity: Number(quantity),

@@ -217,7 +217,7 @@ export default function TemplatesPage() {
         details: `Deleted template "${template.template_name}" and its attachments from system.`
       });
 
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('template_deleted');
       }
 
@@ -278,7 +278,7 @@ export default function TemplatesPage() {
           details: `Updated template content for "${payload.template_name}".`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('template_updated', { channel: formData.channel });
         }
       } else {
@@ -294,7 +294,7 @@ export default function TemplatesPage() {
           details: `Added new template "${payload.template_name}" to template list.`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('template_created', { channel: formData.channel });
         }
       }

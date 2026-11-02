@@ -112,7 +112,7 @@ export default function ProspectPage() {
       setNextPageToken(data.next_page_token || null);
 
       const placeIds = (data.results || []).map((r) => r.place_id).filter(Boolean);
-      if (!isMore && process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (!isMore && process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('prospect_search_completed', { result_count: placeIds.length });
       }
       refreshClientStatus(placeIds);

@@ -327,7 +327,7 @@ export default function SchedulesPage() {
         details: `Requested immediate dispatch of outreach message to "${item.clients?.business_name}".`
       });
 
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('outreach_send_requested', { channel: item.custom_message?.startsWith('[EMAIL]') ? 'email' : 'whatsapp' });
       }
 
@@ -358,7 +358,7 @@ export default function SchedulesPage() {
         details: `Deleted scheduled outreach for client "${item.clients?.business_name}".`
       });
 
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('outreach_schedule_cancelled');
       }
 
@@ -426,7 +426,7 @@ export default function SchedulesPage() {
           details: `Updated queue schedule details for client "${clients.find(c => c.id === payload.client_id)?.business_name}".`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('outreach_schedule_updated', { channel: formData.channel });
         }
       } else {
@@ -441,7 +441,7 @@ export default function SchedulesPage() {
           details: `Scheduled new ${formData.channel === 'email' ? 'Email' : 'WhatsApp'} outreach for client "${clients.find(c => c.id === payload.client_id)?.business_name}".`
         });
 
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+        if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
           posthog.capture('outreach_scheduled', { channel: formData.channel });
         }
       }

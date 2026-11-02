@@ -16,8 +16,8 @@ function optionalPostHogEnvironment(name) {
 function getPostHogServer() {
   if (posthogClient) return posthogClient;
 
-  const projectToken = optionalPostHogEnvironment('NEXT_PUBLIC_POSTHOG_KEY');
-  const host = optionalPostHogEnvironment('NEXT_PUBLIC_POSTHOG_HOST');
+  const projectToken = optionalPostHogEnvironment('POSTHOG_KEYs');
+  const host = optionalPostHogEnvironment('POSTHOG_HOST');
   if (!projectToken || !host) return null;
 
   posthogClient = new PostHog(projectToken, {

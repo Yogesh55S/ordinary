@@ -24,8 +24,8 @@ export function register() {
 
   if (loggerProvider) return;
 
-  const projectToken = requiredPostHogEnvironment('NEXT_PUBLIC_POSTHOG_KEY');
-  const host = requiredPostHogEnvironment('NEXT_PUBLIC_POSTHOG_HOST');
+  const projectToken = requiredPostHogEnvironment('POSTHOG_KEYs');
+  const host = requiredPostHogEnvironment('POSTHOG_HOST');
   if (!projectToken || !host) return;
 
   loggerProvider = new LoggerProvider({
@@ -56,7 +56,7 @@ export const onRequestError = async (error, request) => {
   let distinctId;
   const cookieHeader = request.headers.cookie;
   const cookieString = Array.isArray(cookieHeader) ? cookieHeader.join('; ') : cookieHeader;
-  const projectToken = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+  const projectToken = process.env.POSTHOG_KEYs;
 
   if (cookieString && projectToken) {
     const cookiePrefix = `ph_${projectToken}_posthog=`;

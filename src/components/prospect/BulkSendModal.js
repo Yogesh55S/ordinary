@@ -116,7 +116,7 @@ export default function BulkSendModal({ prospects, clientStatusMap, onClose, onQ
         details: `Queued WhatsApp outreach ("${selectedTemplate.template_name}") to ${queued.length} prospect(s) from Prospect Finder.`,
       });
 
-      if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+      if (process.env.POSTHOG_KEYs && process.env.POSTHOG_HOST) {
         posthog.capture('bulk_outreach_queued', { queued_count: queued.length });
       }
 
