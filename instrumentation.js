@@ -81,8 +81,13 @@ export const onRequestError = async (error, request) => {
   await posthog.flush();
 };
 
+// Route handlers import these helpers through src/lib/posthogLogs.js, and Next.js bundles
+// them separately from this instrumentation entry, so the module-level `loggerProvider`
+// above is not shared with them. Go through the OpenTelemetry global registry instead,
+// which `register()` populated via `logs.setGlobalLoggerProvider`. Before registration
+// (or with PostHog unconfigured) the global is a no-op provider.
 export function emitPostHogLog({ body, severityNumber, attributes }) {
-  loggerProvider?.getLogger('ordinary.posthog').emit({
+  logs.getLogger('ordinary.posthog').emit({
     body,
     severityNumber,
     attributes,
@@ -92,5 +97,8 @@ export function emitPostHogLog({ body, severityNumber, attributes }) {
 export { SeverityNumber };
 
 export async function flushPostHogLogs() {
-  await loggerProvider?.forceFlush();
+  const provider = logs.getLoggerProvider();
+  if (typeof provider.forceFlush === 'function') {
+    await provider.forceFlush();
+  }
 }

@@ -1025,6 +1025,14 @@ async function startWorker() {
   setTimeout(processSchedules, 5000);
 }
 
+// Catch unexpected crashes
+// Keep the worker alive (Baileys can throw stray socket errors). This listener must
+// stay registered: without it PostHog's exception autocapture treats every uncaught
+// error as fatal and exits the process. PostHog still records the error either way.
+process.on('uncaughtException', (err) => {
+  console.error("Uncaught Exception crash:", err);
+});
+
 async function shutdownWorker() {
   clearInterval(checkInterval);
   clearInterval(scheduleInterval);
