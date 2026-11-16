@@ -7,6 +7,7 @@ import { site } from '@/data/portfolio';
 export default function LoginForm({ next = '/workspace' }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const passwordRef = useRef(null);
 
   const handleSubmit = async (event) => {
@@ -64,21 +65,34 @@ export default function LoginForm({ next = '/workspace' }) {
           aria-describedby={error ? 'l-error' : undefined}
         />
       </div>
+
       <div className="ol-field">
         <label htmlFor="l-pw">Password</label>
-        <input
-          ref={passwordRef}
-          id="l-pw"
-          name="password"
-          type="password"
-          className="ol-login__input"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          required
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? 'l-error' : undefined}
-        />
+        <div className="ol-login__pw-wrap">
+          <input
+            ref={passwordRef}
+            id="l-pw"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            className="ol-login__input ol-login__input--pw"
+            autoComplete="current-password"
+            placeholder="••••••••"
+            required
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? 'l-error' : undefined}
+          />
+          <button
+            type="button"
+            className="ol-login__pw-toggle"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            tabIndex={0}
+          >
+            <Icon name={showPassword ? 'eyeOff' : 'eye'} size={18} strokeWidth={2} />
+          </button>
+        </div>
       </div>
+
       <label htmlFor="l-rem" className="ol-login__remember">
         <input id="l-rem" name="remember" type="checkbox" />
         Keep me signed in on this device

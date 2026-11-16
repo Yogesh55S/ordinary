@@ -2005,6 +2005,42 @@ select.ol-input { appearance: none; background-image: url("data:image/svg+xml,%3
 .ol-login__remember input { width: 18px; height: 18px; accent-color: var(--ol-red); }
 .ol-login__submit { border: none; min-height: 54px; padding: 16px 28px; }
 .ol-login__note { font-size: 13px; line-height: 1.5; color: #6B655F; }
+
+/* Password field with show/hide toggle */
+.ol-login__pw-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ol-login__input--pw {
+  padding-right: 48px;
+}
+.ol-login__pw-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: #6B655F;
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+}
+.ol-login__pw-toggle:hover {
+  color: var(--ol-ink);
+  background: var(--ol-paper);
+}
+.ol-login__pw-toggle:focus-visible {
+  outline: 2px solid var(--ol-ink);
+  outline-offset: 2px;
+}
 @media (min-width: 768px) {
   .ol-login__panel { padding: 56px; gap: 48px; }
   .ol-login__panel-blob { width: 420px; }
